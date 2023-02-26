@@ -1019,7 +1019,7 @@
       {
         # There will be other attributes in the future
         'match': '''(?xi)
-          (\\\\)?\\b(Attribute)\\b
+          (\\\\)?\\b(Attribute|SensitiveParameter|AllowDynamicProperties|ReturnTypeWillChange)\\b
         '''
         'name': 'support.attribute.builtin.php'
         'captures':
