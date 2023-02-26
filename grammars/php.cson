@@ -284,13 +284,22 @@
   {
     'begin': '''(?ix)
         (?:
-          \\b(?:(abstract|final)\\s+)?(class)\\s+([a-z_\\x{7f}-\\x{10ffff}][a-z0-9_\\x{7f}-\\x{10ffff}]*)
-          |\\b(new)\\b\\s*(\\#\\[.*\\])?\\s*\\b(class)\\b # anonymous class
+          \\b((?:(?:final|abstract|readonly)\\s+)*)(class)\\s+([a-z_\\x{7f}-\\x{10ffff}][a-z0-9_\\x{7f}-\\x{10ffff}]*)
+          |\\b(new)\\b\\s*(\\#\\[.*\\])?\\s*(?:(readonly)\\s+)?\\b(class)\\b # anonymous class
         )
       '''
     'beginCaptures':
       '1':
-        'name': 'storage.modifier.${1:/downcase}.php'
+        'patterns': [
+          {
+            'match': 'final|abstract'
+            'name': 'storage.modifier.${0:/downcase}.php'
+          }
+          {
+            'match': 'readonly'
+            'name': 'storage.modifier.php'
+          }
+        ]
       '2':
         'name': 'storage.type.class.php'
       '3':
@@ -304,6 +313,8 @@
           }
         ]
       '6':
+        'name': 'storage.modifier.php'
+      '7':
         'name': 'storage.type.class.php'
     'end': '}|(?=\\?>)'
     'endCaptures':
