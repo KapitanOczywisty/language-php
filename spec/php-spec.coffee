@@ -2679,6 +2679,21 @@ describe 'PHP grammar', ->
       expect(lines[1][0]).toEqual value: 'class', scopes: ['source.php', 'meta.class.php', 'storage.type.class.php']
       expect(lines[1][2]).toEqual value: 'FooAttribute', scopes: ['source.php', 'meta.class.php', 'entity.name.type.class.php']
 
+      lines = grammar.tokenizeLines '''
+        #[Attribute]
+        #[Attributes]
+        #[SensitiveParameter]
+        #[\\AllowDynamicProperties]
+        #[ReturnTypeWillChange]
+      '''
+
+      expect(lines[0][1]).toEqual value: 'Attribute', scopes: ['source.php', 'meta.attribute.php', 'support.attribute.builtin.php']
+      expect(lines[1][1]).toEqual value: 'Attributes', scopes: ['source.php', 'meta.attribute.php', 'support.attribute.php']
+      expect(lines[2][1]).toEqual value: 'SensitiveParameter', scopes: ['source.php', 'meta.attribute.php', 'support.attribute.builtin.php']
+      expect(lines[3][1]).toEqual value: '\\', scopes: ['source.php', 'meta.attribute.php', 'support.attribute.builtin.php', 'punctuation.separator.inheritance.php']
+      expect(lines[3][2]).toEqual value: 'AllowDynamicProperties', scopes: ['source.php', 'meta.attribute.php', 'support.attribute.builtin.php']
+      expect(lines[4][1]).toEqual value: 'ReturnTypeWillChange', scopes: ['source.php', 'meta.attribute.php', 'support.attribute.builtin.php']
+
   describe 'types', ->
     it 'should tokenize null correctly', ->
       {tokens} = grammar.tokenizeLine 'function():null{}'
