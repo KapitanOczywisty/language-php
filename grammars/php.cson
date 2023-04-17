@@ -284,13 +284,22 @@
   {
     'begin': '''(?ix)
         (?:
-          \\b(?:(abstract|final)\\s+)?(class)\\s+([a-z_\\x{7f}-\\x{10ffff}][a-z0-9_\\x{7f}-\\x{10ffff}]*)
-          |\\b(new)\\b\\s*(\\#\\[.*\\])?\\s*\\b(class)\\b # anonymous class
+          \\b((?:(?:final|abstract|readonly)\\s+)*)(class)\\s+([a-z_\\x{7f}-\\x{10ffff}][a-z0-9_\\x{7f}-\\x{10ffff}]*)
+          |\\b(new)\\b\\s*(\\#\\[.*\\])?\\s*(?:(readonly)\\s+)?\\b(class)\\b # anonymous class
         )
       '''
     'beginCaptures':
       '1':
-        'name': 'storage.modifier.${1:/downcase}.php'
+        'patterns': [
+          {
+            'match': 'final|abstract'
+            'name': 'storage.modifier.${0:/downcase}.php'
+          }
+          {
+            'match': 'readonly'
+            'name': 'storage.modifier.php'
+          }
+        ]
       '2':
         'name': 'storage.type.class.php'
       '3':
@@ -304,6 +313,8 @@
           }
         ]
       '6':
+        'name': 'storage.modifier.php'
+      '7':
         'name': 'storage.type.class.php'
     'end': '}|(?=\\?>)'
     'endCaptures':
@@ -510,8 +521,13 @@
         'match': '''(?xi)
           (:)\\s*
           (
-            (?:\\?\\s*)? [a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+ |                                        # nullable type
-            [a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+ (?: \\s*[|&]\\s* [a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+)+ # union type
+            # nullable type
+            (?:\\?\\s*)? [a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+ |
+            # union, intersection or DNF type
+            (?: [a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+ | \\(\\s* [a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+(?:\\s*&\\s*[a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+)+ \\s*\\) )
+            (?: \\s*[|&]\\s*
+            (?: [a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+ | \\(\\s* [a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+(?:\\s*&\\s*[a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+)+ \\s*\\) )
+            )+
           )
           (?=\\s*(?:{|/[/*]|\\#|$))
         '''
@@ -560,8 +576,13 @@
         'match': '''(?xi)
           (:)\\s*
           (
-            (?:\\?\\s*)? [a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+ |                                        # nullable type
-            [a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+ (?: \\s*[|&]\\s* [a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+)+ # union type
+            # nullable type
+            (?:\\?\\s*)? [a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+ |
+            # union, intersection or DNF type
+            (?: [a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+ | \\(\\s* [a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+(?:\\s*&\\s*[a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+)+ \\s*\\) )
+            (?: \\s*[|&]\\s*
+            (?: [a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+ | \\(\\s* [a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+(?:\\s*&\\s*[a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+)+ \\s*\\) )
+            )+
           )
           (?=\\s*(?:=>|/[/*]|\\#|$))
         '''
@@ -601,7 +622,7 @@
     'contentName': 'meta.function.parameters.php'
     'end': '''(?xi)
       (\\)) \\s* ( : \\s*
-        (?:\\?\\s*)? (?!\\s) [a-z0-9_\\x{7f}-\\x{10ffff}\\\\\\s\\|&]+ (?<!\\s)
+        (?:\\?\\s*)? (?!\\s) [a-z0-9_\\x{7f}-\\x{10ffff}\\\\\\s\\|&()]+ (?<!\\s)
       )?
       (?=\\s*(?:{|/[/*]|\\#|$|;))
     '''
@@ -624,8 +645,13 @@
         'begin': '''(?xi)
           ((?:(?:public|private|protected|readonly)(?:\\s+|(?=\\?)))++)
           (?: (
-            (?:\\?\\s*)? [a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+ |                                        # nullable type
-            [a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+ (?: \\s*[|&]\\s* [a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+)+ # union type
+            # nullable type
+            (?:\\?\\s*)? [a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+ |
+            # union, intersection or DNF type
+            (?: [a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+ | \\(\\s* [a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+(?:\\s*&\\s*[a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+)+ \\s*\\) )
+            (?: \\s*[|&]\\s*
+            (?: [a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+ | \\(\\s* [a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+(?:\\s*&\\s*[a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+)+ \\s*\\) )
+            )+
           ) \\s+ )?
           ((?:(&)\\s*)?(\\$)[a-z_\\x{7f}-\\x{10ffff}][a-z0-9_\\x{7f}-\\x{10ffff}]*) # Variable name with possible reference
         '''
@@ -704,8 +730,13 @@
     'contentName': 'meta.function.parameters.php'
     'end': '''(?xi)
       (\\)) (?: \\s* (:) \\s* (
-        (?:\\?\\s*)? [a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+ |                                        # nullable type
-        [a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+ (?: \\s*[|&]\\s* [a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+)+ # union type
+        # nullable type
+        (?:\\?\\s*)? [a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+ |
+        # union, intersection or DNF type
+        (?: [a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+ | \\(\\s* [a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+(?:\\s*&\\s*[a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+)+ \\s*\\) )
+        (?: \\s*[|&]\\s*
+        (?: [a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+ | \\(\\s* [a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+(?:\\s*&\\s*[a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+)+ \\s*\\) )
+        )+
       ) )?
       (?=\\s*(?:{|/[/*]|\\#|$|;))
     '''
@@ -740,8 +771,13 @@
     'match': '''(?xi)
       ((?:(?:public|private|protected|static|readonly)(?:\\s+|(?=\\?)))++)                     # At least one modifier
       (
-        (?:\\?\\s*)? [a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+ |                                        # nullable type
-        [a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+ (?: \\s*[|&]\\s* [a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+)+ # union type
+        # nullable type
+        (?:\\?\\s*)? [a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+ |
+        # union, intersection or DNF type
+        (?: [a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+ | \\(\\s* [a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+(?:\\s*&\\s*[a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+)+ \\s*\\) )
+        (?: \\s*[|&]\\s*
+        (?: [a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+ | \\(\\s* [a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+(?:\\s*&\\s*[a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+)+ \\s*\\) )
+        )+
       )?
       \\s+ ((\\$)[a-z_\\x{7f}-\\x{10ffff}][a-z0-9_\\x{7f}-\\x{10ffff}]*)          # Variable name
     '''
@@ -1570,8 +1606,13 @@
         # Variadic
         'match': '''(?xi)
           (?: (
-            (?:\\?\\s*)? [a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+ |                                        # nullable type
-            [a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+ (?: \\s*[|&]\\s* [a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+)+ # union type
+            # nullable type
+            (?:\\?\\s*)? [a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+ |
+            # union, intersection or DNF type
+            (?: [a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+ | \\(\\s* [a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+(?:\\s*&\\s*[a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+)+ \\s*\\) )
+            (?: \\s*[|&]\\s*
+            (?: [a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+ | \\(\\s* [a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+(?:\\s*&\\s*[a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+)+ \\s*\\) )
+            )+
           ) \\s+ )?
           ((?:(&)\\s*)?(\\.\\.\\.)(\\$)[a-z_\\x{7f}-\\x{10ffff}][a-z0-9_\\x{7f}-\\x{10ffff}]*) # Variable name with possible reference
           (?=\\s*(?:,|\\)|/[/*]|\\#|$)) # A closing parentheses (end of argument list) or a comma or a comment
@@ -1597,8 +1638,13 @@
         # Typehinted
         'begin': '''(?xi)
           (
-            (?:\\?\\s*)? [a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+ |                                        # nullable type
-            [a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+ (?: \\s*[|&]\\s* [a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+)+ # union type
+            # nullable type
+            (?:\\?\\s*)? [a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+ |
+            # union, intersection or DNF type
+            (?: [a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+ | \\(\\s* [a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+(?:\\s*&\\s*[a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+)+ \\s*\\) )
+            (?: \\s*[|&]\\s*
+            (?: [a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+ | \\(\\s* [a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+(?:\\s*&\\s*[a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+)+ \\s*\\) )
+            )+
           )
           \\s+ ((?:(&)\\s*)?(\\$)[a-z_\\x{7f}-\\x{10ffff}][a-z0-9_\\x{7f}-\\x{10ffff}]*) # Variable name with possible reference
         '''
@@ -2507,14 +2553,21 @@
         'name': 'punctuation.separator.delimiter.php'
       }
       {
-        # false is allowed in unions
-        'match': '(?i)\\b(null|int|float|bool|string|array|object|callable|iterable|false|mixed|void)\\b',
+        'match': '(?i)\\b(null|int|float|bool|string|array|object|callable|iterable|true|false|mixed|void)\\b',
         'name': 'keyword.other.type.php'
       }
       {
         # static is only allowed in return of methods
         'match': '(?i)\\b(parent|self)\\b',
         'name': 'storage.type.php'
+      }
+      {
+        'match': '\\(',
+        'name': 'punctuation.definition.type.begin.bracket.round.php',
+      }
+      {
+        'match': '\\)',
+        'name': 'punctuation.definition.type.end.bracket.round.php',
       }
       {
         'include': '#class-name'
@@ -2691,6 +2744,14 @@
           {
             'match': '[|&]'
             'name': 'punctuation.separator.delimiter.php'
+          }
+          {
+            'match': '\\('
+            'name': 'punctuation.definition.type.begin.bracket.round.php'
+          }
+          {
+            'match': '\\)'
+            'name': 'punctuation.definition.type.end.bracket.round.php'
           }
         ]
   'php_doc_types_array_multiple':
