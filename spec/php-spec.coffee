@@ -718,6 +718,24 @@ describe 'PHP grammar', ->
       expect(tokens[3]).toEqual value: ' ', scopes: ['source.php', 'meta.class.php']
       expect(tokens[4]).toEqual value: 'Test', scopes: ['source.php', 'meta.class.php', 'entity.name.type.class.php']
 
+    it 'should tokenize readonly correctly', ->
+      {tokens} = grammar.tokenizeLine 'readonly class Foo {}'
+
+      expect(tokens[0]).toEqual value: 'readonly', scopes: ['source.php', 'meta.class.php', 'storage.modifier.php']
+      expect(tokens[2]).toEqual value: 'class', scopes: ['source.php', 'meta.class.php', 'storage.type.class.php']
+
+      {tokens} = grammar.tokenizeLine 'readonly final class Foo {}'
+
+      expect(tokens[0]).toEqual value: 'readonly', scopes: ['source.php', 'meta.class.php', 'storage.modifier.php']
+      expect(tokens[2]).toEqual value: 'final', scopes: ['source.php', 'meta.class.php', 'storage.modifier.final.php']
+      expect(tokens[4]).toEqual value: 'class', scopes: ['source.php', 'meta.class.php', 'storage.type.class.php']
+
+      {tokens} = grammar.tokenizeLine 'abstract readonly class Foo {}'
+
+      expect(tokens[0]).toEqual value: 'abstract', scopes: ['source.php', 'meta.class.php', 'storage.modifier.abstract.php']
+      expect(tokens[2]).toEqual value: 'readonly', scopes: ['source.php', 'meta.class.php', 'storage.modifier.php']
+      expect(tokens[4]).toEqual value: 'class', scopes: ['source.php', 'meta.class.php', 'storage.type.class.php']
+
     it 'tokenizes classes declared immediately after another class ends', ->
       {tokens} = grammar.tokenizeLine 'class Test {}final class Test2 {}'
 
@@ -1183,6 +1201,22 @@ describe 'PHP grammar', ->
         expect(tokens[10]).toEqual value: ':', scopes: ['source.php', 'meta.class.php', 'meta.function-call.php', 'punctuation.separator.colon.php']
         expect(tokens[12]).toEqual value: '123', scopes: ['source.php', 'meta.class.php', 'meta.function-call.php', 'constant.numeric.decimal.php']
         expect(tokens[13]).toEqual value: ')', scopes: ['source.php', 'meta.class.php', 'meta.function-call.php', 'punctuation.definition.arguments.end.bracket.round.php']
+
+      it 'should tokenize readonly anonymous class', ->
+        {tokens} = grammar.tokenizeLine 'new readonly class{}'
+
+        expect(tokens[0]).toEqual value: 'new', scopes: ['source.php', 'meta.class.php', 'keyword.other.new.php']
+        expect(tokens[2]).toEqual value: 'readonly', scopes: ['source.php', 'meta.class.php', 'storage.modifier.php']
+        expect(tokens[4]).toEqual value: 'class', scopes: ['source.php', 'meta.class.php', 'storage.type.class.php']
+
+        {tokens} = grammar.tokenizeLine 'new #[ExampleAttribute] readonly class{}'
+
+        expect(tokens[0]).toEqual value: 'new', scopes: ['source.php', 'meta.class.php', 'keyword.other.new.php']
+        expect(tokens[2]).toEqual value: '#[', scopes: ['source.php', 'meta.class.php', 'meta.attribute.php']
+        expect(tokens[3]).toEqual value: 'ExampleAttribute', scopes: ['source.php', 'meta.class.php', 'meta.attribute.php', 'support.attribute.php']
+        expect(tokens[4]).toEqual value: ']', scopes: ['source.php', 'meta.class.php', 'meta.attribute.php']
+        expect(tokens[6]).toEqual value: 'readonly', scopes: ['source.php', 'meta.class.php', 'storage.modifier.php']
+        expect(tokens[8]).toEqual value: 'class', scopes: ['source.php', 'meta.class.php', 'storage.type.class.php']
 
   describe 'enums', ->
     it 'should tokenize enums correctly', ->
