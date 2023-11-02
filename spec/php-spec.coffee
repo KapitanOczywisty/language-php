@@ -2831,6 +2831,18 @@ describe 'PHP grammar', ->
       expect(lines[1][0]).toEqual value: '*', scopes: ['source.php', 'comment.block.documentation.phpdoc.php']
       expect(lines[1][1]).toEqual value: '@api', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'keyword.other.phpdoc.php']
       expect(lines[2][0]).toEqual value: '*/', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'punctuation.definition.comment.php']
+    
+    it 'should tokenize @abstract tag correctly', ->
+      lines = grammar.tokenizeLines '''
+        /**
+        *@abstract
+        */
+      '''
+
+      expect(lines[0][0]).toEqual value: '/**', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'punctuation.definition.comment.php']
+      expect(lines[1][0]).toEqual value: '*', scopes: ['source.php', 'comment.block.documentation.phpdoc.php']
+      expect(lines[1][1]).toEqual value: '@abstract', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'keyword.other.phpdoc.php']
+      expect(lines[2][0]).toEqual value: '*/', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'punctuation.definition.comment.php']
 
     it 'should tokenize @method tag correctly', ->
       lines = grammar.tokenizeLines '''
@@ -2854,6 +2866,18 @@ describe 'PHP grammar', ->
       expect(lines[0][0]).toEqual value: '/**', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'punctuation.definition.comment.php']
       expect(lines[1][0]).toEqual value: '*', scopes: ['source.php', 'comment.block.documentation.phpdoc.php']
       expect(lines[1][1]).toEqual value: '@property', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'keyword.other.phpdoc.php']
+      expect(lines[2][0]).toEqual value: '*/', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'punctuation.definition.comment.php']
+
+    it 'should tokenize @phpstan-property tag correctly', ->
+      lines = grammar.tokenizeLines '''
+        /**
+        *@phpstan-property
+        */
+      '''
+
+      expect(lines[0][0]).toEqual value: '/**', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'punctuation.definition.comment.php']
+      expect(lines[1][0]).toEqual value: '*', scopes: ['source.php', 'comment.block.documentation.phpdoc.php']
+      expect(lines[1][1]).toEqual value: '@phpstan-property', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'keyword.other.phpdoc.php']
       expect(lines[2][0]).toEqual value: '*/', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'punctuation.definition.comment.php']
 
     it 'should tokenize @property-read tag correctly', ->
@@ -2892,6 +2916,54 @@ describe 'PHP grammar', ->
       expect(lines[1][1]).toEqual value: '@source', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'keyword.other.phpdoc.php']
       expect(lines[2][0]).toEqual value: '*/', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'punctuation.definition.comment.php']
 
+    it 'should tokenize @readonly tag correctly', ->
+      lines = grammar.tokenizeLines '''
+        /**
+        *@readonly
+        */
+      '''
+
+      expect(lines[0][0]).toEqual value: '/**', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'punctuation.definition.comment.php']
+      expect(lines[1][0]).toEqual value: '*', scopes: ['source.php', 'comment.block.documentation.phpdoc.php']
+      expect(lines[1][1]).toEqual value: '@readonly', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'keyword.other.phpdoc.php']
+      expect(lines[2][0]).toEqual value: '*/', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'punctuation.definition.comment.php']
+
+    it 'should tokenize @immutable tag correctly', ->
+      lines = grammar.tokenizeLines '''
+        /**
+        *@immutable
+        */
+      '''
+
+      expect(lines[0][0]).toEqual value: '/**', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'punctuation.definition.comment.php']
+      expect(lines[1][0]).toEqual value: '*', scopes: ['source.php', 'comment.block.documentation.phpdoc.php']
+      expect(lines[1][1]).toEqual value: '@immutable', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'keyword.other.phpdoc.php']
+      expect(lines[2][0]).toEqual value: '*/', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'punctuation.definition.comment.php']
+
+    it 'should tokenize @template-covariant tag correctly', ->
+      lines = grammar.tokenizeLines '''
+        /**
+        *@template-covariant
+        */
+      '''
+
+      expect(lines[0][0]).toEqual value: '/**', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'punctuation.definition.comment.php']
+      expect(lines[1][0]).toEqual value: '*', scopes: ['source.php', 'comment.block.documentation.phpdoc.php']
+      expect(lines[1][1]).toEqual value: '@template-covariant', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'keyword.other.phpdoc.php']
+      expect(lines[2][0]).toEqual value: '*/', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'punctuation.definition.comment.php']
+
+    it 'should tokenize @template-contravariant tag correctly', ->
+      lines = grammar.tokenizeLines '''
+        /**
+        *@template-contravariant
+        */
+      '''
+
+      expect(lines[0][0]).toEqual value: '/**', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'punctuation.definition.comment.php']
+      expect(lines[1][0]).toEqual value: '*', scopes: ['source.php', 'comment.block.documentation.phpdoc.php']
+      expect(lines[1][1]).toEqual value: '@template-contravariant', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'keyword.other.phpdoc.php']
+      expect(lines[2][0]).toEqual value: '*/', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'punctuation.definition.comment.php']
+
     it 'should tokenize an inline phpdoc correctly', ->
       {tokens} = grammar.tokenizeLine '/** @var */'
 
@@ -2902,7 +2974,7 @@ describe 'PHP grammar', ->
       expect(tokens[4]).toEqual value: '*/', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'punctuation.definition.comment.php']
 
     describe 'types', ->
-      it 'should tokenize a single type', ->
+      it 'should tokenize a single type with param tag', ->
         lines = grammar.tokenizeLines '''
           /**
           *@param int description
@@ -2923,6 +2995,204 @@ describe 'PHP grammar', ->
         expect(lines[1][3]).toEqual value: 'Test', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'meta.other.type.phpdoc.php', 'support.class.php']
         expect(lines[1][4]).toEqual value: ' description', scopes: ['source.php', 'comment.block.documentation.phpdoc.php']
 
+      it 'should tokenize a single type with phpstan-param tag', ->
+        lines = grammar.tokenizeLines '''
+          /**
+          *@phpstan-param int description
+        '''
+
+        expect(lines[1][1]).toEqual value: '@phpstan-param', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'keyword.other.phpdoc.php']
+        expect(lines[1][2]).toEqual value: ' ', scopes: ['source.php', 'comment.block.documentation.phpdoc.php']
+        expect(lines[1][3]).toEqual value: 'int', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'meta.other.type.phpdoc.php', 'keyword.other.type.php']
+        expect(lines[1][4]).toEqual value: ' description', scopes: ['source.php', 'comment.block.documentation.phpdoc.php']
+      
+      it 'should tokenize a single type with global tag', ->
+        lines = grammar.tokenizeLines '''
+          /**
+          *@global int description
+        '''
+
+        expect(lines[1][1]).toEqual value: '@global', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'keyword.other.phpdoc.php']
+        expect(lines[1][2]).toEqual value: ' ', scopes: ['source.php', 'comment.block.documentation.phpdoc.php']
+        expect(lines[1][3]).toEqual value: 'int', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'meta.other.type.phpdoc.php', 'keyword.other.type.php']
+        expect(lines[1][4]).toEqual value: ' description', scopes: ['source.php', 'comment.block.documentation.phpdoc.php']
+      
+      it 'should tokenize a single type with property tag', ->
+        lines = grammar.tokenizeLines '''
+          /**
+          *@property int description
+        '''
+
+        expect(lines[1][1]).toEqual value: '@property', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'keyword.other.phpdoc.php']
+        expect(lines[1][2]).toEqual value: ' ', scopes: ['source.php', 'comment.block.documentation.phpdoc.php']
+        expect(lines[1][3]).toEqual value: 'int', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'meta.other.type.phpdoc.php', 'keyword.other.type.php']
+        expect(lines[1][4]).toEqual value: ' description', scopes: ['source.php', 'comment.block.documentation.phpdoc.php']
+      
+      it 'should tokenize a single type with property-read tag', ->
+        lines = grammar.tokenizeLines '''
+          /**
+          *@property-read int description
+        '''
+
+        expect(lines[1][1]).toEqual value: '@property-read', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'keyword.other.phpdoc.php']
+        expect(lines[1][2]).toEqual value: ' ', scopes: ['source.php', 'comment.block.documentation.phpdoc.php']
+        expect(lines[1][3]).toEqual value: 'int', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'meta.other.type.phpdoc.php', 'keyword.other.type.php']
+        expect(lines[1][4]).toEqual value: ' description', scopes: ['source.php', 'comment.block.documentation.phpdoc.php']
+
+      it 'should tokenize a single type with property-write tag', ->
+        lines = grammar.tokenizeLines '''
+          /**
+          *@property-write int description
+        '''
+
+        expect(lines[1][1]).toEqual value: '@property-write', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'keyword.other.phpdoc.php']
+        expect(lines[1][2]).toEqual value: ' ', scopes: ['source.php', 'comment.block.documentation.phpdoc.php']
+        expect(lines[1][3]).toEqual value: 'int', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'meta.other.type.phpdoc.php', 'keyword.other.type.php']
+        expect(lines[1][4]).toEqual value: ' description', scopes: ['source.php', 'comment.block.documentation.phpdoc.php']
+
+      it 'should tokenize a single type with phpstan-property tag', ->
+        lines = grammar.tokenizeLines '''
+          /**
+          *@phpstan-property int description
+        '''
+
+        expect(lines[1][1]).toEqual value: '@phpstan-property', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'keyword.other.phpdoc.php']
+        expect(lines[1][2]).toEqual value: ' ', scopes: ['source.php', 'comment.block.documentation.phpdoc.php']
+        expect(lines[1][3]).toEqual value: 'int', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'meta.other.type.phpdoc.php', 'keyword.other.type.php']
+        expect(lines[1][4]).toEqual value: ' description', scopes: ['source.php', 'comment.block.documentation.phpdoc.php']
+
+      it 'should tokenize a single type with phpstan-property-read tag', ->
+        lines = grammar.tokenizeLines '''
+          /**
+          *@phpstan-property-read int description
+        '''
+
+        expect(lines[1][1]).toEqual value: '@phpstan-property-read', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'keyword.other.phpdoc.php']
+        expect(lines[1][2]).toEqual value: ' ', scopes: ['source.php', 'comment.block.documentation.phpdoc.php']
+        expect(lines[1][3]).toEqual value: 'int', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'meta.other.type.phpdoc.php', 'keyword.other.type.php']
+        expect(lines[1][4]).toEqual value: ' description', scopes: ['source.php', 'comment.block.documentation.phpdoc.php']
+
+      it 'should tokenize a single type with phpstan-property-write tag', ->
+        lines = grammar.tokenizeLines '''
+          /**
+          *@phpstan-property-write int description
+        '''
+
+        expect(lines[1][1]).toEqual value: '@phpstan-property-write', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'keyword.other.phpdoc.php']
+        expect(lines[1][2]).toEqual value: ' ', scopes: ['source.php', 'comment.block.documentation.phpdoc.php']
+        expect(lines[1][3]).toEqual value: 'int', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'meta.other.type.phpdoc.php', 'keyword.other.type.php']
+        expect(lines[1][4]).toEqual value: ' description', scopes: ['source.php', 'comment.block.documentation.phpdoc.php']
+
+      it 'should tokenize a single type with extends tag', ->
+        lines = grammar.tokenizeLines '''
+          /**
+          *@extends int description
+        '''
+
+        expect(lines[1][1]).toEqual value: '@extends', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'keyword.other.phpdoc.php']
+        expect(lines[1][2]).toEqual value: ' ', scopes: ['source.php', 'comment.block.documentation.phpdoc.php']
+        expect(lines[1][3]).toEqual value: 'int', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'meta.other.type.phpdoc.php', 'keyword.other.type.php']
+        expect(lines[1][4]).toEqual value: ' description', scopes: ['source.php', 'comment.block.documentation.phpdoc.php']
+
+      it 'should tokenize a single type with implements tag', ->
+        lines = grammar.tokenizeLines '''
+          /**
+          *@implements int description
+        '''
+
+        expect(lines[1][1]).toEqual value: '@implements', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'keyword.other.phpdoc.php']
+        expect(lines[1][2]).toEqual value: ' ', scopes: ['source.php', 'comment.block.documentation.phpdoc.php']
+        expect(lines[1][3]).toEqual value: 'int', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'meta.other.type.phpdoc.php', 'keyword.other.type.php']
+        expect(lines[1][4]).toEqual value: ' description', scopes: ['source.php', 'comment.block.documentation.phpdoc.php']
+      
+      it 'should tokenize a single type with use tag', ->
+        lines = grammar.tokenizeLines '''
+          /**
+          *@use int description
+        '''
+
+        expect(lines[1][1]).toEqual value: '@use', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'keyword.other.phpdoc.php']
+        expect(lines[1][2]).toEqual value: ' ', scopes: ['source.php', 'comment.block.documentation.phpdoc.php']
+        expect(lines[1][3]).toEqual value: 'int', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'meta.other.type.phpdoc.php', 'keyword.other.type.php']
+        expect(lines[1][4]).toEqual value: ' description', scopes: ['source.php', 'comment.block.documentation.phpdoc.php']
+
+      it 'should tokenize a single type with return tag', ->
+        lines = grammar.tokenizeLines '''
+          /**
+          *@return int description
+        '''
+
+        expect(lines[1][1]).toEqual value: '@return', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'keyword.other.phpdoc.php']
+        expect(lines[1][2]).toEqual value: ' ', scopes: ['source.php', 'comment.block.documentation.phpdoc.php']
+        expect(lines[1][3]).toEqual value: 'int', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'meta.other.type.phpdoc.php', 'keyword.other.type.php']
+        expect(lines[1][4]).toEqual value: ' description', scopes: ['source.php', 'comment.block.documentation.phpdoc.php']
+
+      it 'should tokenize a single type with phpstan-return tag', ->
+        lines = grammar.tokenizeLines '''
+          /**
+          *@phpstan-return int description
+        '''
+
+        expect(lines[1][1]).toEqual value: '@phpstan-return', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'keyword.other.phpdoc.php']
+        expect(lines[1][2]).toEqual value: ' ', scopes: ['source.php', 'comment.block.documentation.phpdoc.php']
+        expect(lines[1][3]).toEqual value: 'int', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'meta.other.type.phpdoc.php', 'keyword.other.type.php']
+        expect(lines[1][4]).toEqual value: ' description', scopes: ['source.php', 'comment.block.documentation.phpdoc.php']
+
+      it 'should tokenize a single type with throws tag', ->
+        lines = grammar.tokenizeLines '''
+          /**
+          *@throws int description
+        '''
+
+        expect(lines[1][1]).toEqual value: '@throws', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'keyword.other.phpdoc.php']
+        expect(lines[1][2]).toEqual value: ' ', scopes: ['source.php', 'comment.block.documentation.phpdoc.php']
+        expect(lines[1][3]).toEqual value: 'int', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'meta.other.type.phpdoc.php', 'keyword.other.type.php']
+        expect(lines[1][4]).toEqual value: ' description', scopes: ['source.php', 'comment.block.documentation.phpdoc.php']
+      
+      it 'should tokenize a single type with phpstan-throws tag', ->
+        lines = grammar.tokenizeLines '''
+          /**
+          *@phpstan-throws int description
+        '''
+
+        expect(lines[1][1]).toEqual value: '@phpstan-throws', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'keyword.other.phpdoc.php']
+        expect(lines[1][2]).toEqual value: ' ', scopes: ['source.php', 'comment.block.documentation.phpdoc.php']
+        expect(lines[1][3]).toEqual value: 'int', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'meta.other.type.phpdoc.php', 'keyword.other.type.php']
+        expect(lines[1][4]).toEqual value: ' description', scopes: ['source.php', 'comment.block.documentation.phpdoc.php']
+
+      it 'should tokenize a single type with var tag', ->
+        lines = grammar.tokenizeLines '''
+          /**
+          *@var int description
+        '''
+
+        expect(lines[1][1]).toEqual value: '@var', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'keyword.other.phpdoc.php']
+        expect(lines[1][2]).toEqual value: ' ', scopes: ['source.php', 'comment.block.documentation.phpdoc.php']
+        expect(lines[1][3]).toEqual value: 'int', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'meta.other.type.phpdoc.php', 'keyword.other.type.php']
+        expect(lines[1][4]).toEqual value: ' description', scopes: ['source.php', 'comment.block.documentation.phpdoc.php']
+      
+      it 'should tokenize a single type with phpstan-var tag', ->
+        lines = grammar.tokenizeLines '''
+          /**
+          *@phpstan-var int description
+        '''
+
+        expect(lines[1][1]).toEqual value: '@phpstan-var', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'keyword.other.phpdoc.php']
+        expect(lines[1][2]).toEqual value: ' ', scopes: ['source.php', 'comment.block.documentation.phpdoc.php']
+        expect(lines[1][3]).toEqual value: 'int', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'meta.other.type.phpdoc.php', 'keyword.other.type.php']
+        expect(lines[1][4]).toEqual value: ' description', scopes: ['source.php', 'comment.block.documentation.phpdoc.php']
+
+      it 'should tokenize a single type with template tag', ->
+        lines = grammar.tokenizeLines '''
+          /**
+          *@template int description
+        '''
+
+        expect(lines[1][1]).toEqual value: '@template', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'keyword.other.phpdoc.php']
+        expect(lines[1][2]).toEqual value: ' ', scopes: ['source.php', 'comment.block.documentation.phpdoc.php']
+        expect(lines[1][3]).toEqual value: 'int', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'meta.other.type.phpdoc.php', 'keyword.other.type.php']
+        expect(lines[1][4]).toEqual value: ' description', scopes: ['source.php', 'comment.block.documentation.phpdoc.php']
+      
       it 'should tokenize a single nullable type', ->
         lines = grammar.tokenizeLines '''
           /**

@@ -2685,7 +2685,9 @@
       {
         # Tags followed by a type expression
         # -  @<tag> type
-        'begin': '(@(?:global|param|property(-(read|write))?|return|throws|var))\\s+(?=[?A-Za-z_\\x{7f}-\\x{10ffff}\\\\]|\\()'
+        'begin': '(?x)(@(?:(phpstan-)?(
+          global|extends|implements|param|property(-(read|write))?|template|return|throws|var|use
+        )))\\s+(?=[?A-Za-z_\\x{7f}-\\x{10ffff}\\\\]|\\()'
         'beginCaptures':
           '1':
             'name': 'keyword.other.phpdoc.php'
@@ -2706,10 +2708,11 @@
       {
         'match': '''(?x)
           @
-          (
+          (phpstan-)?(
             api|abstract|author|category|copyright|example|global|inherit[Dd]oc|internal|
-            license|link|method|property(-(read|write))?|package|param|return|see|since|source|
-            static|subpackage|throws|todo|var|version|uses|deprecated|final|ignore
+            immutable|license|link|method|property(-(read|write))?|package|param|readonly|
+            return|see|since|source|static|subpackage|template(-(covariant|contravariant))?|
+            throws|todo|var|version|use|deprecated|final|ignore
           )\\b
         '''
         'name': 'keyword.other.phpdoc.php'
