@@ -856,7 +856,11 @@
     'name': 'storage.type.php'
   }
   {
-    'match': '(?i)\\b(global|abstract|const|final|private|protected|public|static)\\b'
+    'match': '(?i)\\bconst\\b'
+    'name': 'storage.type.const.php'
+  }
+  {
+    'match': '(?i)\\b(global|abstract|final|private|protected|public|static)\\b'
     'name': 'storage.modifier.php'
   }
   {
@@ -1309,11 +1313,29 @@
   'class-constant':
     'patterns': [
       {
-        'match': '(?i)\\b(const)\\s*([a-z_\\x{7f}-\\x{10ffff}][a-z0-9_\\x{7f}-\\x{10ffff}]*)'
+        'match': '''(?xi)
+          \\b (const) \\s+
+          (?: (
+            # nullable type
+            (?:\\?\\s*)? [a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+ |
+            # union, intersection or DNF type
+            (?: [a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+ | \\(\\s* [a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+(?:\\s*&\\s*[a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+)+ \\s*\\) )
+            (?: \\s*[|&]\\s*
+            (?: [a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+ | \\(\\s* [a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+(?:\\s*&\\s*[a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+)+ \\s*\\) )
+            )+
+          ) \\s+ )?
+          ([a-z_\\x{7f}-\\x{10ffff}][a-z0-9_\\x{7f}-\\x{10ffff}]*)
+        '''
         'captures':
           '1':
-            'name': 'storage.modifier.php'
+            'name': 'storage.type.const.php'
           '2':
+            'patterns': [
+              {
+                'include': '#php-types'
+              }
+            ]
+          '3':
             'name': 'constant.other.php'
       }
     ]
