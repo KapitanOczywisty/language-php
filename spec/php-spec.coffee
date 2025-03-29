@@ -3121,13 +3121,13 @@ describe 'PHP grammar', ->
         expect(lines[1][4]).toEqual value: 'Foo', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'meta.other.type.phpdoc.php', 'support.class.php']
         expect(lines[1][5]).toEqual value: '&', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'meta.other.type.phpdoc.php', 'punctuation.separator.delimiter.php']
         expect(lines[1][6]).toEqual value: 'Bar', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'meta.other.type.phpdoc.php', 'support.class.php']
-        expect(lines[1][7]).toEqual value: ')', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'meta.other.type.phpdoc.php']
+        expect(lines[1][7]).toEqual value: ')', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'meta.other.type.phpdoc.php', 'punctuation.definition.type.end.bracket.round.phpdoc.php']
         expect(lines[1][8]).toEqual value: '|', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'meta.other.type.phpdoc.php', 'punctuation.separator.delimiter.php']
         expect(lines[1][9]).toEqual value: 'false', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'meta.other.type.phpdoc.php', 'keyword.other.type.php']
-        expect(lines[1][11]).toEqual value: 'description', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'meta.other.type.phpdoc.php', 'support.class.php']
+        expect(lines[1][10]).toEqual value: ' description', scopes: ['source.php', 'comment.block.documentation.phpdoc.php']
 
       it 'should end the PHPDoc at the ending comment even if there are malformed types', ->
-        {tokens} = grammar.tokenizeLine '/** @var array(string) */'
+        {tokens} = grammar.tokenizeLine '/** @var array(string */'
 
         expect(tokens[8]).toEqual value: '*/', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'punctuation.definition.comment.php']
 

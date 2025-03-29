@@ -2701,6 +2701,10 @@
           {
             'include': '#php_doc_types'
           }
+          {
+            'match': '[|&]'
+            'name': 'punctuation.separator.delimiter.php'
+          }
         ]
       }
       {
@@ -2723,7 +2727,7 @@
       }
     ]
   'php_doc_types':
-    'match': '(?i)\\??[a-z_\\x{7f}-\\x{10ffff}\\\\][a-z0-9_\\x{7f}-\\x{10ffff}\\\\]*([|&]\\??[a-z_\\x{7f}-\\x{10ffff}\\\\][a-z0-9_\\x{7f}-\\x{10ffff}\\\\]*)*'
+    'match': '(?i)\\??[a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+([|&]\\??[a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+)*'
     'captures':
       '0':
         'patterns': [
@@ -2745,14 +2749,6 @@
             'match': '[|&]'
             'name': 'punctuation.separator.delimiter.php'
           }
-          {
-            'match': '\\('
-            'name': 'punctuation.definition.type.begin.bracket.round.php'
-          }
-          {
-            'match': '\\)'
-            'name': 'punctuation.definition.type.end.bracket.round.php'
-          }
         ]
   'php_doc_types_array_multiple':
     # Multiple types array: (int|string|(int|string)[])[]
@@ -2760,7 +2756,7 @@
     'beginCaptures':
       '0':
         'name': 'punctuation.definition.type.begin.bracket.round.phpdoc.php'
-    'end': '(\\))(\\[\\])|(?=\\*/)'
+    'end': '(\\))(\\[\\])?|(?=\\*/)'
     'endCaptures':
       '1':
         'name': 'punctuation.definition.type.end.bracket.round.phpdoc.php'
@@ -2783,7 +2779,7 @@
     ]
   'php_doc_types_array_single':
     # Singular type array: int[]
-    'match': '(?i)([a-z_\\x{7f}-\\x{10ffff}\\\\][a-z0-9_\\x{7f}-\\x{10ffff}\\\\]*)(\\[\\])'
+    'match': '(?i)([a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+)(\\[\\])'
     'captures':
       '1':
         'patterns': [
