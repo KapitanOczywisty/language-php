@@ -643,7 +643,7 @@
       {
         # Constructor Property Promotion
         'begin': '''(?xi)
-          ((?:(?:public|private|protected|readonly)(?:\\s+|(?=\\?)))++)
+          ((?:(?:(?:public|private|protected)(?:\\(set\\))?|readonly)(?:\\s+|(?=\\?)))++)
           (?: (
             # nullable type
             (?:\\?\\s*)? [a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+ |
@@ -659,7 +659,7 @@
           '1':
             'patterns': [
               {
-                'match': 'public|private|protected|readonly'
+                'match': '(?:public|private|protected)(?:\\(set\\))?|readonly'
                 'name': 'storage.modifier.php'
               }
             ]
@@ -769,7 +769,7 @@
   }
   {
     'match': '''(?xi)
-      ((?:(?:public|private|protected|static|readonly)(?:\\s+|(?=\\?)))++)                     # At least one modifier
+      ((?:(?:(?:public|private|protected)(?:\\(set\\))?|static|readonly)(?:\\s+|(?=\\?)))++)                     # At least one modifier
       (
         # nullable type
         (?:\\?\\s*)? [a-z0-9_\\x{7f}-\\x{10ffff}\\\\]+ |
@@ -785,7 +785,7 @@
       '1':
         'patterns': [
           {
-            'match': 'public|private|protected|static|readonly'
+            'match': '(?:public|private|protected)(?:\\(set\\))?|static|readonly'
             'name': 'storage.modifier.php'
           }
         ]
