@@ -1057,9 +1057,11 @@
         ]
       }
       {
-        # There will be other attributes in the future
         'match': '''(?xi)
-          (\\\\)?\\b(Attribute|SensitiveParameter|AllowDynamicProperties|ReturnTypeWillChange)\\b
+          (\\\\)?\\b(
+            Attribute|SensitiveParameter|AllowDynamicProperties|ReturnTypeWillChange
+            |Override|Deprecated
+          )\\b
         '''
         'name': 'support.attribute.builtin.php'
         'captures':
@@ -1156,7 +1158,9 @@
           |ParentIterator|PDO(Statement)?|Phar(Data|FileInfo)?|php_user_filter|Pool
           |QuickHash(Int(Set|StringHash)|StringIntHash)
           |Recursive(Array|Caching|Directory|Fallback|Filter|Iterator|Regex|Tree)?Iterator
-          |Reflection(Class|Function(Abstract)?|Method|Object|Parameter|Property|(Zend)?Extension)?
+          |Reflection(Attribute|Class(Constant)?|Constant|Enum(UnitCase|BackedCase)?
+            |Fiber|Function(Abstract)?|Generator|(Named|Union|Intersection)?Type
+            |Method|Object|Parameter|Property|Reference|(Zend)?Extension)?
           |RangeException|Reflector|RegexIterator|ResourceBundle|RuntimeException|RRD(Creator|Graph|Updater)
           |SAM(Connection|Message)|SCA(_(SoapProxy|LocalProxy))?
           |SDO_(DAS_(ChangeSummary|Data(Factory|Object)|Relational|Setting|XML(_Document)?)
@@ -3206,12 +3210,15 @@
       {
         'match': '''(?xi)\\b
           (
-            shuffle|sizeof|sort|next|nat(case)?sort|count|compact|current|in_array|usort|uksort|uasort|
-            pos|prev|end|each|extract|ksort|key(_exists)?|krsort|list|asort|arsort|rsort|reset|range|
-            array(_(shift|sum|splice|search|slice|chunk|change_key_case|count_values|column|combine|
-                    (diff|intersect)(_(u)?(key|assoc))?|u(diff|intersect)(_(u)?assoc)?|unshift|unique|
-                    pop|push|pad|product|values|keys|key_exists|filter|fill(_keys)?|flip|walk(_recursive)?|
-                    reduce|replace(_recursive)?|reverse|rand|multisort|merge(_recursive)?|map)?)
+            compact|count|current|end|extract|in_array|key(_exists)?|list|nat(case)?sort|
+            next|pos|prev|range|reset|shuffle|sizeof|[ak]?r?sort|u[ak]?sort|
+            array_(
+              all|any|change_key_case|chunk|column|combine|count_values|
+              fill(_keys)?|filter|find(_key)?|flip|is_list|key_(exists|first|last)|keys|
+              map|multisort|pad|pop|product|push|rand|reduce|reverse|
+              search|shift|slice|splice|sum|unique|unshift|values|
+              u?(diff|intersect)(_u?(key|assoc))?|(walk|replace|merge)(_recursive)?
+            )
           )\\b
         '''
         'name': 'support.function.array.php'
@@ -3219,15 +3226,15 @@
       {
         'match': '''(?xi)\\b
           (
-            show_source|sys_getloadavg|sleep|highlight_(file|string)|constant|connection_(aborted|status)|
-            time_(nanosleep|sleep_until)|ignore_user_abort|die|define(d)?|usleep|uniqid|unpack|__halt_compiler|
-            php_(check_syntax|strip_whitespace)|pack|eval|exit|get_browser
+            connection_(aborted|status)|constant|defined?|die|eval|exit|get_browser|
+            __halt_compiler|highlight_(file|string)|hrtime|ignore_user_abort|pack|php_strip_whitespace|
+            show_source|u?sleep|sys_getloadavg|time_(nanosleep|sleep_until)|uniqid|unpack
           )\\b
         '''
         'name': 'support.function.basic_functions.php'
       }
       {
-        'match': '(?i)\\bbc(scale|sub|sqrt|comp|div|pow(mod)?|add|mod|mul)\\b'
+        'match': '(?i)\\bbc(add|ceil|comp|(div|pow)(mod)?|floor|mod|mul|round|scale|sqrt|sub)\\b'
         'name': 'support.function.bcmath.php'
       }
       {
@@ -3250,8 +3257,10 @@
       {
         'match': '''(?xi)\\b
           (
-            class_alias|all_user_method(_array)?|is_(a|subclass_of)|__autoload|(class|interface|method|property|trait)_exists|
-            get_(class(_(vars|methods))?|(called|parent)_class|object_vars|declared_(classes|interfaces|traits))
+            __autoload|class_alias|(class|interface|method|property|trait|enum)_exists|
+            is_(a|subclass_of)|
+            get_(class(_(vars|methods))?|(called|parent)_class|
+              (mangled_)?object_vars|declared_(classes|interfaces|traits))
           )\\b
         '''
         'name': 'support.function.classobj.php'
@@ -3281,9 +3290,11 @@
       {
         'match': '''(?xi)\\b
           curl_(
-            share_(close|init|setopt)|strerror|setopt(_array)?|copy_handle|close|init|unescape|pause|escape|
-            errno|error|exec|version|file_create|reset|getinfo|
-            multi_(strerror|setopt|select|close|init|info_read|(add|remove)_handle|getcontent|exec)
+            close|copy_handle|errno|error|escape|exec|getinfo|init|pause|reset|
+setopt(_array)?|strerror|unescape|upkeep|version|
+            multi_((add|remove)_handle|close|errno|exec|getcontent|
+              info_read|init|select|setopt|strerror)|
+            share_(close|errno|init(_persistent)?|setopt|strerror)
           )\\b
         '''
         'name': 'support.function.curl.php'
@@ -3293,8 +3304,8 @@
           (
             strtotime|str[fp]time|checkdate|time|timezone_name_(from_abbr|get)|idate|
             timezone_((location|offset|transitions|version)_get|(abbreviations|identifiers)_list|open)|
-            date(_(sun(rise|set)|sun_info|sub|create(_(immutable_)?from_format)?|timestamp_(get|set)|timezone_(get|set)|time_set|
-                   isodate_set|interval_(create_from_date_string|format)|offset_get|diff|default_timezone_(get|set)|date_set|
+            date(_(sun(rise|set)|sun_info|sub|create(_immutable)?(_from_format)?|timestamp_[gs]et|timezone_[gs]et|time_set|
+                   isodate_set|interval_(create_from_date_string|format)|offset_get|diff|default_timezone_[gs]et|date_set|
                    parse(_from_format)?|format|add|get_last_errors|modify))?|
             localtime|get(date|timeofday)|gm(strftime|date|mktime)|microtime|mktime
           )\\b
@@ -3338,7 +3349,7 @@
         'name': 'support.function.ereg.php'
       }
       {
-        'match': '(?i)\\b((restore|set)_(error_handler|exception_handler)|trigger_error|debug_(print_)?backtrace|user_error|error_(log|reporting|get_last))\\b'
+        'match': '(?i)\\b((restore|set)_(error|exception)_handler|trigger_error|debug_(print_)?backtrace|user_error|error_(log|reporting|(clear|get)_last))\\b'
         'name': 'support.function.errorfunc.php'
       }
       {
@@ -3384,7 +3395,8 @@
             dirname|delete|unlink|umask|pclose|popen|pathinfo|parse_ini_(file|string)|fscanf|fstat|fseek|fnmatch|
             fclose|ftell|ftruncate|file(size|[acm]time|type|inode|owner|perms|group)?|file_(exists|(get|put)_contents)|
             f(open|puts|putcsv|passthru|eof|flush|write|lock|read|gets(s)?|getc(sv)?)|lstat|lchown|lchgrp|link(info)?|
-            rename|rewind|read(file|link)|realpath(_cache_(get|size))?|rmdir|glob|move_uploaded_file|mkdir|basename
+            rename|rewind|read(file|link)|realpath(_cache_(get|size))?|rmdir|glob|move_uploaded_file|mkdir|basename|
+            f(data)?sync
           )\\b
         '''
         'name': 'support.function.file.php'
@@ -3398,7 +3410,7 @@
         'name': 'support.function.filter.php'
       }
       {
-        'match': '(?i)\\bfastcgi_finish_request\\b'
+        'match': '(?i)\\b(fastcgi_finish_request|fpm_get_status)\\b'
         'name': 'support.function.fpm.php'
       }
       {
@@ -3413,14 +3425,20 @@
         'match': '''(?xi)\\b
           gmp_(
             scan[01]|strval|sign|sub|setbit|sqrt(rem)?|hamdist|neg|nextprime|com|clrbit|cmp|testbit|
-            intval|init|invert|import|or|div(exact)?|div_(q|qr|r)|jacobi|popcount|pow(m)?|perfect_square|
-            prob_prime|export|fact|legendre|and|add|abs|root(rem)?|random(_(bits|range))?|gcd(ext)?|xor|mod|mul
+            intval|init|invert|import|or|div(exact)?|div_(q|qr|r)|jacobi|popcount|pow(m)?|perfect_(square|power)|
+            prob_prime|export|fact|legendre|and|add|abs|root(rem)?|random(_(bits|range|seed))?|gcd(ext)?|xor|mod|mul|
+            binomial|kronecker|lcm
           )\\b
         '''
         'name': 'support.function.gmp.php'
       }
       {
-        'match': '(?i)\\bhash(_(hmac(_file)?|copy|init|update(_(file|stream))?|pbkdf2|equals|file|final|algos))?\\b'
+        'match': '(?xi)\\b
+          hash(_(
+            algos|copy|equals|file|final|hkdf|hmac(_(file|algos)?)?|
+            init|pbkdf2|update(_(file|stream))?
+          ))?
+        \\b'
         'name': 'support.function.hash.php'
       }
       {
@@ -3437,7 +3455,7 @@
         'name': 'support.function.http.php'
       }
       {
-        'match': '(?i)\\b(iconv(_(str(pos|len|rpos)|substr|(get|set)_encoding|mime_(decode(_headers)?|encode)))?|ob_iconv_handler)\\b'
+        'match': '(?i)\\b(iconv(_(str(pos|len|rpos)|substr|[gs]et_encoding|mime_(decode(_headers)?|encode)))?|ob_iconv_handler)\\b'
         'name': 'support.function.iconv.php'
       }
       {
@@ -3448,16 +3466,16 @@
         'match': '''(?xi)\\b
           (
             iptc(embed|parse)|(jpeg|png)2wbmp|gd_info|getimagesize(fromstring)?|
-            image(s[xy]|scale|(char|string)(up)?|set(style|thickness|tile|interpolation|pixel|brush)|savealpha|
+            image(s[xy]|scale|(char|string)(up)?|set(clip|style|thickness|tile|interpolation|pixel|brush)|savealpha|
                   convolution|copy(resampled|resized|merge(gray)?)?|colors(forindex|total)|
                   color(set|closest(alpha|hwb)?|transparent|deallocate|(allocate|exact|resolve)(alpha)?|at|match)|
-                  crop(auto)?|create(truecolor|from(string|jpeg|png|wbmp|webp|gif|gd(2(part)?)?|xpm|xbm))?|
+                  crop(auto)?|create(truecolor|from(avif|bmp|string|jpeg|png|wbmp|webp|gif|gd(2(part)?)?|tga|xpm|xbm))?|
                   types|ttf(bbox|text)|truecolortopalette|istruecolor|interlace|2wbmp|destroy|dashedline|jpeg|
                   _type_to_(extension|mime_type)|ps(slantfont|text|(encode|extend|free|load)font|bbox)|png|polygon|
                   palette(copy|totruecolor)|ellipse|ft(text|bbox)|filter|fill|filltoborder|
                   filled(arc|ellipse|polygon|rectangle)|font(height|width)|flip|webp|wbmp|line|loadfont|layereffect|
-                  antialias|affine(matrix(concat|get))?|alphablending|arc|rotate|rectangle|gif|gd(2)?|gammacorrect|
-                  grab(screen|window)|xbm)
+                  antialias|affine(matrix(concat|get))?|alphablending|arc|rotate|rectangle|gif|gd2?|gammacorrect|
+                  grab(screen|window)|xbm|resolution|openpolygon|get(clip|interpolation)|avif|bmp)
           )\\b
         '''
         'name': 'support.function.image.php'
@@ -3465,7 +3483,7 @@
       {
         'match': '''(?xi)\\b
           (
-            sys_get_temp_dir|set_(time_limit|include_path|magic_quotes_runtime)|cli_(get|set)_process_title|
+            sys_get_temp_dir|set_(time_limit|include_path|magic_quotes_runtime)|cli_[gs]et_process_title|
             ini_(alter|get(_all)?|restore|set)|zend_(thread_id|version|logo_guid)|dl|php(credits|info|version)|
             php_(sapi_name|ini_(scanned_files|loaded_file)|uname|logo_guid)|putenv|extension_loaded|version_compare|
             assert(_options)?|restore_include_path|gc_(collect_cycles|disable|enable(d)?)|getopt|
@@ -3504,14 +3522,14 @@
             locale_(set_default|compose|canonicalize|parse|filter_matches|lookup|accept_from_http|
                     get_(script|display_(script|name|variant|language|region)|default|primary_language|keywords|all_variants|region))|
             resourcebundle_(create|count|locales|get(_(error_(code|message)))?)|
-            grapheme_(str(i?str|r?i?pos|len)|substr|extract)|
+            grapheme_(str(i?str|r?i?pos|len|_split)|substr|extract)|
             msgfmt_(set_pattern|create|(format|parse)(_message)?|get_(pattern|error_(code|message)|locale))
           )\\b
         '''
         'name': 'support.function.intl.php'
       }
       {
-        'match': '(?i)\\bjson_(decode|encode|last_error(_msg)?)\\b'
+        'match': '(?i)\\bjson_(decode|encode|last_error(_msg)?|validate)\\b'
         'name': 'support.function.json.php'
       }
       {
@@ -3537,9 +3555,9 @@
       {
         'match': '''(?xi)\\b
           (
-            (a)?(cos|sin|tan)(h)?|sqrt|srand|hypot|hexdec|ceil|is_(nan|(in)?finite)|octdec|dec(hex|oct|bin)|deg2rad|
-            pi|pow|exp(m1)?|floor|fmod|lcg_value|log(1(p|0))?|atan2|abs|round|rand|rad2deg|getrandmax|
-            mt_(srand|rand|getrandmax)|max|min|bindec|base_convert
+            a?(cos|sin|tan)h?|sqrt|srand|hypot|hexdec|ceil|is_(nan|(in)?finite)|octdec|dec(hex|oct|bin)|deg2rad|
+            pi|pow|exp(m1)?|floor|f(div|mod|pow)|lcg_value|log(1[p0])?|atan2|abs|round|rand|rad2deg|getrandmax|
+            mt_(srand|rand|getrandmax)|max|min|bindec|base_convert|intdiv
           )\\b
         '''
         'name': 'support.function.math.php'
@@ -3547,12 +3565,13 @@
       {
         'match': '''(?xi)\\b
           mb_(
-            str(cut|str|to(lower|upper)|istr|ipos|imwidth|pos|width|len|rchr|richr|ripos|rpos)|
+            str(cut|str|to(lower|upper)|istr|ipos|imwidth|pos|width|len|rchr|richr|ripos|rpos|_pad|_split)|
             substitute_character|substr(_count)?|split|send_mail|http_(input|output)|check_encoding|
             convert_(case|encoding|kana|variables)|internal_encoding|output_handler|decode_(numericentity|mimeheader)|
             detect_(encoding|order)|parse_str|preferred_mime_name|encoding_aliases|encode_(numericentity|mimeheader)|
             ereg(i(_replace)?)?|ereg_(search(_(get(pos|regs)|init|regs|(set)?pos))?|replace(_callback)?|match)|
-            list_encodings|language|regex_(set_options|encoding)|get_info
+            list_encodings|language|regex_(set_options|encoding)|get_info|
+            [lr]?trim|[lu]cfirst|ord|chr|scrub
           )\\b
         '''
         'name': 'support.function.mbstring.php'
@@ -3601,7 +3620,7 @@
           mysqli_(
             ssl_set|store_result|stat|send_(query|long_data)|set_(charset|opt|local_infile_(default|handler))|
             stmt_(store_result|send_long_data|next_result|close|init|data_seek|prepare|execute|fetch|free_result|
-                  attr_(get|set)|result_metadata|reset|get_(result|warnings)|more_results|bind_(param|result))|
+                  attr_[gs]et|result_metadata|reset|get_(result|warnings)|more_results|bind_(param|result))|
             select_db|slave_query|savepoint|next_result|change_user|character_set_name|connect|commit|
             client_encoding|close|thread_safe|init|options|(enable|disable)_(reads_from_master|rpl_parse)|
             dump_debug_info|debug|data_seek|use_result|ping|poll|param_count|prepare|escape_string|execute|
@@ -3636,7 +3655,8 @@
             syslog|socket_(set_(blocking|timeout)|get_status)|set(raw)?cookie|http_response_code|openlog|
             headers_(list|sent)|header(_(register_callback|remove))?|checkdnsrr|closelog|inet_(ntop|pton)|ip2long|
             openlog|dns_(check_record|get_(record|mx))|define_syslog_variables|(p)?fsockopen|long2ip|
-            get(servby(name|port)|host(name|by(name(l)?|addr))|protoby(name|number)|mxrr)
+            get(servby(name|port)|host(name|by(name(l)?|addr))|protoby(name|number)|mxrr)|
+            http_(clear|get)_last_response_headers|net_get_interfaces|request_parse_body
           )\\b
         '''
         'name': 'support.function.network.php'
@@ -3663,18 +3683,18 @@
         'name': 'support.function.oci8.php'
       }
       {
-        'match': '(?i)\\bopcache_(compile_file|invalidate|reset|get_(status|configuration))\\b'
+        'match': '(?i)\\bopcache_(compile_file|invalidate|is_script_cached|reset|get_(status|configuration))\\b'
         'name': 'support.function.opcache.php'
       }
       {
         'match': '''(?xi)\\b
           openssl_(
             sign|spki_(new|export(_challenge)?|verify)|seal|csr_(sign|new|export(_to_file)?|get_(subject|public_key))|
-            cipher_iv_length|open|dh_compute_key|digest|decrypt|public_(decrypt|encrypt)|encrypt|error_string|
-            pkcs12_(export(_to_file)?|read)|pkcs7_(sign|decrypt|encrypt|verify)|verify|free_key|random_pseudo_bytes|
-            pkey_(new|export(_to_file)?|free|get_(details|public|private))|private_(decrypt|encrypt)|pbkdf2|
-            get_((cipher|md)_methods|cert_locations|(public|private)key)|
-            x509_(check_private_key|checkpurpose|parse|export(_to_file)?|fingerprint|free|read)
+            cipher_(iv|key)_length|open|dh_compute_key|digest|decrypt|public_(decrypt|encrypt)|encrypt|error_string|
+            pkcs12_(export(_to_file)?|read)|(cms|pkcs7)_(sign|decrypt|encrypt|verify|read)|verify|free_key|random_pseudo_bytes|
+            pkey_(derive|new|export(_to_file)?|free|get_(details|public|private))|private_(decrypt|encrypt)|pbkdf2|
+            get_((cipher|md)_methods|cert_locations|curve_names|(public|private)key)|
+            x509_(check_private_key|checkpurpose|parse|export(_to_file)?|fingerprint|free|read|verify)
           )\\b
         '''
         'name': 'support.function.openssl.php'
@@ -3690,14 +3710,15 @@
         'name': 'support.function.output.php'
       }
       {
-        'match': '(?i)\\bpassword_(hash|needs_rehash|verify|get_info)\\b'
+        'match': '(?i)\\bpassword_(algos|hash|needs_rehash|verify|get_info)\\b'
         'name': 'support.function.password.php'
       }
       {
         'match': '''(?xi)\\b
           pcntl_(
-            strerror|signal(_dispatch)?|sig(timedwait|procmask|waitinfo)|setpriority|errno|exec|fork|
-            w(stopsig|termsig|if(stopped|signaled|exited))|wait(pid)?|alarm|getpriority|get_last_error
+            alarm|async_signals|errno|exec|r?fork|get_last_error|[gs]et(cpuaffinity|priority)|
+            signal(_(dispatch|get_handler))?|sig(procmask|timedwait|waitinfo)|strerror|unshare|
+            wait(p?id)?|wexitstatus|wif(exited|signaled|stopped)|w(stop|term)sig
           )\\b
         '''
         'name': 'support.function.pcntl.php'
@@ -3718,7 +3739,7 @@
         'name': 'support.function.pgsql.php'
       }
       {
-        'match': '(?i)\\b(virtual|getallheaders|apache_((get|set)env|note|child_terminate|lookup_uri|response_headers|reset_timeout|request_headers|get_(version|modules)))\\b'
+        'match': '(?i)\\b(virtual|getallheaders|apache_([gs]etenv|note|child_terminate|lookup_uri|response_headers|reset_timeout|request_headers|get_(version|modules)))\\b'
         'name': 'support.function.php_apache.php'
       }
       {
@@ -3769,7 +3790,7 @@
         'name': 'support.function.php_odbc.php'
       }
       {
-        'match': '(?i)\\bpreg_(split|quote|filter|last_error|replace(_callback)?|grep|match(_all)?)\\b'
+        'match': '(?i)\\bpreg_(split|quote|filter|last_error(_msg)?|replace(_callback(_array)?)?|grep|match(_all)?)\\b'
         'name': 'support.function.php_pcre.php'
       }
       {
@@ -3783,9 +3804,9 @@
       {
         'match': '''(?xi)\\b
           posix_(
-            strerror|set(s|e?u|[ep]?g)id|ctermid|ttyname|times|isatty|initgroups|uname|errno|kill|access|
+            strerror|set(s|e?u|[ep]?g)id|ctermid|ttyname|times|isatty|initgroups|uname|errno|kill|e?access|
             get(sid|cwd|uid|pid|ppid|pwnam|pwuid|pgid|pgrp|euid|egid|login|rlimit|gid|grnam|groups|grgid)|
-            get_last_error|mknod|mkfifo
+            get_last_error|mknod|mkfifo|(sys|f?path)conf|setrlimit
           )\\b
         '''
         'name': 'support.function.posix.php'
@@ -3829,7 +3850,7 @@
           session_(
             status|start|set_(save_handler|cookie_params)|save_path|name|commit|cache_(expire|limiter)|
             is_registered|id|destroy|decode|unset|unregister|encode|write_close|abort|reset|register(_shutdown)?|
-            regenerate_id|get_cookie_params|module_name
+            (regenerate|create)_id|get_cookie_params|module_name|gc
           )\\b
         '''
         'name': 'support.function.session.php'
@@ -3860,9 +3881,10 @@
       {
         'match': '''(?xi)\\b
           socket_(
-            shutdown|strerror|send(to|msg)?|set_((non)?block|option)|select|connect|close|clear_error|bind|
-            create(_(pair|listen))?|cmsg_space|import_stream|write|listen|last_error|accept|recv(from|msg)?|
-            read|get(peer|sock)name|get_option
+            accept|addrinfo_(bind|connect|explain|lookup)|atmark|bind|(clear|last)_error|close|cmsg_space|connect|
+            create(_(listen|pair))?|(ex|im)port_stream|[gs]et_option|[gs]etopt|get(peer|sock)name|
+            listen|read|recv(from|msg)?|select|send(msg|to)?|set_(non)?block|shutdown|strerror|write|
+            wsaprotocol_info_(export|import|release)
           )\\b
         '''
         'name': 'support.function.sockets.php'
@@ -3908,15 +3930,13 @@
       }
       {
         'match': '''(?xi)\\b
-          (
-            set_socket_blocking|
-            stream_(socket_(shutdown|sendto|server|client|pair|enable_crypto|accept|recvfrom|get_name)|
-              set_(chunk_size|timeout|(read|write)_buffer|blocking)|select|notification_callback|supports_lock|
-              context_(set_(option|default|params)|create|get_(options|default|params))|copy_to_stream|is_local|
-              encoding|filter_(append|prepend|register|remove)|wrapper_((un)?register|restore)|
-              resolve_include_path|register_wrapper|get_(contents|transports|filters|wrappers|line|meta_data)|
-              bucket_(new|prepend|append|make_writeable)
-            )
+          stream_(
+            bucket_(new|prepend|append|make_writeable)|
+            context_(create|[gs]et_(options?|default|params))|copy_to_stream|filter_((ap|pre)pend|register|remove)|
+            get_(contents|filters|line|meta_data|transports|wrappers)|is(atty|_local)|notification_callback|register_wrapper|resolve_include_path|select|
+            set_(blocking|chunk_size|(read|write)_buffer|timeout)|
+            socket_(accept|client|enable_crypto|get_name|pair|recvfrom|sendto|server|shutdown)|
+            supports_lock|wrapper_((un)?register|restore)
           )\\b
         '''
         'name': 'support.function.streamsfuncs.php'
@@ -3926,7 +3946,8 @@
           (
             money_format|md5(_file)?|metaphone|bin2hex|sscanf|sha1(_file)?|
             str(str|c?spn|n(at)?(case)?cmp|chr|coll|(case)?cmp|to(upper|lower)|tok|tr|istr|pos|pbrk|len|rchr|ri?pos|rev)|
-            str_(getcsv|ireplace|pad|repeat|replace|rot13|shuffle|split|word_count)|
+            str_(getcsv|i?replace|pad|repeat|rot13|shuffle|split|word_count|
+              contains|(starts|ends)_with|(in|de)crement)|
             strip(c?slashes|os)|strip_tags|similar_text|soundex|substr(_(count|compare|replace))?|setlocale|
             html(specialchars(_decode)?|entities)|html_entity_decode|hex2bin|hebrev(c)?|number_format|nl2br|nl_langinfo|
             chop|chunk_split|chr|convert_(cyr_string|uu(decode|encode))|count_chars|crypt|crc32|trim|implode|ord|
@@ -3953,7 +3974,7 @@
       {
         'match': '''(?xi)\\b
           (
-            tidy_((get|set)opt|set_encoding|save_config|config_count|clean_repair|is_(xhtml|xml)|diagnose|
+            tidy_([gs]etopt|set_encoding|save_config|config_count|clean_repair|is_(xhtml|xml)|diagnose|
                   (access|error|warning)_count|load_config|reset_config|(parse|repair)_(string|file)|
                   get_(status|html(_ver)?|head|config|output|opt_doc|root|release|body))|
             ob_tidyhandler
@@ -3999,9 +4020,9 @@
       {
         'match': '''(?xi)\\b
           (
-            strval|settype|serialize|(bool|double|float)val|debug_zval_dump|intval|import_request_variables|isset|
-            is_(scalar|string|null|numeric|callable|int(eger)?|object|double|float|long|array|resource|real|bool)|
-            unset|unserialize|print_r|empty|var_(dump|export)|gettype|get_(defined_vars|resource_type)
+            (bool|double|float|int|str)val|debug_zval_dump|empty|get_(debug_type|defined_vars|resource_(id|type))|[gs]ettype|
+            is_(array|bool|callable|countable|double|float|int(eger)?|iterable|long|null|numeric|object|real|resource|scalar|string)|
+            isset|print_r|(un)?serialize|unset|var_(dump|export)
           )\\b
         '''
         'name': 'support.function.var.php'
@@ -4021,7 +4042,7 @@
             utf8_(decode|encode)|
             xml_(set_((notation|(end|start)_namespace|unparsed_entity)_decl_handler|
                       (character_data|default|element|external_entity_ref|processing_instruction)_handler|object)|
-                 parse(_into_struct)?|parser_((get|set)_option|create(_ns)?|free)|error_string|
+                 parse(_into_struct)?|parser_([gs]et_option|create(_ns)?|free)|error_string|
                  get_(current_((column|line)_number|byte_index)|error_code))
           )\\b
         '''
@@ -4031,7 +4052,7 @@
         'match': '''(?xi)\\b
           xmlrpc_(
             server_(call_method|create|destroy|add_introspection_data|register_(introspection_callback|method))|
-            is_fault|decode(_request)?|parse_method_descriptions|encode(_request)?|(get|set)_type
+            is_fault|decode(_request)?|parse_method_descriptions|encode(_request)?|[gs]et_type
           )\\b
         '''
         'name': 'support.function.xmlrpc.php'
@@ -4051,14 +4072,10 @@
           (
             zlib_(decode|encode|get_coding_type)|readgzfile|
             gz(seek|compress|close|tell|inflate|open|decode|deflate|uncompress|puts|passthru|encode|eof|file|
-               write|rewind|read|getc|getss?)
+               write|rewind|read|getc|getss?)|deflate_(add|init)|inflate_(add|get_(read_len|status)|init)
           )\\b
         '''
         'name': 'support.function.zlib.php'
-      }
-      {
-        'match': '(?i)\\bis_int(eger)?\\b'
-        'name': 'support.function.alias.php'
       }
     ]
   'switch_statement':
