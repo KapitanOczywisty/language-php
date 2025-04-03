@@ -744,7 +744,7 @@ describe 'PHP grammar', ->
       expect(tokens[8]).toEqual value: '(', scopes: ["source.php", "punctuation.definition.arguments.begin.bracket.round.php"]
       expect(tokens[9]).toEqual value: ')', scopes: ["source.php", "punctuation.definition.arguments.end.bracket.round.php"]
       expect(tokens[10]).toEqual value: ';', scopes: ["source.php", "punctuation.terminator.expression.php"]
-      
+
     it 'tokenizes class instantiation', ->
       {tokens} = grammar.tokenizeLine '$a = new ClassName();'
 
@@ -2601,6 +2601,58 @@ describe 'PHP grammar', ->
       expect(tokens[16]).toEqual value: '[', scopes: ["source.php", "punctuation.section.array.begin.php"]
       expect(tokens[17]).toEqual value: '0b1_0', scopes: ["source.php", "constant.numeric.binary.php"]
       expect(tokens[18]).toEqual value: ']', scopes: ["source.php", "punctuation.section.array.end.php"]
+
+  it 'should tokenize conditions correctly', ->
+    lines = grammar.tokenizeLines '''
+      if (1) {
+        echo 1;
+      } elseif (2) {
+        echo 2;
+      } else {
+        echo 3;
+      }
+    '''
+
+    expect(lines[0][0]).toEqual value: 'if', scopes: ['source.php', 'keyword.control.if.php']
+    expect(lines[0][2]).toEqual value: '(', scopes: ['source.php', 'punctuation.definition.begin.bracket.round.php']
+    expect(lines[0][3]).toEqual value: '1', scopes: ['source.php', 'constant.numeric.decimal.php']
+    expect(lines[0][4]).toEqual value: ')', scopes: ['source.php', 'punctuation.definition.end.bracket.round.php']
+    expect(lines[0][6]).toEqual value: '{', scopes: ['source.php', 'punctuation.definition.begin.bracket.curly.php']
+    expect(lines[2][0]).toEqual value: '}', scopes: ['source.php', 'punctuation.definition.end.bracket.curly.php']
+    expect(lines[2][2]).toEqual value: 'elseif', scopes: ['source.php', 'keyword.control.elseif.php']
+    expect(lines[2][4]).toEqual value: '(', scopes: ['source.php', 'punctuation.definition.begin.bracket.round.php']
+    expect(lines[2][5]).toEqual value: '2', scopes: ['source.php', 'constant.numeric.decimal.php']
+    expect(lines[2][6]).toEqual value: ')', scopes: ['source.php', 'punctuation.definition.end.bracket.round.php']
+    expect(lines[2][8]).toEqual value: '{', scopes: ['source.php', 'punctuation.definition.begin.bracket.curly.php']
+    expect(lines[4][0]).toEqual value: '}', scopes: ['source.php', 'punctuation.definition.end.bracket.curly.php']
+    expect(lines[4][2]).toEqual value: 'else', scopes: ['source.php', 'keyword.control.else.php']
+    expect(lines[4][4]).toEqual value: '{', scopes: ['source.php', 'punctuation.definition.begin.bracket.curly.php']
+    expect(lines[6][0]).toEqual value: '}', scopes: ['source.php', 'punctuation.definition.end.bracket.curly.php']
+
+    lines = grammar.tokenizeLines '''
+      if (1):
+        echo 1;
+      elseif (2):
+        echo 2;
+      else:
+        echo 3;
+      endif;
+    '''
+
+    expect(lines[0][0]).toEqual value: 'if', scopes: ['source.php', 'keyword.control.if.php']
+    expect(lines[0][2]).toEqual value: '(', scopes: ['source.php', 'punctuation.definition.begin.bracket.round.php']
+    expect(lines[0][3]).toEqual value: '1', scopes: ['source.php', 'constant.numeric.decimal.php']
+    expect(lines[0][4]).toEqual value: ')', scopes: ['source.php', 'punctuation.definition.end.bracket.round.php']
+    expect(lines[0][5]).toEqual value: ':', scopes: ['source.php', 'punctuation.terminator.statement.php']
+    expect(lines[2][0]).toEqual value: 'elseif', scopes: ['source.php', 'keyword.control.elseif.php']
+    expect(lines[2][2]).toEqual value: '(', scopes: ['source.php', 'punctuation.definition.begin.bracket.round.php']
+    expect(lines[2][3]).toEqual value: '2', scopes: ['source.php', 'constant.numeric.decimal.php']
+    expect(lines[2][4]).toEqual value: ')', scopes: ['source.php', 'punctuation.definition.end.bracket.round.php']
+    expect(lines[2][5]).toEqual value: ':', scopes: ['source.php', 'punctuation.terminator.statement.php']
+    expect(lines[4][0]).toEqual value: 'else', scopes: ['source.php', 'keyword.control.else.php']
+    expect(lines[4][1]).toEqual value: ':', scopes: ['source.php', 'punctuation.terminator.statement.php']
+    expect(lines[6][0]).toEqual value: 'endif', scopes: ['source.php', 'keyword.control.endif.php']
+    expect(lines[6][1]).toEqual value: ';', scopes: ['source.php', 'punctuation.terminator.expression.php']
 
   it 'should tokenize switch statements correctly', ->
     lines = grammar.tokenizeLines '''
