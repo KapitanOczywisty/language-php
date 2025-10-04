@@ -2855,9 +2855,11 @@
     ]
   'php_doc_types_array_shape':
     # array shape: {key1: string, key2: int}
-    'begin': '\\{'
+    'begin': '(array)(\\{)'
     'beginCaptures':
-      '0':
+      '1':
+        'name': 'keyword.other.type.php'
+      '2':
         'name': 'punctuation.definition.type.begin.bracket.curly.phpdoc.php'
     'end': '(\\})'
     'endCaptures':
@@ -2886,9 +2888,11 @@
     ]
   'php_doc_types_array_with_key_type':
     # array with type key: array<string, int>
-    'begin': '\\<'
+    'begin': '(array)(\\<)'
     'beginCaptures':
-      '0':
+      '1':
+        'name': 'keyword.other.type.php'
+      '2':
         'name': 'punctuation.definition.type.begin.bracket.angle.phpdoc.php'
     'end': '(\\>)'
     'endCaptures':
