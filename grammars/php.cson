@@ -2432,7 +2432,7 @@
             ]
           '3':
             'name': 'punctuation.definition.arguments.begin.bracket.round.php'
-        'end': '\\)'
+        'end': '\\)|(?=\\?>)'
         'endCaptures':
           '0':
             'name': 'punctuation.definition.arguments.end.bracket.round.php'
