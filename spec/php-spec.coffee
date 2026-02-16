@@ -2013,10 +2013,27 @@ describe 'PHP grammar', ->
     it 'tokenizes closure calls', ->
       {tokens} = grammar.tokenizeLine '$callback()'
 
-      expect(tokens[0]).toEqual value: '$', scopes: ["source.php", "meta.function-call.invoke.php", "variable.other.php", "punctuation.definition.variable.php"]
-      expect(tokens[1]).toEqual value: 'callback', scopes: ["source.php", "meta.function-call.invoke.php", "variable.other.php"]
-      expect(tokens[2]).toEqual value: '(', scopes: ["source.php", "punctuation.definition.begin.bracket.round.php"]
-      expect(tokens[3]).toEqual value: ')', scopes: ["source.php", "punctuation.definition.end.bracket.round.php"]
+      expect(tokens[0]).toEqual value: '$', scopes: ['source.php', 'meta.function-call.invoke.php', 'variable.other.php', 'punctuation.definition.variable.php']
+      expect(tokens[1]).toEqual value: 'callback', scopes: ['source.php', 'meta.function-call.invoke.php', 'variable.other.php']
+      expect(tokens[2]).toEqual value: '(', scopes: ['source.php', 'meta.function-call.invoke.php', 'punctuation.definition.arguments.begin.bracket.round.php']
+      expect(tokens[3]).toEqual value: ')', scopes: ['source.php', 'meta.function-call.invoke.php', 'punctuation.definition.arguments.end.bracket.round.php']
+
+    it 'tokenizes closure calls with named arguments', ->
+      lines = grammar.tokenizeLines '''
+        $anonFunc(
+            bar: 'test',
+            foo: 'test',
+        );
+      '''
+
+      expect(lines[0][0]).toEqual value: '$', scopes: ['source.php', 'meta.function-call.invoke.php', 'variable.other.php', 'punctuation.definition.variable.php']
+      expect(lines[0][1]).toEqual value: 'anonFunc', scopes: ['source.php', 'meta.function-call.invoke.php', 'variable.other.php']
+      expect(lines[0][2]).toEqual value: '(', scopes: ['source.php', 'meta.function-call.invoke.php', 'punctuation.definition.arguments.begin.bracket.round.php']
+      expect(lines[1][1]).toEqual value: 'bar', scopes: ['source.php', 'meta.function-call.invoke.php', 'entity.name.variable.parameter.php']
+      expect(lines[1][2]).toEqual value: ':', scopes: ['source.php', 'meta.function-call.invoke.php', 'punctuation.separator.colon.php']
+      expect(lines[2][1]).toEqual value: 'foo', scopes: ['source.php', 'meta.function-call.invoke.php', 'entity.name.variable.parameter.php']
+      expect(lines[2][2]).toEqual value: ':', scopes: ['source.php', 'meta.function-call.invoke.php', 'punctuation.separator.colon.php']
+      expect(lines[3][0]).toEqual value: ')', scopes: ['source.php', 'meta.function-call.invoke.php', 'punctuation.definition.arguments.end.bracket.round.php']
 
   describe 'method calls', ->
     it 'tokenizes method calls with no arguments', ->
