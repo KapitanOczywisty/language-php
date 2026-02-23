@@ -2763,13 +2763,27 @@
           '1':
             'name': 'keyword.other.phpdoc.php'
           '2':
-            'name': 'meta.function.parameters.php meta.function.parameter.variadic.php variable.other.php'
-          '3':
-            'name': 'storage.modifier.reference.php'
-          '4':
-            'name': 'keyword.operator.variadic.php'
-          '5':
-            'name': 'punctuation.definition.variable.php'
+            'name': 'meta.function.parameters.php'
+            'patterns': [
+              {
+                'match': '''(?x)
+                  (?:(&)\\s*)?
+                  (\\.\\.\\.)
+                  (\\$)
+                  [A-Za-z_\\x{7f}-\\x{10ffff}][A-Za-z0-9_\\x{7f}-\\x{10ffff}]*
+                '''
+                'name': 'meta.function.parameter.variadic.php'
+                'captures':
+                  '0':
+                    'name': 'variable.other.php'
+                  '1':
+                    'name': 'storage.modifier.reference.php'
+                  '2':
+                    'name': 'keyword.operator.variadic.php'
+                  '3':
+                    'name': 'punctuation.definition.variable.php'
+              }
+            ]
       }
       {
         # @param tag followed directly by a parameter name without a type expression.
@@ -2784,11 +2798,23 @@
           '1':
             'name': 'keyword.other.phpdoc.php'
           '2':
-            'name': 'meta.function.parameters.php variable.other.php'
-          '3':
-            'name': 'storage.modifier.reference.php'
-          '4':
-            'name': 'punctuation.definition.variable.php'
+            'name': 'meta.function.parameters.php'
+            'patterns': [
+              {
+                'match': '''(?x)
+                  (?:(&)\\s*)?
+                  (\\$)
+                  [A-Za-z_\\x{7f}-\\x{10ffff}][A-Za-z0-9_\\x{7f}-\\x{10ffff}]*
+                '''
+                'captures':
+                  '0':
+                    'name': 'variable.other.php'
+                  '1':
+                    'name': 'storage.modifier.reference.php'
+                  '2':
+                    'name': 'punctuation.definition.variable.php'
+              }
+            ]
       }
       {
         # @param tag followed by a type expression and optional parameter name.
@@ -2819,19 +2845,46 @@
         '''
         'endCaptures':
           '1':
-            'name': 'meta.function.parameters.php meta.function.parameter.variadic.php variable.other.php'
-          '2':
-            'name': 'storage.modifier.reference.php'
-          '3':
-            'name': 'keyword.operator.variadic.php'
-          '4':
-            'name': 'punctuation.definition.variable.php'
+            'name': 'meta.function.parameters.php'
+            'patterns': [
+              {
+                'match': '''(?x)
+                  (?:(&)\\s*)?
+                  (\\.\\.\\.)
+                  (\\$)
+                  [A-Za-z_\\x{7f}-\\x{10ffff}][A-Za-z0-9_\\x{7f}-\\x{10ffff}]*
+                '''
+                'name': 'meta.function.parameter.variadic.php'
+                'captures':
+                  '0':
+                    'name': 'variable.other.php'
+                  '1':
+                    'name': 'storage.modifier.reference.php'
+                  '2':
+                    'name': 'keyword.operator.variadic.php'
+                  '3':
+                    'name': 'punctuation.definition.variable.php'
+              }
+            ]
           '5':
-            'name': 'meta.function.parameters.php meta.function.parameter.typehinted.php variable.other.php'
-          '6':
-            'name': 'storage.modifier.reference.php'
-          '7':
-            'name': 'punctuation.definition.variable.php'
+            'name': 'meta.function.parameters.php'
+            'patterns': [
+              {
+                'match': '''(?x)
+                  (?:(&)\\s*)?
+                  (\\$)
+                  [A-Za-z_\\x{7f}-\\x{10ffff}][A-Za-z0-9_\\x{7f}-\\x{10ffff}]*
+                '''
+                'name': 'meta.function.parameter.typehinted.php'
+                'captures':
+                  '0':
+                    'name': 'variable.other.php'
+                  '1':
+                    'name': 'storage.modifier.reference.php'
+                  '2':
+                    'name': 'punctuation.definition.variable.php'
+              }
+            ]
         'contentName': 'meta.other.type.phpdoc.php'
         'patterns': [
           {
