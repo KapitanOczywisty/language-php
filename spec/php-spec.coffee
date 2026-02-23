@@ -691,15 +691,114 @@ describe 'PHP grammar', ->
       expect(tokens[6]).toEqual value: '/*', scopes: ['source.php', 'meta.class.php', 'meta.class.body.php', 'comment.block.php', 'punctuation.definition.comment.php']
       expect(tokens[10]).toEqual value: '}', scopes: ['source.php', 'meta.class.php', 'punctuation.definition.class.end.bracket.curly.php']
 
+    it 'tokenizes class instantiation with special name "parent" without brackets', ->
+      {tokens} = grammar.tokenizeLine '$a = new parent;'
+
+      expect(tokens[5]).toEqual value: 'new', scopes: ["source.php", "keyword.other.new.php"]
+      expect(tokens[6]).toEqual value: ' ', scopes: ["source.php"]
+      expect(tokens[7]).toEqual value: 'parent', scopes: ["source.php", "storage.type.php"]
+      expect(tokens[8]).toEqual value: ';', scopes: ["source.php", "punctuation.terminator.expression.php"]
+
+    it 'tokenizes class instantiation with special name "parent" with brackets', ->
+      {tokens} = grammar.tokenizeLine '$a = new parent();'
+
+      expect(tokens[5]).toEqual value: 'new', scopes: ["source.php", "keyword.other.new.php"]
+      expect(tokens[6]).toEqual value: ' ', scopes: ["source.php"]
+      expect(tokens[7]).toEqual value: 'parent', scopes: ["source.php", "storage.type.php"]
+      expect(tokens[8]).toEqual value: '(', scopes: ["source.php", "punctuation.definition.arguments.begin.bracket.round.php"]
+      expect(tokens[9]).toEqual value: ')', scopes: ["source.php", "punctuation.definition.arguments.end.bracket.round.php"]
+      expect(tokens[10]).toEqual value: ';', scopes: ["source.php", "punctuation.terminator.expression.php"]
+
+    it 'tokenizes class instantiation with special name "self" without brackets', ->
+      {tokens} = grammar.tokenizeLine '$a = new self;'
+
+      expect(tokens[5]).toEqual value: 'new', scopes: ["source.php", "keyword.other.new.php"]
+      expect(tokens[6]).toEqual value: ' ', scopes: ["source.php"]
+      expect(tokens[7]).toEqual value: 'self', scopes: ["source.php", "storage.type.php"]
+      expect(tokens[8]).toEqual value: ';', scopes: ["source.php", "punctuation.terminator.expression.php"]
+
+    it 'tokenizes class instantiation with special name "self" with brackets', ->
+      {tokens} = grammar.tokenizeLine '$a = new self();'
+
+      expect(tokens[5]).toEqual value: 'new', scopes: ["source.php", "keyword.other.new.php"]
+      expect(tokens[6]).toEqual value: ' ', scopes: ["source.php"]
+      expect(tokens[7]).toEqual value: 'self', scopes: ["source.php", "storage.type.php"]
+      expect(tokens[8]).toEqual value: '(', scopes: ["source.php", "punctuation.definition.arguments.begin.bracket.round.php"]
+      expect(tokens[9]).toEqual value: ')', scopes: ["source.php", "punctuation.definition.arguments.end.bracket.round.php"]
+      expect(tokens[10]).toEqual value: ';', scopes: ["source.php", "punctuation.terminator.expression.php"]
+
+    it 'tokenizes class instantiation with special name "static" without brackets', ->
+      {tokens} = grammar.tokenizeLine '$a = new static;'
+
+      expect(tokens[5]).toEqual value: 'new', scopes: ["source.php", "keyword.other.new.php"]
+      expect(tokens[6]).toEqual value: ' ', scopes: ["source.php"]
+      expect(tokens[7]).toEqual value: 'static', scopes: ["source.php", "storage.type.php"]
+      expect(tokens[8]).toEqual value: ';', scopes: ["source.php", "punctuation.terminator.expression.php"]
+
+    it 'tokenizes class instantiation with special name "static" with brackets', ->
+      {tokens} = grammar.tokenizeLine '$a = new static();'
+
+      expect(tokens[5]).toEqual value: 'new', scopes: ["source.php", "keyword.other.new.php"]
+      expect(tokens[6]).toEqual value: ' ', scopes: ["source.php"]
+      expect(tokens[7]).toEqual value: 'static', scopes: ["source.php", "storage.type.php"]
+      expect(tokens[8]).toEqual value: '(', scopes: ["source.php", "punctuation.definition.arguments.begin.bracket.round.php"]
+      expect(tokens[9]).toEqual value: ')', scopes: ["source.php", "punctuation.definition.arguments.end.bracket.round.php"]
+      expect(tokens[10]).toEqual value: ';', scopes: ["source.php", "punctuation.terminator.expression.php"]
+
     it 'tokenizes class instantiation', ->
       {tokens} = grammar.tokenizeLine '$a = new ClassName();'
 
       expect(tokens[5]).toEqual value: 'new', scopes: ["source.php", "keyword.other.new.php"]
       expect(tokens[6]).toEqual value: ' ', scopes: ["source.php"]
       expect(tokens[7]).toEqual value: 'ClassName', scopes: ["source.php", "support.class.php"]
-      expect(tokens[8]).toEqual value: '(', scopes: ["source.php", "punctuation.definition.begin.bracket.round.php"]
-      expect(tokens[9]).toEqual value: ')', scopes: ["source.php", "punctuation.definition.end.bracket.round.php"]
+      expect(tokens[8]).toEqual value: '(', scopes: ["source.php", "punctuation.definition.arguments.begin.bracket.round.php"]
+      expect(tokens[9]).toEqual value: ')', scopes: ["source.php", "punctuation.definition.arguments.end.bracket.round.php"]
       expect(tokens[10]).toEqual value: ';', scopes: ["source.php", "punctuation.terminator.expression.php"]
+
+    it 'tokenizes class instantiation with a variable', ->
+      {tokens} = grammar.tokenizeLine '$a = new $b();'
+
+      expect(tokens[5]).toEqual value: 'new', scopes: ["source.php", "keyword.other.new.php"]
+      expect(tokens[6]).toEqual value: ' ', scopes: ["source.php"]
+      expect(tokens[7]).toEqual value: '$', scopes: ["source.php", "variable.other.php", "punctuation.definition.variable.php"]
+      expect(tokens[8]).toEqual value: 'b', scopes: ["source.php", "variable.other.php"]
+      expect(tokens[9]).toEqual value: '(', scopes: ["source.php", "punctuation.definition.arguments.begin.bracket.round.php"]
+      expect(tokens[10]).toEqual value: ')', scopes: ["source.php", "punctuation.definition.arguments.end.bracket.round.php"]
+      expect(tokens[11]).toEqual value: ';', scopes: ["source.php", "punctuation.terminator.expression.php"]
+
+    it 'tokenizes class instantiation with no brackets', ->
+      {tokens} = grammar.tokenizeLine '$a = new ClassName;'
+
+      expect(tokens[5]).toEqual value: 'new', scopes: ["source.php", "keyword.other.new.php"]
+      expect(tokens[6]).toEqual value: ' ', scopes: ["source.php"]
+      expect(tokens[7]).toEqual value: 'ClassName', scopes: ["source.php", "support.class.php"]
+      expect(tokens[8]).toEqual value: ';', scopes: ["source.php", "punctuation.terminator.expression.php"]
+
+    it 'tokenizes class instantiation with a variable with no brackets', ->
+      {tokens} = grammar.tokenizeLine '$a = new $b;'
+
+      expect(tokens[5]).toEqual value: 'new', scopes: ["source.php", "keyword.other.new.php"]
+      expect(tokens[6]).toEqual value: ' ', scopes: ["source.php"]
+      expect(tokens[7]).toEqual value: '$', scopes: ["source.php", "variable.other.php", "punctuation.definition.variable.php"]
+      expect(tokens[8]).toEqual value: 'b', scopes: ["source.php", "variable.other.php"]
+      expect(tokens[9]).toEqual value: ';', scopes: ["source.php", "punctuation.terminator.expression.php"]
+
+    it 'tokenizes class instantiation with arguments', ->
+      {tokens} = grammar.tokenizeLine '$a = new ClassName(5, x: 123);'
+
+      expect(tokens[5]).toEqual value: 'new', scopes: ["source.php", "keyword.other.new.php"]
+      expect(tokens[6]).toEqual value: ' ', scopes: ["source.php"]
+      expect(tokens[7]).toEqual value: 'ClassName', scopes: ["source.php", "support.class.php"]
+      expect(tokens[8]).toEqual value: '(', scopes: ["source.php", "punctuation.definition.arguments.begin.bracket.round.php"]
+      expect(tokens[9]).toEqual value: '5', scopes: ['source.php', "meta.function-call.php", 'constant.numeric.decimal.php']
+      expect(tokens[10]).toEqual value: ',', scopes: ['source.php', "meta.function-call.php", 'punctuation.separator.delimiter.php']
+      expect(tokens[11]).toEqual value: ' ', scopes: ['source.php', "meta.function-call.php"]
+      expect(tokens[12]).toEqual value: 'x', scopes: ['source.php', "meta.function-call.php", 'entity.name.variable.parameter.php']
+      expect(tokens[13]).toEqual value: ':', scopes: ['source.php', "meta.function-call.php", 'punctuation.separator.colon.php']
+      expect(tokens[14]).toEqual value: ' ', scopes: ['source.php', "meta.function-call.php"]
+      expect(tokens[15]).toEqual value: '123', scopes: ['source.php', "meta.function-call.php", 'constant.numeric.decimal.php']
+      expect(tokens[16]).toEqual value: ')', scopes: ["source.php", "punctuation.definition.arguments.end.bracket.round.php"]
+      expect(tokens[17]).toEqual value: ';', scopes: ["source.php", "punctuation.terminator.expression.php"]
 
     it 'tokenizes class modifiers', ->
       {tokens} = grammar.tokenizeLine 'abstract class Test {}'
@@ -869,9 +968,9 @@ describe 'PHP grammar', ->
       it 'tokenizes readonly properties', ->
         lines = grammar.tokenizeLines '''
           class Foo {
-              public readonly mixed $a;
-              readonly string $b;
-              readonly public mixed $c;
+            public readonly mixed $a;
+            readonly string $b;
+            readonly public mixed $c;
           }
         '''
 
@@ -890,7 +989,57 @@ describe 'PHP grammar', ->
         expect(lines[3][7]).toEqual value: '$', scopes: ['source.php', 'meta.class.php', 'meta.class.body.php', 'variable.other.php', 'punctuation.definition.variable.php']
         expect(lines[3][8]).toEqual value: 'c', scopes: ['source.php', 'meta.class.php', 'meta.class.body.php', 'variable.other.php']
 
+      it 'tokenizes properties with asymmetric visibility modifiers', ->
+        lines = grammar.tokenizeLines '''
+          class Foo {
+            public private(set) mixed $a;
+            protected(set) string $b;
+            public public(set) readonly mixed $c;
+          }
+        '''
+
+        expect(lines[1][1]).toEqual value: 'public', scopes: ['source.php', 'meta.class.php', 'meta.class.body.php', 'storage.modifier.php']
+        expect(lines[1][3]).toEqual value: 'private(set)', scopes: ['source.php', 'meta.class.php', 'meta.class.body.php', 'storage.modifier.php']
+        expect(lines[1][5]).toEqual value: 'mixed', scopes: ['source.php', 'meta.class.php', 'meta.class.body.php', 'keyword.other.type.php']
+        expect(lines[1][7]).toEqual value: '$', scopes: ['source.php', 'meta.class.php', 'meta.class.body.php', 'variable.other.php', 'punctuation.definition.variable.php']
+        expect(lines[1][8]).toEqual value: 'a', scopes: ['source.php', 'meta.class.php', 'meta.class.body.php', 'variable.other.php']
+        expect(lines[2][1]).toEqual value: 'protected(set)', scopes: ['source.php', 'meta.class.php', 'meta.class.body.php', 'storage.modifier.php']
+        expect(lines[2][3]).toEqual value: 'string', scopes: ['source.php', 'meta.class.php', 'meta.class.body.php', 'keyword.other.type.php']
+        expect(lines[2][5]).toEqual value: '$', scopes: ['source.php', 'meta.class.php', 'meta.class.body.php', 'variable.other.php', 'punctuation.definition.variable.php']
+        expect(lines[2][6]).toEqual value: 'b', scopes: ['source.php', 'meta.class.php', 'meta.class.body.php', 'variable.other.php']
+        expect(lines[3][1]).toEqual value: 'public', scopes: ['source.php', 'meta.class.php', 'meta.class.body.php', 'storage.modifier.php']
+        expect(lines[3][3]).toEqual value: 'public(set)', scopes: ['source.php', 'meta.class.php', 'meta.class.body.php', 'storage.modifier.php']
+        expect(lines[3][5]).toEqual value: 'readonly', scopes: ['source.php', 'meta.class.php', 'meta.class.body.php', 'storage.modifier.php']
+        expect(lines[3][7]).toEqual value: 'mixed', scopes: ['source.php', 'meta.class.php', 'meta.class.body.php', 'keyword.other.type.php']
+        expect(lines[3][9]).toEqual value: '$', scopes: ['source.php', 'meta.class.php', 'meta.class.body.php', 'variable.other.php', 'punctuation.definition.variable.php']
+        expect(lines[3][10]).toEqual value: 'c', scopes: ['source.php', 'meta.class.php', 'meta.class.body.php', 'variable.other.php']
+
     describe 'consts', ->
+      it 'should tokenize typed constants correctly', ->
+        lines = grammar.tokenizeLines '''
+          class Foo {
+            const A|B|null Bar = 1;
+            const FooString String = null;
+          }
+        '''
+
+        expect(lines[0][0]).toEqual value: 'class', scopes: ['source.php', 'meta.class.php', 'storage.type.class.php']
+        expect(lines[0][2]).toEqual value: 'Foo', scopes: ['source.php', 'meta.class.php', 'entity.name.type.class.php']
+        expect(lines[1][1]).toEqual value: 'const', scopes: ['source.php', 'meta.class.php', 'meta.class.body.php', 'storage.type.const.php']
+        expect(lines[1][3]).toEqual value: 'A', scopes: ['source.php', 'meta.class.php', 'meta.class.body.php', 'support.class.php']
+        expect(lines[1][4]).toEqual value: '|', scopes: ['source.php', 'meta.class.php', 'meta.class.body.php', 'punctuation.separator.delimiter.php']
+        expect(lines[1][5]).toEqual value: 'B', scopes: ['source.php', 'meta.class.php', 'meta.class.body.php', 'support.class.php']
+        expect(lines[1][6]).toEqual value: '|', scopes: ['source.php', 'meta.class.php', 'meta.class.body.php', 'punctuation.separator.delimiter.php']
+        expect(lines[1][7]).toEqual value: 'null', scopes: ['source.php', 'meta.class.php', 'meta.class.body.php', 'keyword.other.type.php']
+        expect(lines[1][9]).toEqual value: 'Bar', scopes: ['source.php', 'meta.class.php', 'meta.class.body.php', 'constant.other.php']
+        expect(lines[1][11]).toEqual value: '=', scopes: ['source.php', 'meta.class.php', 'meta.class.body.php', 'keyword.operator.assignment.php']
+        expect(lines[1][13]).toEqual value: '1', scopes: ['source.php', 'meta.class.php', 'meta.class.body.php', 'constant.numeric.decimal.php']
+        expect(lines[2][1]).toEqual value: 'const', scopes: ['source.php', 'meta.class.php', 'meta.class.body.php', 'storage.type.const.php']
+        expect(lines[2][3]).toEqual value: 'FooString', scopes: ['source.php', 'meta.class.php', 'meta.class.body.php', 'support.class.php']
+        expect(lines[2][5]).toEqual value: 'String', scopes: ['source.php', 'meta.class.php', 'meta.class.body.php', 'constant.other.php']
+        expect(lines[2][7]).toEqual value: '=', scopes: ['source.php', 'meta.class.php', 'meta.class.body.php', 'keyword.operator.assignment.php']
+        expect(lines[2][9]).toEqual value: 'null', scopes: ['source.php', 'meta.class.php', 'meta.class.body.php', 'constant.language.php']
+
       it 'should tokenize constants with reserved names correctly', ->
         lines = grammar.tokenizeLines '''
           class Foo {
@@ -901,11 +1050,11 @@ describe 'PHP grammar', ->
 
         expect(lines[0][0]).toEqual value: 'class', scopes: ['source.php', 'meta.class.php', 'storage.type.class.php']
         expect(lines[0][2]).toEqual value: 'Foo', scopes: ['source.php', 'meta.class.php', 'entity.name.type.class.php']
-        expect(lines[1][1]).toEqual value: 'const', scopes: ['source.php', 'meta.class.php', 'meta.class.body.php', 'storage.modifier.php']
+        expect(lines[1][1]).toEqual value: 'const', scopes: ['source.php', 'meta.class.php', 'meta.class.body.php', 'storage.type.const.php']
         expect(lines[1][3]).toEqual value: 'Bar', scopes: ['source.php', 'meta.class.php', 'meta.class.body.php', 'constant.other.php']
         expect(lines[1][5]).toEqual value: '=', scopes: ['source.php', 'meta.class.php', 'meta.class.body.php', 'keyword.operator.assignment.php']
         expect(lines[1][7]).toEqual value: '1', scopes: ['source.php', 'meta.class.php', 'meta.class.body.php', 'constant.numeric.decimal.php']
-        expect(lines[2][1]).toEqual value: 'const', scopes: ['source.php', 'meta.class.php', 'meta.class.body.php', 'storage.modifier.php']
+        expect(lines[2][1]).toEqual value: 'const', scopes: ['source.php', 'meta.class.php', 'meta.class.body.php', 'storage.type.const.php']
         expect(lines[2][3]).toEqual value: 'String', scopes: ['source.php', 'meta.class.php', 'meta.class.body.php', 'constant.other.php']
         expect(lines[2][5]).toEqual value: '=', scopes: ['source.php', 'meta.class.php', 'meta.class.body.php', 'keyword.operator.assignment.php']
         expect(lines[2][7]).toEqual value: '\'', scopes: ['source.php', 'meta.class.php', 'meta.class.body.php', 'string.quoted.single.php', 'punctuation.definition.string.begin.php']
@@ -1022,6 +1171,29 @@ describe 'PHP grammar', ->
         expect(lines[1][22]).toEqual value: 'string', scopes: ['source.php', 'meta.class.php', 'meta.class.body.php', 'meta.function.php', 'meta.function.parameters.php', 'meta.function.parameter.promoted-property.php', 'keyword.other.type.php']
         expect(lines[1][24]).toEqual value: '$', scopes: ['source.php', 'meta.class.php', 'meta.class.body.php', 'meta.function.php', 'meta.function.parameters.php', 'meta.function.parameter.promoted-property.php', 'variable.other.php', 'punctuation.definition.variable.php']
         expect(lines[1][25]).toEqual value: 'b', scopes: ['source.php', 'meta.class.php', 'meta.class.body.php', 'meta.function.php', 'meta.function.parameters.php', 'meta.function.parameter.promoted-property.php', 'variable.other.php']
+
+      it 'tokenizes asymmetric visibility in promoted properties', ->
+        lines = grammar.tokenizeLines '''
+          class Test {
+            public function __construct(public private(set) $a, public(set) readonly string $b) {}
+          }
+        '''
+
+        expect(lines[1][1]).toEqual value: 'public', scopes: ['source.php', 'meta.class.php', 'meta.class.body.php', 'meta.function.php', 'storage.modifier.php']
+        expect(lines[1][3]).toEqual value: 'function', scopes: ['source.php', 'meta.class.php', 'meta.class.body.php', 'meta.function.php', 'storage.type.function.php']
+        expect(lines[1][5]).toEqual value: '__construct', scopes: ['source.php', 'meta.class.php', 'meta.class.body.php', 'meta.function.php', 'support.function.constructor.php']
+        expect(lines[1][6]).toEqual value: '(', scopes: ['source.php', 'meta.class.php', 'meta.class.body.php', 'meta.function.php', 'punctuation.definition.parameters.begin.bracket.round.php']
+        expect(lines[1][7]).toEqual value: 'public', scopes: ['source.php', 'meta.class.php', 'meta.class.body.php', 'meta.function.php', 'meta.function.parameters.php', 'meta.function.parameter.promoted-property.php', 'storage.modifier.php']
+        expect(lines[1][9]).toEqual value: 'private(set)', scopes: ['source.php', 'meta.class.php', 'meta.class.body.php', 'meta.function.php', 'meta.function.parameters.php', 'meta.function.parameter.promoted-property.php', 'storage.modifier.php']
+        expect(lines[1][11]).toEqual value: '$', scopes: ['source.php', 'meta.class.php', 'meta.class.body.php', 'meta.function.php', 'meta.function.parameters.php', 'meta.function.parameter.promoted-property.php', 'variable.other.php', 'punctuation.definition.variable.php']
+        expect(lines[1][12]).toEqual value: 'a', scopes: ['source.php', 'meta.class.php', 'meta.class.body.php', 'meta.function.php', 'meta.function.parameters.php', 'meta.function.parameter.promoted-property.php', 'variable.other.php']
+        expect(lines[1][13]).toEqual value: ',', scopes: ['source.php', 'meta.class.php', 'meta.class.body.php', 'meta.function.php', 'meta.function.parameters.php', 'punctuation.separator.delimiter.php']
+        expect(lines[1][15]).toEqual value: 'public(set)', scopes: ['source.php', 'meta.class.php', 'meta.class.body.php', 'meta.function.php', 'meta.function.parameters.php', 'meta.function.parameter.promoted-property.php', 'storage.modifier.php']
+        expect(lines[1][17]).toEqual value: 'readonly', scopes: ['source.php', 'meta.class.php', 'meta.class.body.php', 'meta.function.php', 'meta.function.parameters.php', 'meta.function.parameter.promoted-property.php', 'storage.modifier.php']
+        expect(lines[1][19]).toEqual value: 'string', scopes: ['source.php', 'meta.class.php', 'meta.class.body.php', 'meta.function.php', 'meta.function.parameters.php', 'meta.function.parameter.promoted-property.php', 'keyword.other.type.php']
+        expect(lines[1][21]).toEqual value: '$', scopes: ['source.php', 'meta.class.php', 'meta.class.body.php', 'meta.function.php', 'meta.function.parameters.php', 'meta.function.parameter.promoted-property.php', 'variable.other.php', 'punctuation.definition.variable.php']
+        expect(lines[1][22]).toEqual value: 'b', scopes: ['source.php', 'meta.class.php', 'meta.class.body.php', 'meta.function.php', 'meta.function.parameters.php', 'meta.function.parameter.promoted-property.php', 'variable.other.php']
+        expect(lines[1][23]).toEqual value: ')', scopes: ['source.php', 'meta.class.php', 'meta.class.body.php', 'meta.function.php', 'punctuation.definition.parameters.end.bracket.round.php']
 
       it 'tokenizes constructor with illegal return type declaration', ->
         lines = grammar.tokenizeLines '''
@@ -1347,6 +1519,7 @@ describe 'PHP grammar', ->
         enum Foo : int {
           case Bar = 1;
           const Baz = 1;
+          const ?string String = null;
         }
       '''
 
@@ -1360,12 +1533,18 @@ describe 'PHP grammar', ->
       expect(lines[1][5]).toEqual value: '=', scopes: ['source.php', 'meta.enum.php', 'meta.enum.body.php', 'keyword.operator.assignment.php']
       expect(lines[1][7]).toEqual value: '1', scopes: ['source.php', 'meta.enum.php', 'meta.enum.body.php', 'constant.numeric.decimal.php']
       expect(lines[1][8]).toEqual value: ';', scopes: ['source.php', 'meta.enum.php', 'meta.enum.body.php', 'punctuation.terminator.expression.php']
-      expect(lines[2][1]).toEqual value: 'const', scopes: ['source.php', 'meta.enum.php', 'meta.enum.body.php', 'storage.modifier.php']
+      expect(lines[2][1]).toEqual value: 'const', scopes: ['source.php', 'meta.enum.php', 'meta.enum.body.php', 'storage.type.const.php']
       expect(lines[2][3]).toEqual value: 'Baz', scopes: ['source.php', 'meta.enum.php', 'meta.enum.body.php', 'constant.other.php']
       expect(lines[2][5]).toEqual value: '=', scopes: ['source.php', 'meta.enum.php', 'meta.enum.body.php', 'keyword.operator.assignment.php']
       expect(lines[2][7]).toEqual value: '1', scopes: ['source.php', 'meta.enum.php', 'meta.enum.body.php', 'constant.numeric.decimal.php']
       expect(lines[2][8]).toEqual value: ';', scopes: ['source.php', 'meta.enum.php', 'meta.enum.body.php', 'punctuation.terminator.expression.php']
-      expect(lines[3][0]).toEqual value: '}', scopes: ['source.php', 'meta.enum.php', 'punctuation.definition.enum.end.bracket.curly.php']
+      expect(lines[3][1]).toEqual value: 'const', scopes: ['source.php', 'meta.enum.php', 'meta.enum.body.php', 'storage.type.const.php']
+      expect(lines[3][3]).toEqual value: '?', scopes: ['source.php', 'meta.enum.php', 'meta.enum.body.php', 'keyword.operator.nullable-type.php']
+      expect(lines[3][4]).toEqual value: 'string', scopes: ['source.php', 'meta.enum.php', 'meta.enum.body.php', 'keyword.other.type.php']
+      expect(lines[3][6]).toEqual value: 'String', scopes: ['source.php', 'meta.enum.php', 'meta.enum.body.php', 'constant.other.php']
+      expect(lines[3][8]).toEqual value: '=', scopes: ['source.php', 'meta.enum.php', 'meta.enum.body.php', 'keyword.operator.assignment.php']
+      expect(lines[3][10]).toEqual value: 'null', scopes: ['source.php', 'meta.enum.php', 'meta.enum.body.php', 'constant.language.php']
+      expect(lines[4][0]).toEqual value: '}', scopes: ['source.php', 'meta.enum.php', 'punctuation.definition.enum.end.bracket.curly.php']
 
   describe 'functions', ->
     it 'tokenizes functions with no arguments', ->
@@ -2423,6 +2602,58 @@ describe 'PHP grammar', ->
       expect(tokens[17]).toEqual value: '0b1_0', scopes: ["source.php", "constant.numeric.binary.php"]
       expect(tokens[18]).toEqual value: ']', scopes: ["source.php", "punctuation.section.array.end.php"]
 
+  it 'should tokenize conditions correctly', ->
+    lines = grammar.tokenizeLines '''
+      if (1) {
+        echo 1;
+      } elseif (2) {
+        echo 2;
+      } else {
+        echo 3;
+      }
+    '''
+
+    expect(lines[0][0]).toEqual value: 'if', scopes: ['source.php', 'keyword.control.if.php']
+    expect(lines[0][2]).toEqual value: '(', scopes: ['source.php', 'punctuation.definition.begin.bracket.round.php']
+    expect(lines[0][3]).toEqual value: '1', scopes: ['source.php', 'constant.numeric.decimal.php']
+    expect(lines[0][4]).toEqual value: ')', scopes: ['source.php', 'punctuation.definition.end.bracket.round.php']
+    expect(lines[0][6]).toEqual value: '{', scopes: ['source.php', 'punctuation.definition.begin.bracket.curly.php']
+    expect(lines[2][0]).toEqual value: '}', scopes: ['source.php', 'punctuation.definition.end.bracket.curly.php']
+    expect(lines[2][2]).toEqual value: 'elseif', scopes: ['source.php', 'keyword.control.elseif.php']
+    expect(lines[2][4]).toEqual value: '(', scopes: ['source.php', 'punctuation.definition.begin.bracket.round.php']
+    expect(lines[2][5]).toEqual value: '2', scopes: ['source.php', 'constant.numeric.decimal.php']
+    expect(lines[2][6]).toEqual value: ')', scopes: ['source.php', 'punctuation.definition.end.bracket.round.php']
+    expect(lines[2][8]).toEqual value: '{', scopes: ['source.php', 'punctuation.definition.begin.bracket.curly.php']
+    expect(lines[4][0]).toEqual value: '}', scopes: ['source.php', 'punctuation.definition.end.bracket.curly.php']
+    expect(lines[4][2]).toEqual value: 'else', scopes: ['source.php', 'keyword.control.else.php']
+    expect(lines[4][4]).toEqual value: '{', scopes: ['source.php', 'punctuation.definition.begin.bracket.curly.php']
+    expect(lines[6][0]).toEqual value: '}', scopes: ['source.php', 'punctuation.definition.end.bracket.curly.php']
+
+    lines = grammar.tokenizeLines '''
+      if (1):
+        echo 1;
+      elseif (2):
+        echo 2;
+      else:
+        echo 3;
+      endif;
+    '''
+
+    expect(lines[0][0]).toEqual value: 'if', scopes: ['source.php', 'keyword.control.if.php']
+    expect(lines[0][2]).toEqual value: '(', scopes: ['source.php', 'punctuation.definition.begin.bracket.round.php']
+    expect(lines[0][3]).toEqual value: '1', scopes: ['source.php', 'constant.numeric.decimal.php']
+    expect(lines[0][4]).toEqual value: ')', scopes: ['source.php', 'punctuation.definition.end.bracket.round.php']
+    expect(lines[0][5]).toEqual value: ':', scopes: ['source.php', 'punctuation.terminator.statement.php']
+    expect(lines[2][0]).toEqual value: 'elseif', scopes: ['source.php', 'keyword.control.elseif.php']
+    expect(lines[2][2]).toEqual value: '(', scopes: ['source.php', 'punctuation.definition.begin.bracket.round.php']
+    expect(lines[2][3]).toEqual value: '2', scopes: ['source.php', 'constant.numeric.decimal.php']
+    expect(lines[2][4]).toEqual value: ')', scopes: ['source.php', 'punctuation.definition.end.bracket.round.php']
+    expect(lines[2][5]).toEqual value: ':', scopes: ['source.php', 'punctuation.terminator.statement.php']
+    expect(lines[4][0]).toEqual value: 'else', scopes: ['source.php', 'keyword.control.else.php']
+    expect(lines[4][1]).toEqual value: ':', scopes: ['source.php', 'punctuation.terminator.statement.php']
+    expect(lines[6][0]).toEqual value: 'endif', scopes: ['source.php', 'keyword.control.endif.php']
+    expect(lines[6][1]).toEqual value: ';', scopes: ['source.php', 'punctuation.terminator.expression.php']
+
   it 'should tokenize switch statements correctly', ->
     lines = grammar.tokenizeLines '''
       switch($something)
@@ -3121,13 +3352,13 @@ describe 'PHP grammar', ->
         expect(lines[1][4]).toEqual value: 'Foo', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'meta.other.type.phpdoc.php', 'support.class.php']
         expect(lines[1][5]).toEqual value: '&', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'meta.other.type.phpdoc.php', 'punctuation.separator.delimiter.php']
         expect(lines[1][6]).toEqual value: 'Bar', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'meta.other.type.phpdoc.php', 'support.class.php']
-        expect(lines[1][7]).toEqual value: ')', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'meta.other.type.phpdoc.php']
+        expect(lines[1][7]).toEqual value: ')', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'meta.other.type.phpdoc.php', 'punctuation.definition.type.end.bracket.round.phpdoc.php']
         expect(lines[1][8]).toEqual value: '|', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'meta.other.type.phpdoc.php', 'punctuation.separator.delimiter.php']
         expect(lines[1][9]).toEqual value: 'false', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'meta.other.type.phpdoc.php', 'keyword.other.type.php']
-        expect(lines[1][11]).toEqual value: 'description', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'meta.other.type.phpdoc.php', 'support.class.php']
+        expect(lines[1][10]).toEqual value: ' description', scopes: ['source.php', 'comment.block.documentation.phpdoc.php']
 
       it 'should end the PHPDoc at the ending comment even if there are malformed types', ->
-        {tokens} = grammar.tokenizeLine '/** @var array(string) */'
+        {tokens} = grammar.tokenizeLine '/** @var array(string */'
 
         expect(tokens[8]).toEqual value: '*/', scopes: ['source.php', 'comment.block.documentation.phpdoc.php', 'punctuation.definition.comment.php']
 
