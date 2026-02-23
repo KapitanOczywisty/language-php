@@ -104,7 +104,21 @@
           {
             'match': '''(?xi)
               \\b(as)
-              \\s+(final|abstract|public|private|protected|static)
+              \\s+(static)
+              \\s+([a-z_\\x{7f}-\\x{10ffff}][a-z0-9_\\x{7f}-\\x{10ffff}]*)
+            '''
+            'captures':
+              '1':
+                'name': 'keyword.other.use-as.php'
+              '2':
+                'name': 'storage.modifier.static.php'
+              '3':
+                'name': 'entity.other.alias.php'
+          }
+          {
+            'match': '''(?xi)
+              \\b(as)
+              \\s+(final|abstract|public|private|protected)
               \\s+([a-z_\\x{7f}-\\x{10ffff}][a-z0-9_\\x{7f}-\\x{10ffff}]*)
             '''
             'captures':
@@ -126,7 +140,11 @@
               '2':
                 'patterns': [
                   {
-                    'match': '^(?:final|abstract|public|private|protected|static)$'
+                    'match': '^(?:static)$'
+                    'name': 'storage.modifier.static.php'
+                  }
+                  {
+                    'match': '^(?:final|abstract|public|private|protected)$'
                     'name': 'storage.modifier.php'
                   }
                   {
@@ -713,7 +731,11 @@
       '1':
         'patterns': [
           {
-            'match': 'final|abstract|public|private|protected|static'
+            'match': 'static'
+            'name': 'storage.modifier.static.php'
+          }
+          {
+            'match': 'final|abstract|public|private|protected'
             'name': 'storage.modifier.php'
           }
         ]
@@ -785,7 +807,11 @@
       '1':
         'patterns': [
           {
-            'match': '(?:public|private|protected)(?:\\(set\\))?|static|readonly'
+            'match': 'static'
+            'name': 'storage.modifier.static.php'
+          }
+          {
+            'match': '(?:public|private|protected)(?:\\(set\\))?|readonly'
             'name': 'storage.modifier.php'
           }
         ]
@@ -856,11 +882,15 @@
     'name': 'storage.type.php'
   }
   {
+    'match': '(?i)\\b(static)\\b'
+    'name': 'storage.modifier.static.php'
+  }
+  {
     'match': '(?i)\\bconst\\b'
     'name': 'storage.type.const.php'
   }
   {
-    'match': '(?i)\\b(global|abstract|final|private|protected|public|static)\\b'
+    'match': '(?i)\\b(global|abstract|final|private|protected|public)\\b'
     'name': 'storage.modifier.php'
   }
   {
