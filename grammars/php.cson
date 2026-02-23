@@ -2765,9 +2765,214 @@
         'match': '(@xlink)\\s+(.+)\\s*$'
       }
       {
-        # Tags followed by a type expression
+        # @param tag followed directly by a variadic parameter name without a type expression.
+        # -  @param ...$parameter
+        # -  @param &...$parameter
+        'match': '''(?x)
+          (@param)\\s+
+          ((?:(&)\\s*)?(\\.\\.\\.)(\\$)[A-Za-z_\\x{7f}-\\x{10ffff}][A-Za-z0-9_\\x{7f}-\\x{10ffff}]*) # Variable name with possible reference
+          (?=\\s|\\*/)
+        '''
+        'captures':
+          '1':
+            'name': 'keyword.other.phpdoc.php'
+          '2':
+            'name': 'meta.function.parameters.php'
+            'patterns': [
+              {
+                'match': '''(?x)
+                  (?:(&)\\s*)?
+                  (\\.\\.\\.)
+                  (\\$)
+                  [A-Za-z_\\x{7f}-\\x{10ffff}][A-Za-z0-9_\\x{7f}-\\x{10ffff}]*
+                '''
+                'name': 'meta.function.parameter.variadic.php'
+                'captures':
+                  '0':
+                    'name': 'variable.other.php'
+                  '1':
+                    'name': 'storage.modifier.reference.php'
+                  '2':
+                    'name': 'keyword.operator.variadic.php'
+                  '3':
+                    'name': 'punctuation.definition.variable.php'
+              }
+            ]
+      }
+      {
+        # @param tag followed directly by a parameter name without a type expression.
+        # -  @param $parameter
+        # -  @param &$parameter
+        'match': '''(?x)
+          (@param)\\s+
+          ((?:(&)\\s*)?(\\$)[A-Za-z_\\x{7f}-\\x{10ffff}][A-Za-z0-9_\\x{7f}-\\x{10ffff}]*) # Variable name with possible reference
+          (?=\\s|\\*/)
+        '''
+        'captures':
+          '1':
+            'name': 'keyword.other.phpdoc.php'
+          '2':
+            'name': 'meta.function.parameters.php'
+            'patterns': [
+              {
+                'match': '''(?x)
+                  (?:(&)\\s*)?
+                  (\\$)
+                  [A-Za-z_\\x{7f}-\\x{10ffff}][A-Za-z0-9_\\x{7f}-\\x{10ffff}]*
+                '''
+                'captures':
+                  '0':
+                    'name': 'variable.other.php'
+                  '1':
+                    'name': 'storage.modifier.reference.php'
+                  '2':
+                    'name': 'punctuation.definition.variable.php'
+              }
+            ]
+      }
+      {
+        # @param tag followed by a type expression and optional parameter name.
+        # -  @param type $parameter
+        'begin': '(@param)\\s+(?=[?A-Za-z0-9_\\x{7f}-\\x{10ffff}\\\\]|\\(|\\x27|")'
+        'beginCaptures':
+          '1':
+            'name': 'keyword.other.phpdoc.php'
+        'end': '''(?ix)
+          (?:\\s+
+            (?:
+              # variadic parameter
+              (
+                (?:(&)\\s*)?          # reference operator
+                (\\.\\.\\.)           # variadic operator
+                (\\$)                 # variable sigil
+                [a-z_\\x{7f}-\\x{10ffff}][a-z0-9_\\x{7f}-\\x{10ffff}]*
+              )|
+              # non-variadic parameter
+              (
+                (?:(&)\\s*)?          # reference operator
+                (\\$)                 # variable sigil
+                [a-z_\\x{7f}-\\x{10ffff}][a-z0-9_\\x{7f}-\\x{10ffff}]*
+              )
+            )
+          )?
+          (?=\\s|\\*/)
+        '''
+        'endCaptures':
+          '1':
+            'name': 'meta.function.parameters.php'
+            'patterns': [
+              {
+                'match': '''(?x)
+                  (?:(&)\\s*)?
+                  (\\.\\.\\.)
+                  (\\$)
+                  [A-Za-z_\\x{7f}-\\x{10ffff}][A-Za-z0-9_\\x{7f}-\\x{10ffff}]*
+                '''
+                'name': 'meta.function.parameter.variadic.php'
+                'captures':
+                  '0':
+                    'name': 'variable.other.php'
+                  '1':
+                    'name': 'storage.modifier.reference.php'
+                  '2':
+                    'name': 'keyword.operator.variadic.php'
+                  '3':
+                    'name': 'punctuation.definition.variable.php'
+              }
+            ]
+          '5':
+            'name': 'meta.function.parameters.php'
+            'patterns': [
+              {
+                'match': '''(?x)
+                  (?:(&)\\s*)?
+                  (\\$)
+                  [A-Za-z_\\x{7f}-\\x{10ffff}][A-Za-z0-9_\\x{7f}-\\x{10ffff}]*
+                '''
+                'name': 'meta.function.parameter.typehinted.php'
+                'captures':
+                  '0':
+                    'name': 'variable.other.php'
+                  '1':
+                    'name': 'storage.modifier.reference.php'
+                  '2':
+                    'name': 'punctuation.definition.variable.php'
+              }
+            ]
+        'contentName': 'meta.other.type.phpdoc.php'
+        'patterns': [
+          {
+            'include': '#php_doc_types_array_multiple'
+          }
+          {
+            'include': '#php_doc_types_array_single'
+          }
+          {
+            'include': '#php_doc_types'
+          }
+          {
+            'match': '[|&]'
+            'name': 'punctuation.separator.delimiter.php'
+          }
+        ]
+      }
+      {
+        # Tags followed directly by a variable name without a type expression.
+        # -  @<tag> $variable
+        'match': '''(?x)
+          (@(?:global|property(?:-(?:read|write))?|var))\\s+
+          ((\\$)[A-Za-z_\\x{7f}-\\x{10ffff}][A-Za-z0-9_\\x{7f}-\\x{10ffff}]*)
+          (?=\\s|\\*/)
+        '''
+        'captures':
+          '1':
+            'name': 'keyword.other.phpdoc.php'
+          '2':
+            'name': 'variable.other.php'
+          '3':
+            'name': 'punctuation.definition.variable.php'
+      }
+      {
+        # Tags followed by a type expression and optional variable name.
+        # -  @<tag> type $variable
+        'begin': '''(?x)
+          (@(?:global|property(-(read|write))?|var))\\s+(?=[?A-Za-z_\\x{7f}-\\x{10ffff}\\\\]|\\(|\\x27|")
+        '''
+        'beginCaptures':
+          '1':
+            'name': 'keyword.other.phpdoc.php'
+        'end': '''(?ix)
+          (?:\\s+
+            ((\\$)[a-z_\\x{7f}-\\x{10ffff}][a-z0-9_\\x{7f}-\\x{10ffff}]*)
+          )?
+          (?=\\s|\\*/)
+        '''
+        'endCaptures':
+          '1':
+            'name': 'variable.other.php'
+          '2':
+            'name': 'punctuation.definition.variable.php'
+        'contentName': 'meta.other.type.phpdoc.php'
+        'patterns': [
+          {
+            'include': '#php_doc_types_array_multiple'
+          }
+          {
+            'include': '#php_doc_types_array_single'
+          }
+          {
+            'include': '#php_doc_types'
+          }
+          {
+            'match': '[|&]'
+            'name': 'punctuation.separator.delimiter.php'
+          }
+        ]
+      }
+      {
+        # Tags followed by a type expression.
         # -  @<tag> type
-        'begin': '(@(?:global|param|property(-(read|write))?|return|throws|var))\\s+(?=[?A-Za-z_\\x{7f}-\\x{10ffff}\\\\]|\\()'
+        'begin': '(@(?:return|throws))\\s+(?=[?A-Za-z_\\x{7f}-\\x{10ffff}\\\\]|\\(|\\x27|")'
         'beginCaptures':
           '1':
             'name': 'keyword.other.phpdoc.php'
