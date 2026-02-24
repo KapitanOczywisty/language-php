@@ -3252,15 +3252,15 @@
         'name': 'support.function.basic_functions.php'
       }
       {
-        'match': '(?i)\\bbc(add|ceil|comp|(div|pow)(mod)?|floor|mod|mul|round|scale|sqrt|sub)\\b'
+        'match': '(?i)\\b(bc(add|ceil|comp|(div|pow)(mod)?|floor|mod|mul|round|scale|sqrt|sub))\\b'
         'name': 'support.function.bcmath.php'
       }
       {
-        'match': '(?i)\\bblenc_encrypt\\b'
+        'match': '(?i)\\b(blenc_encrypt)\\b'
         'name': 'support.function.blenc.php'
       }
       {
-        'match': '(?i)\\bbz(compress|close|open|decompress|errstr|errno|error|flush|write|read)\\b'
+        'match': '(?i)\\b(bz(compress|close|open|decompress|errstr|errno|error|flush|write|read))\\b'
         'name': 'support.function.bz2.php'
       }
       {
@@ -3302,14 +3302,14 @@
         'name': 'support.function.construct.output.php'
       }
       {
-        'match': '(?i)\\bctype_(space|cntrl|digit|upper|punct|print|lower|alnum|alpha|graph|xdigit)\\b'
+        'match': '(?i)\\b(ctype_(space|cntrl|digit|upper|punct|print|lower|alnum|alpha|graph|xdigit))\\b'
         'name': 'support.function.ctype.php'
       }
       {
         'match': '''(?xi)\\b
           curl_(
-            close|copy_handle|errno|error|escape|exec|getinfo|init|pause|reset|
-setopt(_array)?|strerror|unescape|upkeep|version|
+            close|copy_handle|errno|error|escape|exec|file_create|getinfo|init|pause|reset|
+            setopt(_array)?|strerror|unescape|upkeep|version|
             multi_((add|remove)_handle|close|errno|exec|getcontent|
               info_read|init|select|setopt|strerror)|
             share_(close|errno|init(_persistent)?|setopt|strerror)
@@ -3331,11 +3331,11 @@ setopt(_array)?|strerror|unescape|upkeep|version|
         'name': 'support.function.datetime.php'
       }
       {
-        'match': '(?i)\\bdba_(sync|handlers|nextkey|close|insert|optimize|open|delete|popen|exists|key_split|firstkey|fetch|list|replace)\\b'
+        'match': '(?i)\\b(dba_(sync|handlers|nextkey|close|insert|optimize|open|delete|popen|exists|key_split|firstkey|fetch|list|replace))\\b'
         'name': 'support.function.dba.php'
       }
       {
-        'match': '(?i)\\bdbx_(sort|connect|compare|close|escape_string|error|query|fetch_row)\\b'
+        'match': '(?i)\\b(dbx_(sort|connect|compare|close|escape_string|error|query|fetch_row))\\b'
         'name': 'support.function.dbx.php'
       }
       {
@@ -3424,7 +3424,7 @@ setopt(_array)?|strerror|unescape|upkeep|version|
         'name': 'support.function.fileinfo.php'
       }
       {
-        'match': '(?i)\\bfilter_(has_var|input(_array)?|id|var(_array)?|list)\\b'
+        'match': '(?i)\\b(filter_(has_var|input(_array)?|id|var(_array)?|list))\\b'
         'name': 'support.function.filter.php'
       }
       {
@@ -3436,7 +3436,7 @@ setopt(_array)?|strerror|unescape|upkeep|version|
         'name': 'support.function.funchand.php'
       }
       {
-        'match': '(?i)\\b((n)?gettext|textdomain|d((n)?gettext|c(n)?gettext)|bind(textdomain|_textdomain_codeset))\\b'
+        'match': '(?i)\\b((n)?gettext|_|textdomain|d((n)?gettext|c(n)?gettext)|bind(textdomain|_textdomain_codeset))\\b'
         'name': 'support.function.gettext.php'
       }
       {
@@ -3477,7 +3477,7 @@ setopt(_array)?|strerror|unescape|upkeep|version|
         'name': 'support.function.iconv.php'
       }
       {
-        'match': '(?i)\\biis_((start|stop)_(service|server)|set_(script_map|server_rights|dir_security|app_settings)|(add|remove)_server|get_(script_map|service_state|server_(rights|by_(comment|path))|dir_security))\\b'
+        'match': '(?i)\\b(iis_((start|stop)_(service|server)|set_(script_map|server_rights|dir_security|app_settings)|(add|remove)_server|get_(script_map|service_state|server_(rights|by_(comment|path))|dir_security)))\\b'
         'name': 'support.function.iisfunc.php'
       }
       {
@@ -3502,13 +3502,16 @@ setopt(_array)?|strerror|unescape|upkeep|version|
         'match': '''(?xi)\\b
           (
             sys_get_temp_dir|set_(time_limit|include_path|magic_quotes_runtime)|cli_[gs]et_process_title|
-            ini_(alter|get(_all)?|restore|set)|zend_(thread_id|version|logo_guid)|dl|php(credits|info|version)|
+            ini_(alter|get(_all)?|parse_quantity|restore|set)|zend_(thread_id|version|logo_guid)|dl|php(credits|info|version)|
             php_(sapi_name|ini_(scanned_files|loaded_file)|uname|logo_guid)|putenv|extension_loaded|version_compare|
-            assert(_options)?|restore_include_path|gc_(collect_cycles|disable|enable(d)?)|getopt|
+            assert(_options)?|restore_include_path|
+            gc_(collect_cycles|disable|enable(d)?|mem_caches|status)|
+            getopt|
             get_(cfg_var|current_user|defined_constants|extension_funcs|include_path|included_files|loaded_extensions|
                  magic_quotes_(gpc|runtime)|required_files|resources)|
             get(env|lastmod|rusage|my(inode|[gup]id))|
-            memory_get_(peak_)?usage|main|magic_quotes_runtime
+            memory_(get_(peak_)?usage|reset_peak_usage)|
+            main|magic_quotes_runtime
           )\\b
         '''
         'name': 'support.function.info.php'
@@ -3528,26 +3531,126 @@ setopt(_array)?|strerror|unescape|upkeep|version|
       {
         'match': '''(?xi)\\b
           (
-            normalizer_(normalize|is_normalized)|idn_to_(unicode|utf8|ascii)|
-            numfmt_(set_(symbol|(text_)?attribute|pattern)|create|(parse|format)(_currency)?|
-                    get_(symbol|(text_)?attribute|pattern|error_(code|message)|locale))|
-            collator_(sort(_with_sort_keys)?|set_(attribute|strength)|compare|create|asort|
-                      get_(strength|sort_key|error_(code|message)|locale|attribute))|
-            transliterator_(create(_(inverse|from_rules))?|transliterate|list_ids|get_error_(code|message))|
-            intl(cal|tz)_get_error_(code|message)|intl_(is_failure|error_name|get_error_(code|message))|
-            datefmt_(set_(calendar|lenient|pattern|timezone(_id)?)|create|is_lenient|parse|format(_object)?|localtime|
-                     get_(calendar(_object)?|time(type|zone(_id)?)|datetype|pattern|error_(code|message)|locale))|
-            locale_(set_default|compose|canonicalize|parse|filter_matches|lookup|accept_from_http|
-                    get_(script|display_(script|name|variant|language|region)|default|primary_language|keywords|all_variants|region))|
-            resourcebundle_(create|count|locales|get(_(error_(code|message)))?)|
-            grapheme_(str(i?str|r?i?pos|len|_split)|substr|extract)|
-            msgfmt_(set_pattern|create|(format|parse)(_message)?|get_(pattern|error_(code|message)|locale))
+            normalizer_(normalize|is_normalized|get_raw_decomposition)|
+            idn_to_(unicode|utf8|ascii)|
+            numfmt_(
+                    set_(symbol|(text_)?attribute|pattern)|
+                    create|
+                    (parse|format)(_currency)?|
+                    get_(
+                         symbol|
+                         (text_)?attribute|
+                         pattern|
+                         error_(code|message)|
+                         locale
+                    )
+            )|
+            collator_(
+                      sort(_with_sort_keys)?|
+                      set_(attribute|strength)|
+                      compare|create|asort|
+                      get_(
+                           strength|sort_key|
+                           error_(code|message)|
+                           locale|attribute
+                      )
+            )|
+            transliterator_(
+                            create(_(inverse|from_rules))?|
+                            transliterate|list_ids|
+                            get_error_(code|message)
+            )|
+            intl(cal|tz)_get_error_(code|message)|
+            intlcal_(
+                     add|after|before|clear|create_instance|equals|field_difference|from_date_time|
+                     get(_(
+                           available_locales|
+                           (actual_)?(maximum|minimum)|
+                           day_of_week_type|first_day_of_week|greatest_minimum|keyword_values_for_locale|least_maximum|
+                           locale|minimal_days_in_first_week|now|repeated_wall_time_option|skipped_wall_time_option|
+                           time(_zone)?|
+                           type|weekend_transition
+                     ))?|
+                     in_daylight_time|
+                     is_(equivalent_to|lenient|set|weekend)|
+                     roll|
+                     set(_(
+                           first_day_of_week|lenient|minimal_days_in_first_week|repeated_wall_time_option|skipped_wall_time_option|
+                           time(_zone)?
+                     ))?|
+                     to_date_time
+            )|
+            intltz_(
+                    count_equivalent_ids|
+                    create_(
+                            default|enumeration|
+                            time_zone(_id_enumeration)?
+                    )|
+                    from_date_time_zone|
+                    get_(
+                         canonical_id|display_name|dst_savings|equivalent_id|gmt|iana_id|
+                         id(_for_windows_id)?|
+                         offset|raw_offset|region|tz_data_version|unknown|windows_id
+                    )|
+                    has_same_rules|to_date_time_zone|use_daylight_time
+            )|
+            intlgregcal_(
+                         create_instance|
+                         (get|set)_gregorian_change|
+                         is_leap_year
+            )|
+            intl_(
+                  is_failure|
+                  error_name|
+                  get_error_(code|message)
+            )|
+            datefmt_(
+                     set_(
+                          calendar|lenient|pattern|
+                          timezone(_id)?
+                     )|
+                     create|is_lenient|parse|
+                     format(_object)?|
+                     localtime|
+                     get_(
+                          calendar(_object)?|
+                          time(type|zone(_id)?)|
+                          datetype|pattern|
+                          error_(code|message)|
+                          locale
+                     )
+            )|
+            locale_(
+                    set_default|compose|canonicalize|parse|filter_matches|lookup|accept_from_http|
+                    get_(
+                         script|
+                         display_(script|name|variant|language|region)|
+                         default|primary_language|keywords|all_variants|region
+                    )
+            )|
+            resourcebundle_(
+                            create|count|locales|
+                            get(_(error_(code|message)))?
+            )|
+            grapheme_(
+                      str(i?str|r?i?pos|len|_split)|
+                      substr|extract
+            )|
+            msgfmt_(
+                    set_pattern|create|
+                    (format|parse)(_message)?|
+                    get_(
+                         pattern|
+                         error_(code|message)|
+                         locale
+                    )
+            )
           )\\b
         '''
         'name': 'support.function.intl.php'
       }
       {
-        'match': '(?i)\\bjson_(decode|encode|last_error(_msg)?|validate)\\b'
+        'match': '(?i)\\b(json_(decode|encode|last_error(_msg)?|validate))\\b'
         'name': 'support.function.json.php'
       }
       {
@@ -3563,7 +3666,13 @@ setopt(_array)?|strerror|unescape|upkeep|version|
         'name': 'support.function.ldap.php'
       }
       {
-        'match': '(?i)\\blibxml_(set_(streams_context|external_entity_loader)|clear_errors|disable_entity_loader|use_internal_errors|get_(errors|last_error))\\b'
+        'match': '''(?xi)\\b
+          libxml_(
+            set_(streams_context|external_entity_loader)|
+            clear_errors|disable_entity_loader|use_internal_errors|
+            get_(errors|last_error|external_entity_loader)
+          )\\b
+        '''
         'name': 'support.function.libxml.php'
       }
       {
@@ -3575,7 +3684,7 @@ setopt(_array)?|strerror|unescape|upkeep|version|
           (
             a?(cos|sin|tan)h?|sqrt|srand|hypot|hexdec|ceil|is_(nan|(in)?finite)|octdec|dec(hex|oct|bin)|deg2rad|
             pi|pow|exp(m1)?|floor|f(div|mod|pow)|lcg_value|log(1[p0])?|atan2|abs|round|rand|rad2deg|getrandmax|
-            mt_(srand|rand|getrandmax)|max|min|bindec|base_convert|intdiv
+            mt_(srand|rand|getrandmax)|max|min|bindec|base_convert|intdiv|random_(int|bytes)
           )\\b
         '''
         'name': 'support.function.math.php'
@@ -3610,11 +3719,11 @@ setopt(_array)?|strerror|unescape|upkeep|version|
         'name': 'support.function.mcrypt.php'
       }
       {
-        'match': '(?i)\\bmemcache_debug\\b'
+        'match': '(?i)\\b(memcache_debug)\\b'
         'name': 'support.function.memcache.php'
       }
       {
-        'match': '(?i)\\bmhash(_(count|keygen_s2k|get_(hash_name|block_size)))?\\b'
+        'match': '(?i)\\b(mhash(_(count|keygen_s2k|get_(hash_name|block_size)))?)\\b'
         'name': 'support.function.mhash.php'
       }
       {
@@ -3652,19 +3761,19 @@ setopt(_array)?|strerror|unescape|upkeep|version|
         'name': 'support.function.mysqli.php'
       }
       {
-        'match': '(?i)\\bmysqlnd_memcache_(set|get_config)\\b'
+        'match': '(?i)\\b(mysqlnd_memcache_(set|get_config))\\b'
         'name': 'support.function.mysqlnd-memcache.php'
       }
       {
-        'match': '(?i)\\bmysqlnd_ms_(set_(user_pick_server|qos)|dump_servers|query_is_select|fabric_select_(shard|global)|get_(stats|last_(used_connection|gtid))|xa_(commit|rollback|gc|begin)|match_wild)\\b'
+        'match': '(?i)\\b(mysqlnd_ms_(set_(user_pick_server|qos)|dump_servers|query_is_select|fabric_select_(shard|global)|get_(stats|last_(used_connection|gtid))|xa_(commit|rollback|gc|begin)|match_wild))\\b'
         'name': 'support.function.mysqlnd-ms.php'
       }
       {
-        'match': '(?i)\\bmysqlnd_qc_(set_(storage_handler|cache_condition|is_select|user_handlers)|clear_cache|get_(normalized_query_trace_log|core_stats|cache_info|query_trace_log|available_handlers))\\b'
+        'match': '(?i)\\b(mysqlnd_qc_(set_(storage_handler|cache_condition|is_select|user_handlers)|clear_cache|get_(normalized_query_trace_log|core_stats|cache_info|query_trace_log|available_handlers)))\\b'
         'name': 'support.function.mysqlnd-qc.php'
       }
       {
-        'match': '(?i)\\bmysqlnd_uh_(set_(statement|connection)_proxy|convert_to_mysqlnd)\\b'
+        'match': '(?i)\\b(mysqlnd_uh_(set_(statement|connection)_proxy|convert_to_mysqlnd))\\b'
         'name': 'support.function.mysqlnd-uh.php'
       }
       {
@@ -3680,7 +3789,7 @@ setopt(_array)?|strerror|unescape|upkeep|version|
         'name': 'support.function.network.php'
       }
       {
-        'match': '(?i)\\bnsapi_(virtual|response_headers|request_headers)\\b'
+        'match': '(?i)\\b(nsapi_(virtual|response_headers|request_headers))\\b'
         'name': 'support.function.nsapi.php'
       }
       {
@@ -3701,7 +3810,7 @@ setopt(_array)?|strerror|unescape|upkeep|version|
         'name': 'support.function.oci8.php'
       }
       {
-        'match': '(?i)\\bopcache_(compile_file|invalidate|is_script_cached|reset|get_(status|configuration))\\b'
+        'match': '(?i)\\b(opcache_(compile_file|invalidate|is_script_cached|reset|get_(status|configuration)|jit_blacklist))\\b'
         'name': 'support.function.opcache.php'
       }
       {
@@ -3728,15 +3837,15 @@ setopt(_array)?|strerror|unescape|upkeep|version|
         'name': 'support.function.output.php'
       }
       {
-        'match': '(?i)\\bpassword_(algos|hash|needs_rehash|verify|get_info)\\b'
+        'match': '(?i)\\b(password_(algos|hash|needs_rehash|verify|get_info))\\b'
         'name': 'support.function.password.php'
       }
       {
         'match': '''(?xi)\\b
           pcntl_(
-            alarm|async_signals|errno|exec|r?fork|get_last_error|[gs]et(cpuaffinity|priority)|
+            alarm|async_signals|errno|exec|r?fork|get(_last_error|cpu)|[gs]et(cpuaffinity|priority)|setns|
             signal(_(dispatch|get_handler))?|sig(procmask|timedwait|waitinfo)|strerror|unshare|
-            wait(p?id)?|wexitstatus|wif(exited|signaled|stopped)|w(stop|term)sig
+            wait(p?id)?|wexitstatus|wif(continued|exited|signaled|stopped)|w(stop|term)sig
           )\\b
         '''
         'name': 'support.function.pcntl.php'
@@ -3744,14 +3853,44 @@ setopt(_array)?|strerror|unescape|upkeep|version|
       {
         'match': '''(?xi)\\b
           pg_(
-            socket|send_(prepare|execute|query(_params)?)|set_(client_encoding|error_verbosity)|select|host|
-            num_(fields|rows)|consume_input|connection_(status|reset|busy)|connect(_poll)?|convert|copy_(from|to)|
-            client_encoding|close|cancel_query|tty|transaction_status|trace|insert|options|delete|dbname|untrace|
-            unescape_bytea|update|pconnect|ping|port|put_line|parameter_status|prepare|version|query(_params)?|
-            escape_(string|identifier|literal|bytea)|end_copy|execute|flush|free_result|last_(notice|error|oid)|
-            field_(size|num|name|type(_oid)?|table|is_null|prtlen)|affected_rows|result_(status|seek|error(_field)?)|
-            fetch_(object|assoc|all(_columns)?|array|row|result)|get_(notify|pid|result)|meta_data|
-            lo_(seek|close|create|tell|truncate|import|open|unlink|export|write|read(_all)?)|
+            socket(_poll)?|
+            send_(prepare|execute|query(_params)?)|
+            set_(chunked_rows_size|client_encoding|error_(verbosity|context_visibility))|
+            setclientencoding|select|host|
+            num_?(fields|rows)|
+            consume_input|
+            connection_(status|reset|busy)|
+            connect(_poll)?|
+            convert|
+            copy_(from|to)|
+            client_?encoding|close|cancel_query|tty|transaction_status|
+            change_password|cmdtuples|errormessage|jit|
+            trace|insert|options|delete|dbname|untrace|unescape_bytea|
+            update|pconnect|ping|port|
+            put_(line|copy_(data|end))|
+            parameter_status|prepare|version|
+            query(_params)?|
+            escape_(string|identifier|literal|bytea)|
+            end_copy|
+            exec(ute)?|
+            flush|
+            free_?result|
+            last_(notice|error|oid)|
+            field(
+              _?(size|num|name|type|prtlen)|  # with or without _
+              isnull|                         # only without _
+              _(type_oid|table|is_null)       # only with _
+            )|
+            affected_rows|
+            result(_(status|seek|error(_field)?|memory_size))?|
+            fetch_(object|assoc|all(_columns)?|array|row|result)|
+            get(lastoid|_(notify|pid|result))|
+            meta_data|
+            lo(
+              _?(close|create|export|import|open|read|unlink|write)|  # with or without _
+              readall|                                                # only without _
+              _(read_all|seek|tell|truncate)                          # only with _
+            )
           )\\b
         '''
         'name': 'support.function.pgsql.php'
@@ -3761,14 +3900,14 @@ setopt(_array)?|strerror|unescape|upkeep|version|
         'name': 'support.function.php_apache.php'
       }
       {
-        'match': '(?i)\\bdom_import_simplexml\\b'
+        'match': '(?i)\\b(dom_import_simplexml)\\b'
         'name': 'support.function.php_dom.php'
       }
       {
         'match': '''(?xi)\\b
           ftp_(
             ssl_connect|systype|site|size|set_option|nlist|nb_(continue|f?(put|get))|ch(dir|mod)|connect|cdup|close|
-            delete|put|pwd|pasv|exec|quit|f(put|get)|login|alloc|rename|raw(list)?|rmdir|get(_option)?|mdtm|mkdir
+            delete|put|pwd|pasv|exec|quit|f(put|get)|login|alloc|append|rename|raw(list)?|rmdir|get(_option)?|mdtm|mkdir|mlsd
           )\\b
         '''
         'name': 'support.function.php_ftp.php'
@@ -3776,12 +3915,30 @@ setopt(_array)?|strerror|unescape|upkeep|version|
       {
         'match': '''(?xi)\\b
           imap_(
-            (create|delete|list|rename|scan)(mailbox)?|status|sort|subscribe|set_quota|set(flag_full|acl)|search|savebody|
-            num_(recent|msg)|check|close|clearflag_full|thread|timeout|open|header(info)?|headers|append|alerts|reopen|
-            8bit|unsubscribe|undelete|utf7_(decode|encode)|utf8|uid|ping|errors|expunge|qprint|gc|
-            fetch(structure|header|text|mime|body)|fetch_overview|lsub|list(scan|subscribed)|last_error|
-            rfc822_(parse_(headers|adrlist)|write_address)|get(subscribed|acl|mailboxes)|get_quota(root)?|
-            msgno|mime_header_decode|mail_(copy|compose|move)|mail|mailboxmsginfo|binary|body(struct)?|base64
+            (create|delete|list|rename|scan)(mailbox)?|
+            status|sort|subscribe|set_quota|
+            set(flag_full|acl)|
+            search|savebody|
+            num_(recent|msg)|
+            check|close|clearflag_full|thread|timeout|open|
+            header(info)?|
+            headers|append|alerts|is_open|reopen|
+            8bit|unsubscribe|undelete|
+            utf7_(decode|encode)|
+            utf8|uid|ping|errors|expunge|qprint|gc|
+            mutf7_to_utf8|utf8_to_mutf7|
+            fetch(structure|header|text|mime|body)|
+            fetch_overview|lsub|
+            list(scan|subscribed)|
+            last_error|
+            rfc822_(parse_(headers|adrlist)|write_address)|
+            get(subscribed|acl|mailboxes)|
+            get_quota(root)?|
+            msgno|mime_header_decode|
+            mail_(copy|compose|move)|
+            mail|mailboxmsginfo|binary|
+            body(struct)?|
+            base64
           )\\b
         '''
         'name': 'support.function.php_imap.php'
@@ -3808,15 +3965,15 @@ setopt(_array)?|strerror|unescape|upkeep|version|
         'name': 'support.function.php_odbc.php'
       }
       {
-        'match': '(?i)\\bpreg_(split|quote|filter|last_error(_msg)?|replace(_callback(_array)?)?|grep|match(_all)?)\\b'
+        'match': '(?i)\\b(preg_(split|quote|filter|last_error(_msg)?|replace(_callback(_array)?)?|grep|match(_all)?))\\b'
         'name': 'support.function.php_pcre.php'
       }
       {
-        'match': '(?i)\\b(spl_(classes|object_hash|autoload(_(call|unregister|extensions|functions|register))?)|class_(implements|uses|parents)|iterator_(count|to_array|apply))\\b'
+        'match': '(?i)\\b(spl_(classes|object_(hash|id)|autoload(_(call|unregister|extensions|functions|register))?)|class_(implements|uses|parents)|iterator_(count|to_array|apply))\\b'
         'name': 'support.function.php_spl.php'
       }
       {
-        'match': '(?i)\\bzip_(close|open|entry_(name|compressionmethod|compressedsize|close|open|filesize|read)|read)\\b'
+        'match': '(?i)\\b(zip_(close|open|entry_(name|compressionmethod|compressedsize|close|open|filesize|read)|read))\\b'
         'name': 'support.function.php_zip.php'
       }
       {
@@ -3830,7 +3987,7 @@ setopt(_array)?|strerror|unescape|upkeep|version|
         'name': 'support.function.posix.php'
       }
       {
-        'match': '(?i)\\bset(thread|proc)title\\b'
+        'match': '(?i)\\b(set(thread|proc)title)\\b'
         'name': 'support.function.proctitle.php'
       }
       {
@@ -3843,15 +4000,15 @@ setopt(_array)?|strerror|unescape|upkeep|version|
         'name': 'support.function.pspell.php'
       }
       {
-        'match': '(?i)\\breadline(_(completion_function|clear_history|callback_(handler_(install|remove)|read_char)|info|on_new_line|write_history|list_history|add_history|redisplay|read_history))?\\b'
+        'match': '(?i)\\b(readline(_(completion_function|clear_history|callback_(handler_(install|remove)|read_char)|info|on_new_line|write_history|list_history|add_history|redisplay|read_history))?)\\b'
         'name': 'support.function.readline.php'
       }
       {
-        'match': '(?i)\\brecode(_(string|file))?\\b'
+        'match': '(?i)\\b(recode(_(string|file))?)\\b'
         'name': 'support.function.recode.php'
       }
       {
-        'match': '(?i)\\brrd(c_disconnect|_(create|tune|info|update|error|version|first|fetch|last(update)?|restore|graph|xport))\\b'
+        'match': '(?i)\\b(rrd(c_disconnect|_(create|tune|info|update|error|version|first|fetch|last(update)?|restore|graph|xport)))\\b'
         'name': 'support.function.rrd.php'
       }
       {
@@ -3874,11 +4031,11 @@ setopt(_array)?|strerror|unescape|upkeep|version|
         'name': 'support.function.session.php'
       }
       {
-        'match': '(?i)\\bshmop_(size|close|open|delete|write|read)\\b'
+        'match': '(?i)\\b(shmop_(size|close|open|delete|write|read))\\b'
         'name': 'support.function.shmop.php'
       }
       {
-        'match': '(?i)\\bsimplexml_(import_dom|load_(string|file))\\b'
+        'match': '(?i)\\b(simplexml_(import_dom|load_(string|file)))\\b'
         'name': 'support.function.simplexml.php'
       }
       {
@@ -3906,6 +4063,73 @@ setopt(_array)?|strerror|unescape|upkeep|version|
           )\\b
         '''
         'name': 'support.function.sockets.php'
+      }
+      {
+        'match': '''(?xi)\\b
+          sodium_(
+                  add|base642bin|bin2base64|bin2hex|compare|
+                  crypto_(
+                          aead_(
+                                aes256gcm_((de|en)crypt|is_available|keygen)|
+                                chacha20poly1305_((de|en)crypt|keygen)|
+                                x?chacha20poly1305_ietf_((de|en)crypt|keygen)
+                          )|
+                          auth(_(keygen|verify))?|
+                          box(_(
+                                keypair(_from_secretkey_and_publickey)?|
+                                open|
+                                publickey(_from_secretkey)?|
+                                seal(_open)?|
+                                secretkey|
+                                seed_keypair
+                          ))?|
+                          core_ristretto255_(
+                                            add|from_hash|is_valid_point|random|
+                                            scalar_(add|complement|invert|mul|negate|random|reduce|sub)|
+                                            sub
+                          )|
+                          generichash(_(final|init|keygen|update))?|
+                          kdf_(derive_from_key|keygen)|
+                          kx_(
+                              ((client|server)_session_keys)|
+                              (seed_)?keypair|
+                              ((public|secret)key)
+                          )|
+                          pwhash(_(
+                                scryptsalsa208sha256(_(str(_verify)?))?|
+                                str(_(needs_rehash|verify))?
+                          ))?|
+                          scalarmult(_(
+                                      base|
+                                      ristretto255(_base)?
+                          ))?|
+                          secretbox(_(keygen|open))?|
+                          secretstream_xchacha20poly1305_(
+                                                          (init_)?(pull|push)|
+                                                          keygen|rekey
+                          )|
+                          shorthash(_keygen)?|
+                          sign(_(
+                                (verify_)?detached|
+                                ed25519_[ps]k_to_curve25519|
+                                (seed_)?keypair|
+                                keypair_from_secretkey_and_publickey|
+                                open|
+                                publickey(_from_secretkey)?|
+                                secretkey
+                          ))?|
+                          stream(_(
+                                keygen|
+                                xchacha20(_(keygen|xor(_ic)?))?|
+                                xor
+                          ))?
+                  )|
+                  hex2bin|increment|
+                  mem(cmp|zero)|
+                  (un)?pad
+          )\\b
+        '''
+        'name': 'support.function.sodium.php'
       }
       {
         'match': '''(?xi)\\b
@@ -4001,7 +4225,7 @@ setopt(_array)?|strerror|unescape|upkeep|version|
         'name': 'support.function.tidy.php'
       }
       {
-        'match': '(?i)\\btoken_(name|get_all)\\b'
+        'match': '(?i)\\b(token_(name|get_all))\\b'
         'name': 'support.function.tokenizer.php'
       }
       {
@@ -4028,7 +4252,7 @@ setopt(_array)?|strerror|unescape|upkeep|version|
         'name': 'support.function.trader.php'
       }
       {
-        'match': '(?i)\\buopz_(copy|compose|implement|overload|delete|undefine|extend|function|flags|restore|rename|redefine|backup)\\b'
+        'match': '(?i)\\b(uopz_(copy|compose|implement|overload|delete|undefine|extend|function|flags|restore|rename|redefine|backup))\\b'
         'name': 'support.function.uopz.php'
       }
       {
@@ -4046,11 +4270,11 @@ setopt(_array)?|strerror|unescape|upkeep|version|
         'name': 'support.function.var.php'
       }
       {
-        'match': '(?i)\\bwddx_(serialize_(value|vars)|deserialize|packet_(start|end)|add_vars)\\b'
+        'match': '(?i)\\b(wddx_(serialize_(value|vars)|deserialize|packet_(start|end)|add_vars))\\b'
         'name': 'support.function.wddx.php'
       }
       {
-        'match': '(?i)\\bxhprof_(sample_)?(disable|enable)\\b'
+        'match': '(?i)\\b(xhprof_(sample_)?(disable|enable))\\b'
         'name': 'support.function.xhprof.php'
       }
       {
@@ -4094,6 +4318,10 @@ setopt(_array)?|strerror|unescape|upkeep|version|
           )\\b
         '''
         'name': 'support.function.zlib.php'
+      }
+      {
+        'match': '(?i)\\b(pdo_drivers)\\b'
+        'name': 'support.function.pdo.php'
       }
     ]
   'switch_statement':
