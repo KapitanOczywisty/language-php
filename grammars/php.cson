@@ -104,21 +104,7 @@
           {
             'match': '''(?xi)
               \\b(as)
-              \\s+(static)
-              \\s+([a-z_\\x{7f}-\\x{10ffff}][a-z0-9_\\x{7f}-\\x{10ffff}]*)
-            '''
-            'captures':
-              '1':
-                'name': 'keyword.other.use-as.php'
-              '2':
-                'name': 'storage.modifier.static.php'
-              '3':
-                'name': 'entity.other.alias.php'
-          }
-          {
-            'match': '''(?xi)
-              \\b(as)
-              \\s+(final|abstract|public|private|protected)
+              \\s+((final|abstract|public|private|protected|static))
               \\s+([a-z_\\x{7f}-\\x{10ffff}][a-z0-9_\\x{7f}-\\x{10ffff}]*)
             '''
             'captures':
@@ -127,6 +113,8 @@
               '2':
                 'name': 'storage.modifier.php'
               '3':
+                'name': 'storage.modifier.${3:/downcase}.php'
+              '4':
                 'name': 'entity.other.alias.php'
           }
           {
@@ -140,12 +128,11 @@
               '2':
                 'patterns': [
                   {
-                    'match': '^(?:static)$'
-                    'name': 'storage.modifier.static.php'
-                  }
-                  {
-                    'match': '^(?:final|abstract|public|private|protected)$'
+                    'match': '(?i)\\b(?:final|abstract|public|private|protected|static)\\b'
                     'name': 'storage.modifier.php'
+                    'captures':
+                      '0':
+                        'name': 'storage.modifier.${0:/downcase}.php'
                   }
                   {
                     'match': '.+'
@@ -282,11 +269,13 @@
         'contentName': 'meta.enum.body.php'
         'patterns': [
           {
-            'match': '(?i)\\b(case)\\s*([a-z_\\x{7f}-\\x{10ffff}][a-z0-9_\\x{7f}-\\x{10ffff}]*)'
+            'match': '(?i)\\b((case))\\s*([a-z_\\x{7f}-\\x{10ffff}][a-z0-9_\\x{7f}-\\x{10ffff}]*)'
             'captures':
               '1':
                 'name': 'storage.modifier.php'
               '2':
+                'name': 'storage.modifier.case.php'
+              '3':
                 'name': 'constant.enum.php'
           }
           {
@@ -303,19 +292,18 @@
     'begin': '''(?ix)
         (?:
           \\b((?:(?:final|abstract|readonly)\\s+)*)(class)\\s+([a-z_\\x{7f}-\\x{10ffff}][a-z0-9_\\x{7f}-\\x{10ffff}]*)
-          |\\b(new)\\b\\s*(\\#\\[.*\\])?\\s*(?:(readonly)\\s+)?\\b(class)\\b # anonymous class
+          |\\b(new)\\b\\s*(\\#\\[.*\\])?\\s*(?:((readonly))\\s+)?\\b(class)\\b # anonymous class
         )
       '''
     'beginCaptures':
       '1':
         'patterns': [
           {
-            'match': 'final|abstract'
-            'name': 'storage.modifier.${0:/downcase}.php'
-          }
-          {
-            'match': 'readonly'
+            'match': 'final|abstract|readonly'
             'name': 'storage.modifier.php'
+            'captures':
+              '0':
+                'name': 'storage.modifier.${0:/downcase}.php'
           }
         ]
       '2':
@@ -333,6 +321,8 @@
       '6':
         'name': 'storage.modifier.php'
       '7':
+        'name': 'storage.modifier.readonly.php'
+      '8':
         'name': 'storage.type.class.php'
     'end': '}|(?=\\?>)'
     'endCaptures':
@@ -629,6 +619,9 @@
           {
             'match': 'final|abstract|public|private|protected'
             'name': 'storage.modifier.php'
+            'captures':
+              '0':
+                'name': 'storage.modifier.${0:/downcase}.php'
           }
         ]
       '2':
@@ -677,8 +670,31 @@
           '1':
             'patterns': [
               {
-                'match': '(?:public|private|protected)(?:\\(set\\))?|readonly'
+                'match': 'public\\(set\\)|private\\(set\\)|protected\\(set\\)'
                 'name': 'storage.modifier.php'
+                'captures':
+                  '0':
+                    'patterns': [
+                      {
+                        'match': 'public\\(set\\)'
+                        'name': 'storage.modifier.public.set.php'
+                      }
+                      {
+                        'match': 'private\\(set\\)'
+                        'name': 'storage.modifier.private.set.php'
+                      }
+                      {
+                        'match': 'protected\\(set\\)'
+                        'name': 'storage.modifier.protected.set.php'
+                      }
+                    ]
+              }
+              {
+                'match': 'public|private|protected|readonly'
+                'name': 'storage.modifier.php'
+                'captures':
+                  '0':
+                    'name': 'storage.modifier.${0:/downcase}.php'
               }
             ]
           '2':
@@ -731,12 +747,11 @@
       '1':
         'patterns': [
           {
-            'match': 'static'
-            'name': 'storage.modifier.static.php'
-          }
-          {
-            'match': 'final|abstract|public|private|protected'
+            'match': 'final|abstract|public|private|protected|static'
             'name': 'storage.modifier.php'
+            'captures':
+              '0':
+                'name': 'storage.modifier.${0:/downcase}.php'
           }
         ]
       '2':
@@ -807,12 +822,31 @@
       '1':
         'patterns': [
           {
-            'match': 'static'
-            'name': 'storage.modifier.static.php'
+            'match': 'public\\(set\\)|private\\(set\\)|protected\\(set\\)'
+            'name': 'storage.modifier.php'
+            'captures':
+              '0':
+                'patterns': [
+                  {
+                    'match': 'public\\(set\\)'
+                    'name': 'storage.modifier.public.set.php'
+                  }
+                  {
+                    'match': 'private\\(set\\)'
+                    'name': 'storage.modifier.private.set.php'
+                  }
+                  {
+                    'match': 'protected\\(set\\)'
+                    'name': 'storage.modifier.protected.set.php'
+                  }
+                ]
           }
           {
-            'match': '(?:public|private|protected)(?:\\(set\\))?|readonly'
+            'match': 'public|private|protected|readonly|static'
             'name': 'storage.modifier.php'
+            'captures':
+              '0':
+                'name': 'storage.modifier.${0:/downcase}.php'
           }
         ]
       '2':
@@ -882,16 +916,15 @@
     'name': 'storage.type.php'
   }
   {
-    'match': '(?i)\\b(static)\\b'
-    'name': 'storage.modifier.static.php'
-  }
-  {
     'match': '(?i)\\bconst\\b'
     'name': 'storage.type.const.php'
   }
   {
-    'match': '(?i)\\b(global|abstract|final|private|protected|public)\\b'
+    'match': '(?i)\\b(global|abstract|final|private|protected|public|static)\\b'
     'name': 'storage.modifier.php'
+    'captures':
+      '1':
+        'name': 'storage.modifier.${1:/downcase}.php'
   }
   {
     'include': '#object'
@@ -2783,8 +2816,10 @@
           '3':
             'name': 'storage.modifier.php'
           '4':
+            'name': 'storage.modifier.${4:/downcase}.php'
+          '5':
             'name': 'invalid.illegal.wrong-access-type.phpdoc.php'
-        'match': '^\\s*\\*\\s*(@access)\\s+((public|private|protected)|(.+))\\s*$'
+        'match': '^\\s*\\*\\s*(@access)\\s+(((public|private|protected))|(.+))\\s*$'
       }
       {
         'captures':
