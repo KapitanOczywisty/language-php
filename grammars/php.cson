@@ -842,13 +842,32 @@
     ]
   }
   {
-    'match': '(?i)(\\()\\s*(array|real|double|float|int(?:eger)?|bool(?:ean)?|string|object|binary|unset)\\s*(\\))'
+    'match': '''(?ix)
+      (\\()
+      \\s*
+      (
+          (int(?:eger)?)
+          | (bool(?:ean)?)
+          | (float|double|real)
+          | (string|array|object|binary|unset)
+      )
+      \\s*
+      (\\))
+    '''
     'captures':
       '1':
         'name': 'punctuation.definition.storage-type.begin.bracket.round.php'
       '2':
         'name': 'storage.type.php'
       '3':
+        'name': 'storage.type.cast.int.php'
+      '4':
+        'name': 'storage.type.cast.bool.php'
+      '5':
+        'name': 'storage.type.cast.float.php'
+      '6':
+        'name': 'storage.type.cast.${6:/downcase}.php'
+      '7':
         'name': 'punctuation.definition.storage-type.end.bracket.round.php'
   }
   {
