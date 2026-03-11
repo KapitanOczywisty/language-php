@@ -104,7 +104,11 @@
           {
             'match': '''(?xi)
               \\b(as)
-              \\s+((final|abstract|public|private|protected|static))
+              \\s+(
+                (final|abstract)
+                |(public|private|protected)
+                |(static)
+              )
               \\s+([a-z_\\x{7f}-\\x{10ffff}][a-z0-9_\\x{7f}-\\x{10ffff}]*)
             '''
             'captures':
@@ -113,8 +117,12 @@
               '2':
                 'name': 'storage.modifier.php'
               '3':
-                'name': 'storage.modifier.${3:/downcase}.php'
+                'name': 'storage.modifier.inheritance.${3:/downcase}.php'
               '4':
+                'name': 'storage.modifier.visibility.${4:/downcase}.php'
+              '5':
+                'name': 'storage.modifier.static.php'
+              '6':
                 'name': 'entity.other.alias.php'
           }
           {
@@ -128,11 +136,21 @@
               '2':
                 'patterns': [
                   {
-                    'match': '(?i)\\b(?:final|abstract|public|private|protected|static)\\b'
+                    'match': '''(?xi)\\b
+                      (
+                        (final|abstract)
+                        |(public|private|protected)
+                        |(static)
+                      )\\b
+                    '''
                     'name': 'storage.modifier.php'
                     'captures':
-                      '0':
-                        'name': 'storage.modifier.${0:/downcase}.php'
+                      '2':
+                        'name': 'storage.modifier.inheritance.${2:/downcase}.php'
+                      '3':
+                        'name': 'storage.modifier.visibility.${3:/downcase}.php'
+                      '4':
+                        'name': 'storage.modifier.static.php'
                   }
                   {
                     'match': '.+'
@@ -299,11 +317,13 @@
       '1':
         'patterns': [
           {
-            'match': 'final|abstract|readonly'
+            'match': '((final|abstract)|(readonly))'
             'name': 'storage.modifier.php'
             'captures':
-              '0':
-                'name': 'storage.modifier.${0:/downcase}.php'
+              '2':
+                'name': 'storage.modifier.inheritance.${2:/downcase}.php'
+              '3':
+                'name': 'storage.modifier.readonly.php'
           }
         ]
       '2':
@@ -617,11 +637,13 @@
       '1':
         'patterns': [
           {
-            'match': 'final|abstract|public|private|protected'
+            'match': '((final|abstract)|(public|private|protected))'
             'name': 'storage.modifier.php'
             'captures':
-              '0':
-                'name': 'storage.modifier.${0:/downcase}.php'
+              '2':
+                'name': 'storage.modifier.inheritance.${2:/downcase}.php'
+              '3':
+                'name': 'storage.modifier.visibility.${3:/downcase}.php'
           }
         ]
       '2':
@@ -670,31 +692,22 @@
           '1':
             'patterns': [
               {
-                'match': 'public\\(set\\)|private\\(set\\)|protected\\(set\\)'
+                'match': '''(?x)
+                  \\b((public|private|protected)\\(set\\))
+                  |
+                  \\b(
+                    (public|private|protected)
+                    |(readonly)
+                  )\\b
+                '''
                 'name': 'storage.modifier.php'
                 'captures':
-                  '0':
-                    'patterns': [
-                      {
-                        'match': 'public\\(set\\)'
-                        'name': 'storage.modifier.public.set.php'
-                      }
-                      {
-                        'match': 'private\\(set\\)'
-                        'name': 'storage.modifier.private.set.php'
-                      }
-                      {
-                        'match': 'protected\\(set\\)'
-                        'name': 'storage.modifier.protected.set.php'
-                      }
-                    ]
-              }
-              {
-                'match': 'public|private|protected|readonly'
-                'name': 'storage.modifier.php'
-                'captures':
-                  '0':
-                    'name': 'storage.modifier.${0:/downcase}.php'
+                  '1':
+                    'name': 'storage.modifier.visibility.set.${2:/downcase}.php'
+                  '4':
+                    'name': 'storage.modifier.visibility.${4:/downcase}.php'
+                  '5':
+                    'name': 'storage.modifier.readonly.php'
               }
             ]
           '2':
@@ -747,11 +760,21 @@
       '1':
         'patterns': [
           {
-            'match': 'final|abstract|public|private|protected|static'
+            'match': '''(?x)
+            (
+              (final|abstract)
+              |(public|private|protected)
+              |(static)
+            )
+            '''
             'name': 'storage.modifier.php'
             'captures':
-              '0':
-                'name': 'storage.modifier.${0:/downcase}.php'
+              '2':
+                'name': 'storage.modifier.inheritance.${2:/downcase}.php'
+              '3':
+                'name': 'storage.modifier.visibility.${3:/downcase}.php'
+              '4':
+                'name': 'storage.modifier.static.php'
           }
         ]
       '2':
@@ -822,31 +845,22 @@
       '1':
         'patterns': [
           {
-            'match': 'public\\(set\\)|private\\(set\\)|protected\\(set\\)'
+            'match': '''(?x)
+              \\b((public|private|protected)\\(set\\))
+              |
+              \\b(
+                (public|private|protected)
+                |(readonly|static)
+              )\\b
+            '''
             'name': 'storage.modifier.php'
             'captures':
-              '0':
-                'patterns': [
-                  {
-                    'match': 'public\\(set\\)'
-                    'name': 'storage.modifier.public.set.php'
-                  }
-                  {
-                    'match': 'private\\(set\\)'
-                    'name': 'storage.modifier.private.set.php'
-                  }
-                  {
-                    'match': 'protected\\(set\\)'
-                    'name': 'storage.modifier.protected.set.php'
-                  }
-                ]
-          }
-          {
-            'match': 'public|private|protected|readonly|static'
-            'name': 'storage.modifier.php'
-            'captures':
-              '0':
-                'name': 'storage.modifier.${0:/downcase}.php'
+              '1':
+                'name': 'storage.modifier.visibility.set.${2:/downcase}.php'
+              '4':
+                'name': 'storage.modifier.visibility.${4:/downcase}.php'
+              '5':
+                'name': 'storage.modifier.${5:/downcase}.php'
           }
         ]
       '2':
@@ -920,11 +934,24 @@
     'name': 'storage.type.const.php'
   }
   {
-    'match': '(?i)\\b(global|abstract|final|private|protected|public|static)\\b'
+    'match': '''(?xi)\\b
+      (
+        (global)
+        |(abstract|final)
+        |(private|protected|public)
+        |(static)
+      )\\b
+    '''
     'name': 'storage.modifier.php'
     'captures':
-      '1':
-        'name': 'storage.modifier.${1:/downcase}.php'
+      '2':
+        'name': 'storage.modifier.global.php'
+      '3':
+        'name': 'storage.modifier.inheritance.${3:/downcase}.php'
+      '4':
+        'name': 'storage.modifier.visibility.${4:/downcase}.php'
+      '5':
+        'name': 'storage.modifier.static.php'
   }
   {
     'include': '#object'
@@ -2816,7 +2843,7 @@
           '3':
             'name': 'storage.modifier.php'
           '4':
-            'name': 'storage.modifier.${4:/downcase}.php'
+            'name': 'storage.modifier.visibility.${4:/downcase}.php'
           '5':
             'name': 'invalid.illegal.wrong-access-type.phpdoc.php'
         'match': '^\\s*\\*\\s*(@access)\\s+(((public|private|protected))|(.+))\\s*$'
