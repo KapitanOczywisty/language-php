@@ -3578,6 +3578,24 @@ describe 'PHP grammar', ->
       expect(lines[1][1]).toEqual value: ' uh oh a comment SELECT', scopes: ['source.php', scope, 'source.sql.embedded.php', 'comment.line.double-dash.sql']
       expect(lines[1][2]).toEqual value: delim, scopes: ['source.php', scope, 'punctuation.definition.string.end.php']
 
+  it 'should not let embedded SQL consume a single quoted PHP string that ends with N', ->
+    cases = [
+      {line: "['AND N' => 1, ''];", keyword: 'AND'}
+      {line: "['AND DAMN' => 1, ''];", keyword: 'AND'}
+      {line: "['SELECT N' => 1, ''];", keyword: 'SELECT'}
+    ]
+
+    for {line, keyword} in cases
+      {tokens} = grammar.tokenizeLine line
+
+      expect(tokens[1]).toEqual value: '\'', scopes: ['source.php', 'string.quoted.single.sql.php', 'punctuation.definition.string.begin.php']
+      expect(tokens[2]).toEqual value: keyword, scopes: ['source.php', 'string.quoted.single.sql.php', 'source.sql.embedded.php', 'keyword.other.DML.sql']
+      expect(tokens[4]).toEqual value: 'N', scopes: ['source.php', 'string.quoted.single.sql.php', 'source.sql.embedded.php']
+      expect(tokens[5]).toEqual value: '\'', scopes: ['source.php', 'string.quoted.single.sql.php', 'punctuation.definition.string.end.php']
+      expect(tokens[7]).toEqual value: '=>', scopes: ['source.php', 'keyword.operator.key.php']
+      expect(tokens[12]).toEqual value: '\'', scopes: ['source.php', 'string.quoted.single.php', 'punctuation.definition.string.begin.php']
+      expect(tokens[13]).toEqual value: '\'', scopes: ['source.php', 'string.quoted.single.php', 'punctuation.definition.string.end.php']
+
   it 'should tokenize single quoted string regex escape characters correctly', ->
     {tokens} = grammar.tokenizeLine "'/[\\\\\\\\]/';"
 
