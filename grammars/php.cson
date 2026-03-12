@@ -2832,15 +2832,6 @@
         'captures':
           '1':
             'name': 'keyword.other.phpdoc.php'
-          '3':
-            'name': 'storage.modifier.php'
-          '4':
-            'name': 'storage.modifier.visibility.${4:/downcase}.php'
-          '5':
-            'name': 'invalid.illegal.wrong-access-type.phpdoc.php'
-        'captures':
-          '1':
-            'name': 'keyword.other.phpdoc.php'
           '2':
             'name': 'storage.modifier.php'
           '3':
