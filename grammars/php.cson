@@ -136,8 +136,8 @@
               '2':
                 'patterns': [
                   {
-                    'match': '''(?xi)\\b
-                      (
+                    'match': '''(?xi)
+                      \\b(?:
                         (final|abstract)
                         |(public|private|protected)
                         |(static)
@@ -145,11 +145,11 @@
                     '''
                     'name': 'storage.modifier.php'
                     'captures':
+                      '1':
+                        'name': 'storage.modifier.inheritance.${1:/downcase}.php'
                       '2':
-                        'name': 'storage.modifier.inheritance.${2:/downcase}.php'
+                        'name': 'storage.modifier.visibility.${2:/downcase}.php'
                       '3':
-                        'name': 'storage.modifier.visibility.${3:/downcase}.php'
-                      '4':
                         'name': 'storage.modifier.static.php'
                   }
                   {
@@ -292,7 +292,7 @@
               '1':
                 'name': 'storage.modifier.php'
               '2':
-                'name': 'storage.modifier.case.php'
+                'name': 'storage.type.enum.case.php'
               '3':
                 'name': 'constant.enum.php'
           }
@@ -317,12 +317,12 @@
       '1':
         'patterns': [
           {
-            'match': '((final|abstract)|(readonly))'
+            'match': '(?i)(final|abstract)|(readonly)'
             'name': 'storage.modifier.php'
             'captures':
+              '1':
+                'name': 'storage.modifier.inheritance.${1:/downcase}.php'
               '2':
-                'name': 'storage.modifier.inheritance.${2:/downcase}.php'
-              '3':
                 'name': 'storage.modifier.readonly.php'
           }
         ]
@@ -637,13 +637,13 @@
       '1':
         'patterns': [
           {
-            'match': '((final|abstract)|(public|private|protected))'
+            'match': '(?i)(final|abstract)|(public|private|protected)'
             'name': 'storage.modifier.php'
             'captures':
+              '1':
+                'name': 'storage.modifier.inheritance.${1:/downcase}.php'
               '2':
-                'name': 'storage.modifier.inheritance.${2:/downcase}.php'
-              '3':
-                'name': 'storage.modifier.visibility.${3:/downcase}.php'
+                'name': 'storage.modifier.visibility.${2:/downcase}.php'
           }
         ]
       '2':
@@ -760,20 +760,18 @@
       '1':
         'patterns': [
           {
-            'match': '''(?x)
-            (
-              (final|abstract)
-              |(public|private|protected)
-              |(static)
-            )
+            'match': '''(?xi)
+            (final|abstract)
+            |(public|private|protected)
+            |(static)
             '''
             'name': 'storage.modifier.php'
             'captures':
+              '1':
+                'name': 'storage.modifier.inheritance.${1:/downcase}.php'
               '2':
-                'name': 'storage.modifier.inheritance.${2:/downcase}.php'
+                'name': 'storage.modifier.visibility.${2:/downcase}.php'
               '3':
-                'name': 'storage.modifier.visibility.${3:/downcase}.php'
-              '4':
                 'name': 'storage.modifier.static.php'
           }
         ]
@@ -934,8 +932,8 @@
     'name': 'storage.type.const.php'
   }
   {
-    'match': '''(?xi)\\b
-      (
+    'match': '''(?xi)
+      \\b(?:
         (global)
         |(abstract|final)
         |(private|protected|public)
@@ -944,13 +942,13 @@
     '''
     'name': 'storage.modifier.php'
     'captures':
-      '2':
+      '1':
         'name': 'storage.modifier.global.php'
+      '2':
+        'name': 'storage.modifier.inheritance.${2:/downcase}.php'
       '3':
-        'name': 'storage.modifier.inheritance.${3:/downcase}.php'
+        'name': 'storage.modifier.visibility.${3:/downcase}.php'
       '4':
-        'name': 'storage.modifier.visibility.${4:/downcase}.php'
-      '5':
         'name': 'storage.modifier.static.php'
   }
   {
