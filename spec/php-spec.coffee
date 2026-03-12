@@ -3396,6 +3396,23 @@ describe 'PHP grammar', ->
       expect(lines[1][2]).toEqual value: '$', scopes: ['source.php', 'variable.other.php', 'punctuation.definition.variable.php']
 
   describe 'string escape sequences', ->
+    it 'tokenizes braced interpolation as embedded PHP code', ->
+      {tokens} = grammar.tokenizeLine '"test {$array[\'x\']}";'
+
+      expect(tokens[0]).toEqual value: '"', scopes: ['source.php', 'string.quoted.double.php', 'punctuation.definition.string.begin.php']
+      expect(tokens[1]).toEqual value: 'test ', scopes: ['source.php', 'string.quoted.double.php']
+      expect(tokens[2]).toEqual value: '{', scopes: ['source.php', 'string.quoted.double.php', 'meta.embedded.interpolation.php', 'punctuation.definition.variable.php']
+      expect(tokens[3]).toEqual value: '$', scopes: ['source.php', 'string.quoted.double.php', 'meta.embedded.interpolation.php', 'variable.other.php', 'punctuation.definition.variable.php']
+      expect(tokens[4]).toEqual value: 'array', scopes: ['source.php', 'string.quoted.double.php', 'meta.embedded.interpolation.php', 'variable.other.php']
+      expect(tokens[5]).toEqual value: '[', scopes: ['source.php', 'string.quoted.double.php', 'meta.embedded.interpolation.php', 'punctuation.section.array.begin.php']
+      expect(tokens[6]).toEqual value: '\'', scopes: ['source.php', 'string.quoted.double.php', 'meta.embedded.interpolation.php', 'string.quoted.single.php', 'punctuation.definition.string.begin.php']
+      expect(tokens[7]).toEqual value: 'x', scopes: ['source.php', 'string.quoted.double.php', 'meta.embedded.interpolation.php', 'string.quoted.single.php']
+      expect(tokens[8]).toEqual value: '\'', scopes: ['source.php', 'string.quoted.double.php', 'meta.embedded.interpolation.php', 'string.quoted.single.php', 'punctuation.definition.string.end.php']
+      expect(tokens[9]).toEqual value: ']', scopes: ['source.php', 'string.quoted.double.php', 'meta.embedded.interpolation.php', 'punctuation.section.array.end.php']
+      expect(tokens[10]).toEqual value: '}', scopes: ['source.php', 'string.quoted.double.php', 'meta.embedded.interpolation.php', 'punctuation.definition.variable.php']
+      expect(tokens[11]).toEqual value: '"', scopes: ['source.php', 'string.quoted.double.php', 'punctuation.definition.string.end.php']
+      expect(tokens[12]).toEqual value: ';', scopes: ['source.php', 'punctuation.terminator.expression.php']
+
     it 'tokenizes escaped octal sequences', ->
       {tokens} = grammar.tokenizeLine '"test \\007 test";'
 
@@ -4029,9 +4046,9 @@ describe 'PHP grammar', ->
     '''
 
     expect(lines[3][7]).toEqual value: '`', scopes: ['source.php', 'string.unquoted.heredoc.php', 'meta.embedded.sql', 'source.sql.embedded.php', 'string.quoted.other.backtick.sql', 'punctuation.definition.string.begin.sql']
-    expect(lines[3][8]).toEqual value: '{', scopes: ['source.php', 'string.unquoted.heredoc.php', 'meta.embedded.sql', 'source.sql.embedded.php', 'string.quoted.other.backtick.sql', 'punctuation.definition.variable.php']
-    expect(lines[3][9]).toEqual value: '$', scopes: ['source.php', 'string.unquoted.heredoc.php', 'meta.embedded.sql', 'source.sql.embedded.php', 'string.quoted.other.backtick.sql', 'variable.other.php', 'punctuation.definition.variable.php']
-    expect(lines[3][10]).toEqual value: 'schema', scopes: ['source.php', 'string.unquoted.heredoc.php', 'meta.embedded.sql', 'source.sql.embedded.php', 'string.quoted.other.backtick.sql', 'variable.other.php']
+    expect(lines[3][8]).toEqual value: '{', scopes: ['source.php', 'string.unquoted.heredoc.php', 'meta.embedded.sql', 'source.sql.embedded.php', 'string.quoted.other.backtick.sql', 'meta.embedded.interpolation.php', 'punctuation.definition.variable.php']
+    expect(lines[3][9]).toEqual value: '$', scopes: ['source.php', 'string.unquoted.heredoc.php', 'meta.embedded.sql', 'source.sql.embedded.php', 'string.quoted.other.backtick.sql', 'meta.embedded.interpolation.php', 'variable.other.php', 'punctuation.definition.variable.php']
+    expect(lines[3][10]).toEqual value: 'schema', scopes: ['source.php', 'string.unquoted.heredoc.php', 'meta.embedded.sql', 'source.sql.embedded.php', 'string.quoted.other.backtick.sql', 'meta.embedded.interpolation.php', 'variable.other.php']
     expect(lines[3][26]).toEqual value: '\'', scopes: ['source.php', 'string.unquoted.heredoc.php', 'meta.embedded.sql', 'source.sql.embedded.php', 'string.quoted.single.sql', 'punctuation.definition.string.begin.sql']
     expect(lines[3][27]).toEqual value: '$', scopes: ['source.php', 'string.unquoted.heredoc.php', 'meta.embedded.sql', 'source.sql.embedded.php', 'string.quoted.single.sql', 'variable.other.php', 'punctuation.definition.variable.php']
     expect(lines[3][28]).toEqual value: 'id', scopes: ['source.php', 'string.unquoted.heredoc.php', 'meta.embedded.sql', 'source.sql.embedded.php', 'string.quoted.single.sql', 'variable.other.php']
