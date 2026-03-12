@@ -692,7 +692,7 @@
           '1':
             'patterns': [
               {
-                'match': '''(?x)
+                'match': '''(?xi)
                   \\b((public|private|protected)\\(set\\))
                   |\\b(public|private|protected)\\b
                   |\\b(readonly)\\b
@@ -840,7 +840,7 @@
       '1':
         'patterns': [
           {
-            'match': '''(?x)
+            'match': '''(?xi)
               \\b((public|private|protected)\\(set\\))
               |\\b(public|private|protected)\\b
               |\\b(readonly|static)\\b
@@ -2838,7 +2838,16 @@
             'name': 'storage.modifier.visibility.${4:/downcase}.php'
           '5':
             'name': 'invalid.illegal.wrong-access-type.phpdoc.php'
-        'match': '^\\s*\\*\\s*(@access)\\s+(((public|private|protected))|(.+))\\s*$'
+        'captures':
+          '1':
+            'name': 'keyword.other.phpdoc.php'
+          '2':
+            'name': 'storage.modifier.php'
+          '3':
+            'name': 'storage.modifier.visibility.${3:/downcase}.php'
+          '4':
+            'name': 'invalid.illegal.wrong-access-type.phpdoc.php'
+        'match': '^\\s*\\*\\s*(@access)\\s+(?i:((public|private|protected))|(.+))\\s*$'
       }
       {
         'captures':
