@@ -2755,6 +2755,15 @@ describe 'PHP grammar', ->
           specificScope
         ]
 
+      assertLegacyAlias = (input, value) ->
+        {tokens} = grammar.tokenizeLine input
+        castToken = tokens.find (token) -> token.value is value
+
+        expect(castToken).toEqual value: value, scopes: [
+          'source.php'
+          'storage.type.php'
+        ]
+
       {tokens} = grammar.tokenizeLine '(int)'
 
       expect(tokens[0]).toEqual value: '(', scopes: ['source.php', 'punctuation.definition.storage-type.begin.bracket.round.php']
@@ -2780,23 +2789,28 @@ describe 'PHP grammar', ->
         ['(Object)', 'Object', 'storage.type.cast.object.php']
         ['(string)', 'string', 'storage.type.cast.string.php']
         ['(String)', 'String', 'storage.type.cast.string.php']
-        
-        ['(binary)', 'binary', 'storage.type.cast.alias.binary.php']
-        ['(Binary)', 'Binary', 'storage.type.cast.alias.binary.php']
-        ['(boolean)', 'boolean', 'storage.type.cast.alias.boolean.php']
-        ['(Boolean)', 'Boolean', 'storage.type.cast.alias.boolean.php']
-        ['(double)', 'double', 'storage.type.cast.alias.double.php']
-        ['(Double)', 'Double', 'storage.type.cast.alias.double.php']
-        ['(integer)', 'integer', 'storage.type.cast.alias.integer.php']
-        ['(Integer)', 'Integer', 'storage.type.cast.alias.integer.php']
-        ['(real)', 'real', 'storage.type.cast.alias.real.php']
-        ['(Real)', 'Real', 'storage.type.cast.alias.real.php']
-        ['(unset)', 'unset', 'storage.type.cast.alias.unset.php']
-        ['(Unset)', 'Unset', 'storage.type.cast.alias.unset.php']
       ]
 
       for [input, value, specificScope] in castCases
         assertCast input, value, specificScope
+
+      legacyAliasCases = [
+        ['(binary)', 'binary']
+        ['(Binary)', 'Binary']
+        ['(boolean)', 'boolean']
+        ['(Boolean)', 'Boolean']
+        ['(double)', 'double']
+        ['(Double)', 'Double']
+        ['(integer)', 'integer']
+        ['(Integer)', 'Integer']
+        ['(real)', 'real']
+        ['(Real)', 'Real']
+        ['(unset)', 'unset']
+        ['(Unset)', 'Unset']
+      ]
+
+      for [input, value] in legacyAliasCases
+        assertLegacyAlias input, value
 
     it 'keeps scope-resolution special names distinct from cast types', ->
       {tokens} = grammar.tokenizeLine 'parent::class'

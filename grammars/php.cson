@@ -859,8 +859,7 @@
         'name': 'storage.type.php'
       '3':
         'name': 'storage.type.cast.${3:/downcase}.php'
-      '4':
-        'name': 'storage.type.cast.alias.${4:/downcase}.php'
+      # intentionally skip group #4 to exclude old cast aliases from the "storage.type.cast" scope
       '5':
         'name': 'punctuation.definition.storage-type.end.bracket.round.php'
   }
