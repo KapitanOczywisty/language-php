@@ -2469,6 +2469,7 @@
       }
       {
         'begin': '{(?=\\$.*?})'
+        'name': 'meta.embedded.interpolation.php'
         'beginCaptures':
           '0':
             'name': 'punctuation.definition.variable.php'
