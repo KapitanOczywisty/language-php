@@ -694,19 +694,16 @@
               {
                 'match': '''(?x)
                   \\b((public|private|protected)\\(set\\))
-                  |
-                  \\b(
-                    (public|private|protected)
-                    |(readonly)
-                  )\\b
+                  |\\b(public|private|protected)\\b
+                  |\\b(readonly)\\b
                 '''
                 'name': 'storage.modifier.php'
                 'captures':
                   '1':
                     'name': 'storage.modifier.visibility.set.${2:/downcase}.php'
+                  '3':
+                    'name': 'storage.modifier.visibility.${3:/downcase}.php'
                   '4':
-                    'name': 'storage.modifier.visibility.${4:/downcase}.php'
-                  '5':
                     'name': 'storage.modifier.readonly.php'
               }
             ]
@@ -845,20 +842,17 @@
           {
             'match': '''(?x)
               \\b((public|private|protected)\\(set\\))
-              |
-              \\b(
-                (public|private|protected)
-                |(readonly|static)
-              )\\b
+              |\\b(public|private|protected)\\b
+              |\\b(readonly|static)\\b
             '''
             'name': 'storage.modifier.php'
             'captures':
               '1':
                 'name': 'storage.modifier.visibility.set.${2:/downcase}.php'
+              '3':
+                'name': 'storage.modifier.visibility.${3:/downcase}.php'
               '4':
-                'name': 'storage.modifier.visibility.${4:/downcase}.php'
-              '5':
-                'name': 'storage.modifier.${5:/downcase}.php'
+                'name': 'storage.modifier.${4:/downcase}.php'
           }
         ]
       '2':
