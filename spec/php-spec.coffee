@@ -3611,6 +3611,18 @@ describe 'PHP grammar', ->
     expect(lines[2][11]).toEqual value: '"', scopes: ['source.php', 'string.quoted.double.php', 'punctuation.definition.string.begin.php']
     expect(lines[3][0]).toEqual value: '}', scopes: ['source.php', 'punctuation.definition.end.bracket.curly.php']
 
+  it 'should close an embedded SQL string that ends with AS alias', ->
+    lines = grammar.tokenizeLines '''
+      query("SELECT alias.* FROM (SELECT * FROM other) AS alias")
+      ->execute();
+    '''
+
+    expect(lines[0][2]).toEqual value: '"', scopes: ['source.php', 'meta.function-call.php', 'string.quoted.double.sql.php', 'punctuation.definition.string.begin.php']
+    expect(lines[0][15]).toEqual value: 'AS', scopes: ['source.php', 'meta.function-call.php', 'string.quoted.double.sql.php', 'source.sql.embedded.php', 'keyword.other.alias.sql']
+    expect(lines[0][17]).toEqual value: '"', scopes: ['source.php', 'meta.function-call.php', 'string.quoted.double.sql.php', 'punctuation.definition.string.end.php']
+    expect(lines[1][0]).toEqual value: '->', scopes: ['source.php', 'meta.method-call.php', 'keyword.operator.class.php']
+    expect(lines[1][1]).toEqual value: 'execute', scopes: ['source.php', 'meta.method-call.php', 'entity.name.function.php']
+
   it 'should tokenize single quoted string regex escape characters correctly', ->
     {tokens} = grammar.tokenizeLine "'/[\\\\\\\\]/';"
 
