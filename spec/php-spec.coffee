@@ -3578,6 +3578,39 @@ describe 'PHP grammar', ->
       expect(lines[1][1]).toEqual value: ' uh oh a comment SELECT', scopes: ['source.php', scope, 'source.sql.embedded.php', 'comment.line.double-dash.sql']
       expect(lines[1][2]).toEqual value: delim, scopes: ['source.php', scope, 'punctuation.definition.string.end.php']
 
+  it 'should tokenize an unclosed single quoted SQL string inside a double quoted PHP string', ->
+    {tokens} = grammar.tokenizeLine '$sql = "AND ($key LIKE \'";'
+
+    expect(tokens[5]).toEqual value: '"', scopes: ['source.php', 'string.quoted.double.sql.php', 'punctuation.definition.string.begin.php']
+    expect(tokens[6]).toEqual value: 'AND', scopes: ['source.php', 'string.quoted.double.sql.php', 'source.sql.embedded.php', 'keyword.other.DML.sql']
+    expect(tokens[13]).toEqual value: '\'', scopes: ['source.php', 'string.quoted.double.sql.php', 'source.sql.embedded.php', 'string.quoted.single.unclosed.sql']
+    expect(tokens[14]).toEqual value: '"', scopes: ['source.php', 'string.quoted.double.sql.php', 'punctuation.definition.string.end.php']
+    expect(tokens[15]).toEqual value: ';', scopes: ['source.php', 'punctuation.terminator.expression.php']
+
+  it 'should tokenize an unclosed double quoted SQL string inside a single quoted PHP string', ->
+    {tokens} = grammar.tokenizeLine '$sql = \'AND "\';'
+
+    expect(tokens[5]).toEqual value: '\'', scopes: ['source.php', 'string.quoted.single.sql.php', 'punctuation.definition.string.begin.php']
+    expect(tokens[6]).toEqual value: 'AND', scopes: ['source.php', 'string.quoted.single.sql.php', 'source.sql.embedded.php', 'keyword.other.DML.sql']
+    expect(tokens[8]).toEqual value: '"', scopes: ['source.php', 'string.quoted.single.sql.php', 'source.sql.embedded.php', 'string.quoted.double.unclosed.sql']
+    expect(tokens[9]).toEqual value: '\'', scopes: ['source.php', 'string.quoted.single.sql.php', 'punctuation.definition.string.end.php']
+    expect(tokens[10]).toEqual value: ';', scopes: ['source.php', 'punctuation.terminator.expression.php']
+
+  it 'should recover after an unmatched parenthesis in an embedded SQL string', ->
+    lines = grammar.tokenizeLines '''
+      $sql = $sql . " AND ($key LIKE '" . $valuex . "'";
+      if ($ii > 0) {
+        $sql = $sql . " OR $key LIKE '" . $valuex . "'";
+      }
+    '''
+
+    expect(lines[0][10]).toEqual value: '" ', scopes: ['source.php', 'string.quoted.double.sql.php', 'punctuation.definition.string.begin.php']
+    expect(lines[0][11]).toEqual value: 'AND', scopes: ['source.php', 'string.quoted.double.sql.php', 'source.sql.embedded.php', 'keyword.other.DML.sql']
+    expect(lines[0][18]).toEqual value: '\'', scopes: ['source.php', 'string.quoted.double.sql.php', 'source.sql.embedded.php', 'string.quoted.single.unclosed.sql']
+    expect(lines[1][0]).toEqual value: 'if', scopes: ['source.php', 'keyword.control.if.php']
+    expect(lines[2][11]).toEqual value: '"', scopes: ['source.php', 'string.quoted.double.php', 'punctuation.definition.string.begin.php']
+    expect(lines[3][0]).toEqual value: '}', scopes: ['source.php', 'punctuation.definition.end.bracket.curly.php']
+
   it 'should tokenize single quoted string regex escape characters correctly', ->
     {tokens} = grammar.tokenizeLine "'/[\\\\\\\\]/';"
 
