@@ -860,7 +860,7 @@
       '3':
         'name': 'storage.type.cast.${3:/downcase}.php'
       '4':
-        'name': 'storage.type.cast.php'
+        'name': 'storage.type.cast.alias.${4:/downcase}.php'
       '5':
         'name': 'punctuation.definition.storage-type.end.bracket.round.php'
   }
