@@ -3058,6 +3058,26 @@
         'name': 'constant.character.escape.php'
       }
       {
+        # Unclosed bracketed identifiers must be captured to avoid them eating the remainder of the PHP script
+        'match': '\\[(?=((\\\\")|[^\\]"])*("|$))'
+        'name': 'text.bracketed.unclosed.sql'
+      }
+      {
+        # Unclosed block comments must be captured to avoid them eating the remainder of the PHP script
+        'match': '/\\*(?=((\\\\")|(?:(?!\\*/|").))*("|$))'
+        'name': 'comment.block.unclosed.sql'
+      }
+      {
+        # Unclosed %{...} strings must be captured to avoid them eating the remainder of the PHP script
+        'match': '%\\{(?=((\\\\")|[^}"])*("|$))'
+        'name': 'string.other.quoted.brackets.unclosed.sql'
+      }
+      {
+        # Unclosed %r{...} regexes must be captured to avoid them eating the remainder of the PHP script
+        'match': '%r\\{(?=((\\\\")|[^}"])*("|$))'
+        'name': 'string.regexp.modr.unclosed.sql'
+      }
+      {
         # Unclosed strings must be captured to avoid them eating the remainder of the PHP script
         # Sample case: $sql = "SELECT * FROM bar WHERE foo = \'" . $variable . "\'"'
         'match': '\'(?=((\\\\\')|[^\'"])*("|$))'
@@ -3125,6 +3145,26 @@
       {
         'match': '\\\\[\\\\\'`"]'
         'name': 'constant.character.escape.php'
+      }
+      {
+        # Unclosed bracketed identifiers must be captured to avoid them eating the remainder of the PHP script
+        'match': '\\[(?=((\\\\\')|[^\\]\'])*(\'|$))'
+        'name': 'text.bracketed.unclosed.sql'
+      }
+      {
+        # Unclosed block comments must be captured to avoid them eating the remainder of the PHP script
+        'match': '/\\*(?=((\\\\\')|(?:(?!\\*/|\').))*(\'|$))'
+        'name': 'comment.block.unclosed.sql'
+      }
+      {
+        # Unclosed %{...} strings must be captured to avoid them eating the remainder of the PHP script
+        'match': '%\\{(?=((\\\\\')|[^}\'])*(\'|$))'
+        'name': 'string.other.quoted.brackets.unclosed.sql'
+      }
+      {
+        # Unclosed %r{...} regexes must be captured to avoid them eating the remainder of the PHP script
+        'match': '%r\\{(?=((\\\\\')|[^}\'])*(\'|$))'
+        'name': 'string.regexp.modr.unclosed.sql'
       }
       {
         # Unclosed strings must be captured to avoid them eating the remainder of the PHP script
