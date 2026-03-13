@@ -2743,20 +2743,87 @@ describe 'PHP grammar', ->
     expect(lines[4][0]).toEqual value: '}', scopes: ['source.php', 'meta.match-statement.php', 'punctuation.definition.section.match-block.end.bracket.curly.php']
     expect(lines[4][1]).toEqual value: ';', scopes: ['source.php', 'punctuation.terminator.expression.php']
 
-  it 'should tokenize storage types correctly', ->
-    {tokens} = grammar.tokenizeLine '(int)'
+  describe 'casts', ->
+    it 'should tokenize cast types correctly', ->
+      assertCast = (input, value, specificScope) ->
+        {tokens} = grammar.tokenizeLine input
+        castToken = tokens.find (token) -> specificScope in token.scopes
 
-    expect(tokens[0]).toEqual value: '(', scopes: ['source.php', 'punctuation.definition.storage-type.begin.bracket.round.php']
-    expect(tokens[1]).toEqual value: 'int', scopes: ['source.php', 'storage.type.php']
-    expect(tokens[2]).toEqual value: ')', scopes: ['source.php', 'punctuation.definition.storage-type.end.bracket.round.php']
+        expect(castToken).toEqual value: value, scopes: [
+          'source.php'
+          'storage.type.php'
+          specificScope
+        ]
 
-    {tokens} = grammar.tokenizeLine '( int )'
+      assertLegacyAlias = (input, value) ->
+        {tokens} = grammar.tokenizeLine input
+        castToken = tokens.find (token) -> token.value is value
 
-    expect(tokens[0]).toEqual value: '(', scopes: ['source.php', 'punctuation.definition.storage-type.begin.bracket.round.php']
-    expect(tokens[1]).toEqual value: ' ', scopes: ['source.php']
-    expect(tokens[2]).toEqual value: 'int', scopes: ['source.php', 'storage.type.php']
-    expect(tokens[3]).toEqual value: ' ', scopes: ['source.php']
-    expect(tokens[4]).toEqual value: ')', scopes: ['source.php', 'punctuation.definition.storage-type.end.bracket.round.php']
+        expect(castToken).toEqual value: value, scopes: [
+          'source.php'
+          'storage.type.php'
+        ]
+
+      {tokens} = grammar.tokenizeLine '(int)'
+
+      expect(tokens[0]).toEqual value: '(', scopes: ['source.php', 'punctuation.definition.storage-type.begin.bracket.round.php']
+      expect(tokens[1]).toEqual value: 'int', scopes: ['source.php', 'storage.type.php', 'storage.type.cast.int.php']
+      expect(tokens[2]).toEqual value: ')', scopes: ['source.php', 'punctuation.definition.storage-type.end.bracket.round.php']
+
+      {tokens} = grammar.tokenizeLine '( int )'
+
+      expect(tokens[0]).toEqual value: '(', scopes: ['source.php', 'punctuation.definition.storage-type.begin.bracket.round.php']
+      expect(tokens[1]).toEqual value: ' ', scopes: ['source.php']
+      expect(tokens[2]).toEqual value: 'int', scopes: ['source.php', 'storage.type.php', 'storage.type.cast.int.php']
+      expect(tokens[3]).toEqual value: ' ', scopes: ['source.php']
+      expect(tokens[4]).toEqual value: ')', scopes: ['source.php', 'punctuation.definition.storage-type.end.bracket.round.php']
+
+      castCases = [
+        ['(array)', 'array', 'storage.type.cast.array.php']
+        ['(Array)', 'Array', 'storage.type.cast.array.php']
+        ['(bool)', 'bool', 'storage.type.cast.bool.php']
+        ['(Bool)', 'Bool', 'storage.type.cast.bool.php']
+        ['(float)', 'float', 'storage.type.cast.float.php']
+        ['(Float)', 'Float', 'storage.type.cast.float.php']
+        ['(object)', 'object', 'storage.type.cast.object.php']
+        ['(Object)', 'Object', 'storage.type.cast.object.php']
+        ['(string)', 'string', 'storage.type.cast.string.php']
+        ['(String)', 'String', 'storage.type.cast.string.php']
+      ]
+
+      for [input, value, specificScope] in castCases
+        assertCast input, value, specificScope
+
+      legacyAliasCases = [
+        ['(binary)', 'binary']
+        ['(Binary)', 'Binary']
+        ['(boolean)', 'boolean']
+        ['(Boolean)', 'Boolean']
+        ['(double)', 'double']
+        ['(Double)', 'Double']
+        ['(integer)', 'integer']
+        ['(Integer)', 'Integer']
+        ['(real)', 'real']
+        ['(Real)', 'Real']
+        ['(unset)', 'unset']
+        ['(Unset)', 'Unset']
+      ]
+
+      for [input, value] in legacyAliasCases
+        assertLegacyAlias input, value
+
+    it 'keeps scope-resolution special names distinct from cast types', ->
+      {tokens} = grammar.tokenizeLine 'parent::class'
+
+      expect(tokens[0]).toEqual value: 'parent', scopes: ['source.php', 'storage.type.php']
+
+      {tokens} = grammar.tokenizeLine 'self::class'
+
+      expect(tokens[0]).toEqual value: 'self', scopes: ['source.php', 'storage.type.php']
+
+      {tokens} = grammar.tokenizeLine 'static::class'
+
+      expect(tokens[0]).toEqual value: 'static', scopes: ['source.php', 'storage.type.php']
 
   describe 'attributes', ->
     it 'should tokenize basic attribute', ->
