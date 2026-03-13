@@ -1933,6 +1933,9 @@
         'name': 'meta.embedded.sql'
         'patterns': [
           {
+            'include': '#sql-delimited-segments-heredoc'
+          }
+          {
             'include': '#interpolation'
           }
           {
@@ -2210,6 +2213,9 @@
             'name': 'keyword.operator.nowdoc.php'
         'name': 'meta.embedded.sql'
         'patterns': [
+          {
+            'include': '#sql-delimited-segments-nowdoc'
+          }
           {
             'include': 'source.sql'
           }
@@ -3027,6 +3033,169 @@
     # Support both PHP string and regex escaping
     'match': '\\\\(?:\\\\(?:\\\\[\\\\\']?|[^\'])|.)'
     'name': 'constant.character.escape.php'
+  'sql-delimited-segments-heredoc':
+    'patterns': [
+      {
+        'begin': '\''
+        'end': '(\')|(?=^\\s*(?:SQL|DQL)(?![A-Za-z0-9_\\x{7f}-\\x{10ffff}]))'
+        'endCaptures':
+          '1':
+            'name': 'punctuation.definition.string.end.sql'
+        'beginCaptures':
+          '0':
+            'name': 'punctuation.definition.string.begin.sql'
+        'name': 'string.quoted.single.sql'
+        'patterns': [
+          {
+            'include': '#interpolation_double_quoted'
+          }
+        ]
+      }
+      {
+        'begin': '"'
+        'end': '(")|(?=^\\s*(?:SQL|DQL)(?![A-Za-z0-9_\\x{7f}-\\x{10ffff}]))'
+        'endCaptures':
+          '1':
+            'name': 'punctuation.definition.string.end.sql'
+        'beginCaptures':
+          '0':
+            'name': 'punctuation.definition.string.begin.sql'
+        'name': 'string.quoted.double.sql'
+        'patterns': [
+          {
+            'include': '#interpolation_double_quoted'
+          }
+        ]
+      }
+      {
+        'begin': '`'
+        'end': '(`)|(?=^\\s*(?:SQL|DQL)(?![A-Za-z0-9_\\x{7f}-\\x{10ffff}]))'
+        'endCaptures':
+          '1':
+            'name': 'punctuation.definition.string.end.sql'
+        'beginCaptures':
+          '0':
+            'name': 'punctuation.definition.string.begin.sql'
+        'name': 'string.quoted.other.backtick.sql'
+        'patterns': [
+          {
+            'include': '#interpolation_double_quoted'
+          }
+        ]
+      }
+      {
+        'begin': '/\\*'
+        'beginCaptures':
+          '0':
+            'name': 'punctuation.definition.comment.sql'
+        'end': '(\\*/)|(?=^\\s*(?:SQL|DQL)(?![A-Za-z0-9_\\x{7f}-\\x{10ffff}]))'
+        'endCaptures':
+          '1':
+            'name': 'punctuation.definition.comment.sql'
+        'name': 'comment.block'
+        'patterns': [
+          {
+            'include': '#sql-delimited-segments-heredoc'
+          }
+        ]
+      }
+      {
+        'begin': '%\\{'
+        'beginCaptures':
+          '0':
+            'name': 'punctuation.definition.string.begin.sql'
+        'end': '(\\})|(?=^\\s*(?:SQL|DQL)(?![A-Za-z0-9_\\x{7f}-\\x{10ffff}]))'
+        'endCaptures':
+          '1':
+            'name': 'punctuation.definition.string.end.sql'
+        'name': 'string.other.quoted.brackets.sql'
+      }
+      {
+        'begin': '%r\\{'
+        'beginCaptures':
+          '0':
+            'name': 'punctuation.definition.string.begin.sql'
+        'end': '(\\})|(?=^\\s*(?:SQL|DQL)(?![A-Za-z0-9_\\x{7f}-\\x{10ffff}]))'
+        'endCaptures':
+          '1':
+            'name': 'punctuation.definition.string.end.sql'
+        'name': 'string.regexp.modr.sql'
+      }
+    ]
+  'sql-delimited-segments-nowdoc':
+    'patterns': [
+      {
+        'begin': '\''
+        'end': '(\')|(?=^\\s*(?:SQL|DQL)(?![A-Za-z0-9_\\x{7f}-\\x{10ffff}]))'
+        'endCaptures':
+          '1':
+            'name': 'punctuation.definition.string.end.sql'
+        'beginCaptures':
+          '0':
+            'name': 'punctuation.definition.string.begin.sql'
+        'name': 'string.quoted.single.sql'
+      }
+      {
+        'begin': '"'
+        'end': '(")|(?=^\\s*(?:SQL|DQL)(?![A-Za-z0-9_\\x{7f}-\\x{10ffff}]))'
+        'endCaptures':
+          '1':
+            'name': 'punctuation.definition.string.end.sql'
+        'beginCaptures':
+          '0':
+            'name': 'punctuation.definition.string.begin.sql'
+        'name': 'string.quoted.double.sql'
+      }
+      {
+        'begin': '`'
+        'end': '(`)|(?=^\\s*(?:SQL|DQL)(?![A-Za-z0-9_\\x{7f}-\\x{10ffff}]))'
+        'endCaptures':
+          '1':
+            'name': 'punctuation.definition.string.end.sql'
+        'beginCaptures':
+          '0':
+            'name': 'punctuation.definition.string.begin.sql'
+        'name': 'string.quoted.other.backtick.sql'
+      }
+      {
+        'begin': '/\\*'
+        'beginCaptures':
+          '0':
+            'name': 'punctuation.definition.comment.sql'
+        'end': '(\\*/)|(?=^\\s*(?:SQL|DQL)(?![A-Za-z0-9_\\x{7f}-\\x{10ffff}]))'
+        'endCaptures':
+          '1':
+            'name': 'punctuation.definition.comment.sql'
+        'name': 'comment.block'
+        'patterns': [
+          {
+            'include': '#sql-delimited-segments-nowdoc'
+          }
+        ]
+      }
+      {
+        'begin': '%\\{'
+        'beginCaptures':
+          '0':
+            'name': 'punctuation.definition.string.begin.sql'
+        'end': '(\\})|(?=^\\s*(?:SQL|DQL)(?![A-Za-z0-9_\\x{7f}-\\x{10ffff}]))'
+        'endCaptures':
+          '1':
+            'name': 'punctuation.definition.string.end.sql'
+        'name': 'string.other.quoted.brackets.sql'
+      }
+      {
+        'begin': '%r\\{'
+        'beginCaptures':
+          '0':
+            'name': 'punctuation.definition.string.begin.sql'
+        'end': '(\\})|(?=^\\s*(?:SQL|DQL)(?![A-Za-z0-9_\\x{7f}-\\x{10ffff}]))'
+        'endCaptures':
+          '1':
+            'name': 'punctuation.definition.string.end.sql'
+        'name': 'string.regexp.modr.sql'
+      }
+    ]
   'sql-string-double-quoted':
     'begin': '"\\s*(?=(SELECT|INSERT|UPDATE|DELETE|CREATE|REPLACE|ALTER|AND|WITH)\\b)'
     'beginCaptures':
