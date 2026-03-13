@@ -3579,35 +3579,40 @@ describe 'PHP grammar', ->
       expect(lines[1][2]).toEqual value: delim, scopes: ['source.php', scope, 'punctuation.definition.string.end.php']
 
   it 'should tokenize SQL continuation fragments in a string', ->
-    cases = [
-      {
-        line: '"WHERE id = 1"'
-        stringScope: 'string.quoted.double.sql.php'
-      }
-      {
-        line: "'WHERE id = 1'"
-        stringScope: 'string.quoted.single.sql.php'
-      }
-      {
-        line: '"JOIN child c ON c.parent_id = p.id"'
-        stringScope: 'string.quoted.double.sql.php'
-      }
-      {
-        line: "'LEFT JOIN child c ON c.parent_id = p.id'"
-        stringScope: 'string.quoted.single.sql.php'
-      }
-      {
-        line: '"FULL OUTER JOIN child c ON c.parent_id = p.id"'
-        stringScope: 'string.quoted.double.sql.php'
-      }
+    delimsByScope =
+      '"': 'string.quoted.double.sql.php'
+      "'": 'string.quoted.single.sql.php'
+
+    fragments = [
+      'SELECT foo'
+      'INSERT foo'
+      'UPDATE foo'
+      'DELETE foo'
+      'CREATE foo'
+      'REPLACE foo'
+      'ALTER foo'
+      'AND foo'
+      'WITH foo'
+      'WHERE foo'
+      'JOIN foo'
+      'LEFT JOIN foo'
+      'LEFT OUTER JOIN foo'
+      'RIGHT JOIN foo'
+      'RIGHT OUTER JOIN foo'
+      'FULL JOIN foo'
+      'FULL OUTER JOIN foo'
+      'INNER JOIN foo'
+      'OUTER JOIN foo'
+      'CROSS JOIN foo'
     ]
 
-    for {line, stringScope} in cases
-      {tokens} = grammar.tokenizeLine line
+    for fragment in fragments
+      for delim, stringScope of delimsByScope
+        {tokens} = grammar.tokenizeLine "#{delim}#{fragment}#{delim}"
 
-      expect(tokens[0].scopes).toContainAll ['source.php', stringScope, 'punctuation.definition.string.begin.php']
-      expect(tokens[1].scopes).toContainAll ['source.php', stringScope, 'source.sql.embedded.php']
-      expect(tokens[tokens.length - 1].scopes).toContainAll ['source.php', stringScope, 'punctuation.definition.string.end.php']
+        expect(tokens[0].scopes).toContainAll ['source.php', stringScope, 'punctuation.definition.string.begin.php']
+        expect(tokens[1].scopes).toContainAll ['source.php', stringScope, 'source.sql.embedded.php']
+        expect(tokens[tokens.length - 1].scopes).toContainAll ['source.php', stringScope, 'punctuation.definition.string.end.php']
 
   it 'should not tokenize near-miss SQL continuation fragments as embedded SQL', ->
     delimsByScope =
