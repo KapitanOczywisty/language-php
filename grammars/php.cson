@@ -3223,6 +3223,10 @@
         'name': 'constant.character.escape.php'
       }
       {
+        # Prevent source.sql from treating the PHP closing quote as T-SQL's N'...' prefix
+        'match': 'N(?=\')'
+      }
+      {
         # Unclosed strings must be captured to avoid them eating the remainder of the PHP script
         # Sample case: $sql = "SELECT * FROM bar WHERE foo = \'" . $variable . "\'"'
         'match': '`(?=((\\\\`)|[^`\'])*(\'|$))'
