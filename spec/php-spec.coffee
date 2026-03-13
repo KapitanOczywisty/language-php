@@ -3650,7 +3650,9 @@ describe 'PHP grammar', ->
         token:
           value: '['
           scopes: ['source.php', 'string.quoted.double.sql.php', 'source.sql.embedded.php', 'text.bracketed.unclosed.sql']
-        stringEnd: '"'
+        stringEndToken:
+          value: '"'
+          scopes: ['source.php', 'string.quoted.double.sql.php', 'punctuation.definition.string.end.php']
       }
       {
         line: "$sql = 'UPDATE ['.$x.']';"
@@ -3658,7 +3660,9 @@ describe 'PHP grammar', ->
         token:
           value: '['
           scopes: ['source.php', 'string.quoted.single.sql.php', 'source.sql.embedded.php', 'text.bracketed.unclosed.sql']
-        stringEnd: '\''
+        stringEndToken:
+          value: '\''
+          scopes: ['source.php', 'string.quoted.single.sql.php', 'punctuation.definition.string.end.php']
       }
       {
         line: '$sql = "SELECT /*".$x."*/";'
@@ -3666,7 +3670,9 @@ describe 'PHP grammar', ->
         token:
           value: '/*'
           scopes: ['source.php', 'string.quoted.double.sql.php', 'source.sql.embedded.php', 'comment.block.unclosed.sql']
-        stringEnd: '"'
+        stringEndToken:
+          value: '"'
+          scopes: ['source.php', 'string.quoted.double.sql.php', 'punctuation.definition.string.end.php']
       }
       {
         line: "$sql = 'UPDATE /*'.$x.'*/';"
@@ -3674,7 +3680,9 @@ describe 'PHP grammar', ->
         token:
           value: '/*'
           scopes: ['source.php', 'string.quoted.single.sql.php', 'source.sql.embedded.php', 'comment.block.unclosed.sql']
-        stringEnd: '\''
+        stringEndToken:
+          value: '\''
+          scopes: ['source.php', 'string.quoted.single.sql.php', 'punctuation.definition.string.end.php']
       }
       {
         line: '$sql = "SELECT %{".$x."}";'
@@ -3682,7 +3690,9 @@ describe 'PHP grammar', ->
         token:
           value: '%{'
           scopes: ['source.php', 'string.quoted.double.sql.php', 'source.sql.embedded.php', 'string.other.quoted.brackets.unclosed.sql']
-        stringEnd: '"'
+        stringEndToken:
+          value: '"'
+          scopes: ['source.php', 'string.quoted.double.sql.php', 'punctuation.definition.string.end.php']
       }
       {
         line: "$sql = 'UPDATE %{'.$x.'}';"
@@ -3690,7 +3700,9 @@ describe 'PHP grammar', ->
         token:
           value: '%{'
           scopes: ['source.php', 'string.quoted.single.sql.php', 'source.sql.embedded.php', 'string.other.quoted.brackets.unclosed.sql']
-        stringEnd: '\''
+        stringEndToken:
+          value: '\''
+          scopes: ['source.php', 'string.quoted.single.sql.php', 'punctuation.definition.string.end.php']
       }
       {
         line: '$sql = "SELECT %r{".$x."}";'
@@ -3698,7 +3710,9 @@ describe 'PHP grammar', ->
         token:
           value: '%r{'
           scopes: ['source.php', 'string.quoted.double.sql.php', 'source.sql.embedded.php', 'string.regexp.modr.unclosed.sql']
-        stringEnd: '"'
+        stringEndToken:
+          value: '"'
+          scopes: ['source.php', 'string.quoted.double.sql.php', 'punctuation.definition.string.end.php']
       }
       {
         line: "$sql = 'UPDATE %r{'.$x.'}';"
@@ -3706,14 +3720,16 @@ describe 'PHP grammar', ->
         token:
           value: '%r{'
           scopes: ['source.php', 'string.quoted.single.sql.php', 'source.sql.embedded.php', 'string.regexp.modr.unclosed.sql']
-        stringEnd: '\''
+        stringEndToken:
+          value: '\''
+          scopes: ['source.php', 'string.quoted.single.sql.php', 'punctuation.definition.string.end.php']
       }
     ]
 
-    for {line, tokenIndex, token, stringEnd} in cases
+    for {line, tokenIndex, token, stringEnd, stringEndToken} in cases
       {tokens} = grammar.tokenizeLine line
       expect(tokens[tokenIndex]).toEqual token
-      expect(tokens[tokenIndex + 1]).toEqual value: stringEnd, scopes: ['source.php', token.scopes[1], 'punctuation.definition.string.end.php']
+      expect(tokens[tokenIndex + 1]).toEqual stringEndToken
       expect(tokens[tokenIndex + 2]).toEqual value: '.', scopes: ['source.php', 'keyword.operator.string.php']
       expect(tokens[tokenIndex + 3]).toEqual value: '$', scopes: ['source.php', 'variable.other.php', 'punctuation.definition.variable.php']
       expect(tokens[tokenIndex + 4]).toEqual value: 'x', scopes: ['source.php', 'variable.other.php']
