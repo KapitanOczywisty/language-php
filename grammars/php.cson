@@ -1923,7 +1923,7 @@
             'name': 'keyword.operator.heredoc.php'
           '5':
             'name': 'invalid.illegal.trailing-whitespace.php'
-        'contentName': 'source.sql'
+        'contentName': 'source.sql.embedded.php'
         'end': '^\\s*(\\3)(?![A-Za-z0-9_\\x{7f}-\\x{10ffff}])'
         'endCaptures':
           '0':
@@ -2204,7 +2204,7 @@
             'name': 'keyword.operator.nowdoc.php'
           '3':
             'name': 'invalid.illegal.trailing-whitespace.php'
-        'contentName': 'source.sql'
+        'contentName': 'source.sql.embedded.php'
         'end': '^\\s*(\\2)(?![A-Za-z0-9_\\x{7f}-\\x{10ffff}])'
         'endCaptures':
           '0':

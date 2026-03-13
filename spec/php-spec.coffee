@@ -4003,19 +4003,19 @@ describe 'PHP grammar', ->
     expect(lines[0][5]).toEqual value: '<<<', scopes: ['source.php', 'string.unquoted.heredoc.php', 'meta.embedded.sql', 'punctuation.section.embedded.begin.php', 'punctuation.definition.string.php']
     expect(lines[0][6]).toEqual value: 'SQL', scopes: ['source.php', 'string.unquoted.heredoc.php', 'meta.embedded.sql', 'punctuation.section.embedded.begin.php', 'keyword.operator.heredoc.php']
     expect(lines[1][0].value).toEqual 'SELECT'
-    expect(lines[1][0].scopes).toContainAll ['source.php', 'string.unquoted.heredoc.php', 'meta.embedded.sql', 'source.sql']
+    expect(lines[1][0].scopes).toContainAll ['source.php', 'string.unquoted.heredoc.php', 'meta.embedded.sql', 'source.sql.embedded.php']
     expect(lines[1][1].value).toEqual ' '
-    expect(lines[1][1].scopes).toContainAll ['source.php', 'string.unquoted.heredoc.php', 'meta.embedded.sql', 'source.sql']
+    expect(lines[1][1].scopes).toContainAll ['source.php', 'string.unquoted.heredoc.php', 'meta.embedded.sql', 'source.sql.embedded.php']
     expect(lines[1][2].value).toEqual '*'
-    expect(lines[1][2].scopes).toContainAll ['source.php', 'string.unquoted.heredoc.php', 'meta.embedded.sql', 'source.sql']
+    expect(lines[1][2].scopes).toContainAll ['source.php', 'string.unquoted.heredoc.php', 'meta.embedded.sql', 'source.sql.embedded.php']
     expect(lines[1][3].value).toEqual ' '
-    expect(lines[1][3].scopes).toContainAll ['source.php', 'string.unquoted.heredoc.php', 'meta.embedded.sql', 'source.sql']
+    expect(lines[1][3].scopes).toContainAll ['source.php', 'string.unquoted.heredoc.php', 'meta.embedded.sql', 'source.sql.embedded.php']
     expect(lines[1][4].value).toEqual 'FROM'
-    expect(lines[1][4].scopes).toContainAll ['source.php', 'string.unquoted.heredoc.php', 'meta.embedded.sql', 'source.sql']
+    expect(lines[1][4].scopes).toContainAll ['source.php', 'string.unquoted.heredoc.php', 'meta.embedded.sql', 'source.sql.embedded.php']
     expect(lines[1][5].value).toEqual ' '
-    expect(lines[1][5].scopes).toContainAll ['source.php', 'string.unquoted.heredoc.php', 'meta.embedded.sql', 'source.sql']
+    expect(lines[1][5].scopes).toContainAll ['source.php', 'string.unquoted.heredoc.php', 'meta.embedded.sql', 'source.sql.embedded.php']
     expect(lines[1][6].value).toEqual 'table'
-    expect(lines[1][6].scopes).toContainAll ['source.php', 'string.unquoted.heredoc.php', 'meta.embedded.sql', 'source.sql']
+    expect(lines[1][6].scopes).toContainAll ['source.php', 'string.unquoted.heredoc.php', 'meta.embedded.sql', 'source.sql.embedded.php']
     expect(lines[2][0]).toEqual value: 'SQL', scopes: ['source.php', 'string.unquoted.heredoc.php', 'meta.embedded.sql', 'punctuation.section.embedded.end.php', 'keyword.operator.heredoc.php']
     expect(lines[2][1]).toEqual value: ';', scopes: ['source.php', 'punctuation.terminator.expression.php']
 
@@ -4028,36 +4028,71 @@ describe 'PHP grammar', ->
       SQL;
     '''
 
-    expect(lines[3][7]).toEqual value: '`', scopes: ['source.php', 'string.unquoted.heredoc.php', 'meta.embedded.sql', 'source.sql', 'string.quoted.other.backtick.sql', 'punctuation.definition.string.begin.sql']
-    expect(lines[3][8]).toEqual value: '{', scopes: ['source.php', 'string.unquoted.heredoc.php', 'meta.embedded.sql', 'source.sql', 'string.quoted.other.backtick.sql', 'punctuation.definition.variable.php']
-    expect(lines[3][9]).toEqual value: '$', scopes: ['source.php', 'string.unquoted.heredoc.php', 'meta.embedded.sql', 'source.sql', 'string.quoted.other.backtick.sql', 'variable.other.php', 'punctuation.definition.variable.php']
-    expect(lines[3][10]).toEqual value: 'schema', scopes: ['source.php', 'string.unquoted.heredoc.php', 'meta.embedded.sql', 'source.sql', 'string.quoted.other.backtick.sql', 'variable.other.php']
-    expect(lines[3][26]).toEqual value: '\'', scopes: ['source.php', 'string.unquoted.heredoc.php', 'meta.embedded.sql', 'source.sql', 'string.quoted.single.sql', 'punctuation.definition.string.begin.sql']
-    expect(lines[3][27]).toEqual value: '$', scopes: ['source.php', 'string.unquoted.heredoc.php', 'meta.embedded.sql', 'source.sql', 'string.quoted.single.sql', 'variable.other.php', 'punctuation.definition.variable.php']
-    expect(lines[3][28]).toEqual value: 'id', scopes: ['source.php', 'string.unquoted.heredoc.php', 'meta.embedded.sql', 'source.sql', 'string.quoted.single.sql', 'variable.other.php']
-    expect(lines[3][29]).toEqual value: '\'', scopes: ['source.php', 'string.unquoted.heredoc.php', 'meta.embedded.sql', 'source.sql', 'string.quoted.single.sql', 'punctuation.definition.string.end.sql']
+    expect(lines[3][7]).toEqual value: '`', scopes: ['source.php', 'string.unquoted.heredoc.php', 'meta.embedded.sql', 'source.sql.embedded.php', 'string.quoted.other.backtick.sql', 'punctuation.definition.string.begin.sql']
+    expect(lines[3][8]).toEqual value: '{', scopes: ['source.php', 'string.unquoted.heredoc.php', 'meta.embedded.sql', 'source.sql.embedded.php', 'string.quoted.other.backtick.sql', 'punctuation.definition.variable.php']
+    expect(lines[3][9]).toEqual value: '$', scopes: ['source.php', 'string.unquoted.heredoc.php', 'meta.embedded.sql', 'source.sql.embedded.php', 'string.quoted.other.backtick.sql', 'variable.other.php', 'punctuation.definition.variable.php']
+    expect(lines[3][10]).toEqual value: 'schema', scopes: ['source.php', 'string.unquoted.heredoc.php', 'meta.embedded.sql', 'source.sql.embedded.php', 'string.quoted.other.backtick.sql', 'variable.other.php']
+    expect(lines[3][26]).toEqual value: '\'', scopes: ['source.php', 'string.unquoted.heredoc.php', 'meta.embedded.sql', 'source.sql.embedded.php', 'string.quoted.single.sql', 'punctuation.definition.string.begin.sql']
+    expect(lines[3][27]).toEqual value: '$', scopes: ['source.php', 'string.unquoted.heredoc.php', 'meta.embedded.sql', 'source.sql.embedded.php', 'string.quoted.single.sql', 'variable.other.php', 'punctuation.definition.variable.php']
+    expect(lines[3][28]).toEqual value: 'id', scopes: ['source.php', 'string.unquoted.heredoc.php', 'meta.embedded.sql', 'source.sql.embedded.php', 'string.quoted.single.sql', 'variable.other.php']
+    expect(lines[3][29]).toEqual value: '\'', scopes: ['source.php', 'string.unquoted.heredoc.php', 'meta.embedded.sql', 'source.sql.embedded.php', 'string.quoted.single.sql', 'punctuation.definition.string.end.sql']
+
+  it 'should use the same embedded SQL content scope for heredocs as double-quoted SQL strings', ->
+    lines = grammar.tokenizeLines '''
+      $maxId = 10;
+      $sql = "SELECT d.id FROM my_table d WHERE d.id BETWEEN 1 AND $maxId AND my_custom_func(d.name) > 10";
+      $sql = <<<SQL
+          SELECT d.id FROM my_table d WHERE d.id BETWEEN 1 AND $maxId AND my_custom_func(d.name) > 10
+      SQL;
+    '''
+
+    findToken = (tokens, value, scope) ->
+      for token in tokens when token.value is value and scope in token.scopes
+        return token
+
+    quotedAlias = findToken lines[1], 'd', 'constant.other.database-name.sql'
+    heredocAlias = findToken lines[3], 'd', 'constant.other.database-name.sql'
+    quotedIdentifier = findToken lines[1], 'id', 'constant.other.table-name.sql'
+    heredocIdentifier = findToken lines[3], 'id', 'constant.other.table-name.sql'
+    quotedInterpolation = findToken lines[1], 'maxId', 'variable.other.php'
+    heredocInterpolation = findToken lines[3], 'maxId', 'variable.other.php'
+
+    expect(findToken(lines[1], 'SELECT', 'keyword.other.DML.sql').scopes).toContain 'source.sql.embedded.php'
+    expect(findToken(lines[3], 'SELECT', 'keyword.other.DML.sql').scopes).toContain 'source.sql.embedded.php'
+    expect(quotedAlias.scopes).toContain 'source.sql.embedded.php'
+    expect(heredocAlias.scopes).toContain 'source.sql.embedded.php'
+    expect(quotedAlias.scopes).toContain 'constant.other.database-name.sql'
+    expect(heredocAlias.scopes).toContain 'constant.other.database-name.sql'
+    expect(quotedIdentifier.scopes).toContain 'source.sql.embedded.php'
+    expect(heredocIdentifier.scopes).toContain 'source.sql.embedded.php'
+    expect(quotedIdentifier.scopes).toContain 'constant.other.table-name.sql'
+    expect(heredocIdentifier.scopes).toContain 'constant.other.table-name.sql'
+    expect(quotedInterpolation.scopes).toContain 'source.sql.embedded.php'
+    expect(heredocInterpolation.scopes).toContain 'source.sql.embedded.php'
+    expect(quotedInterpolation.scopes).toContain 'variable.other.php'
+    expect(heredocInterpolation.scopes).toContain 'variable.other.php'
 
   it 'should stop unclosed embedded SQL segments at a heredoc terminator', ->
     cases = [
       {
         opener: '/*'
-        scopes: ['source.php', 'string.unquoted.heredoc.php', 'meta.embedded.sql', 'source.sql', 'comment.block', 'punctuation.definition.comment.sql']
+        scopes: ['source.php', 'string.unquoted.heredoc.php', 'meta.embedded.sql', 'source.sql.embedded.php', 'comment.block', 'punctuation.definition.comment.sql']
       }
       {
         opener: '"'
-        scopes: ['source.php', 'string.unquoted.heredoc.php', 'meta.embedded.sql', 'source.sql', 'string.quoted.double.sql', 'punctuation.definition.string.begin.sql']
+        scopes: ['source.php', 'string.unquoted.heredoc.php', 'meta.embedded.sql', 'source.sql.embedded.php', 'string.quoted.double.sql', 'punctuation.definition.string.begin.sql']
       }
       {
         opener: '\''
-        scopes: ['source.php', 'string.unquoted.heredoc.php', 'meta.embedded.sql', 'source.sql', 'string.quoted.single.sql', 'punctuation.definition.string.begin.sql']
+        scopes: ['source.php', 'string.unquoted.heredoc.php', 'meta.embedded.sql', 'source.sql.embedded.php', 'string.quoted.single.sql', 'punctuation.definition.string.begin.sql']
       }
       {
         opener: '%{'
-        scopes: ['source.php', 'string.unquoted.heredoc.php', 'meta.embedded.sql', 'source.sql', 'string.other.quoted.brackets.sql', 'punctuation.definition.string.begin.sql']
+        scopes: ['source.php', 'string.unquoted.heredoc.php', 'meta.embedded.sql', 'source.sql.embedded.php', 'string.other.quoted.brackets.sql', 'punctuation.definition.string.begin.sql']
       }
       {
         opener: '%r{'
-        scopes: ['source.php', 'string.unquoted.heredoc.php', 'meta.embedded.sql', 'source.sql', 'string.regexp.modr.sql', 'punctuation.definition.string.begin.sql']
+        scopes: ['source.php', 'string.unquoted.heredoc.php', 'meta.embedded.sql', 'source.sql.embedded.php', 'string.regexp.modr.sql', 'punctuation.definition.string.begin.sql']
       }
     ]
 
@@ -4092,19 +4127,19 @@ describe 'PHP grammar', ->
     expect(lines[0][7]).toEqual value: 'SQL', scopes: ['source.php', 'string.unquoted.nowdoc.php', 'meta.embedded.sql', 'punctuation.section.embedded.begin.php', 'keyword.operator.nowdoc.php']
     expect(lines[0][8]).toEqual value: '\'', scopes: ['source.php', 'string.unquoted.nowdoc.php', 'meta.embedded.sql', 'punctuation.section.embedded.begin.php']
     expect(lines[1][0].value).toEqual 'SELECT'
-    expect(lines[1][0].scopes).toContainAll ['source.php', 'string.unquoted.nowdoc.php', 'meta.embedded.sql', 'source.sql']
+    expect(lines[1][0].scopes).toContainAll ['source.php', 'string.unquoted.nowdoc.php', 'meta.embedded.sql', 'source.sql.embedded.php']
     expect(lines[1][1].value).toEqual ' '
-    expect(lines[1][1].scopes).toContainAll ['source.php', 'string.unquoted.nowdoc.php', 'meta.embedded.sql', 'source.sql']
+    expect(lines[1][1].scopes).toContainAll ['source.php', 'string.unquoted.nowdoc.php', 'meta.embedded.sql', 'source.sql.embedded.php']
     expect(lines[1][2].value).toEqual '*'
-    expect(lines[1][2].scopes).toContainAll ['source.php', 'string.unquoted.nowdoc.php', 'meta.embedded.sql', 'source.sql']
+    expect(lines[1][2].scopes).toContainAll ['source.php', 'string.unquoted.nowdoc.php', 'meta.embedded.sql', 'source.sql.embedded.php']
     expect(lines[1][3].value).toEqual ' '
-    expect(lines[1][3].scopes).toContainAll ['source.php', 'string.unquoted.nowdoc.php', 'meta.embedded.sql', 'source.sql']
+    expect(lines[1][3].scopes).toContainAll ['source.php', 'string.unquoted.nowdoc.php', 'meta.embedded.sql', 'source.sql.embedded.php']
     expect(lines[1][4].value).toEqual 'FROM'
-    expect(lines[1][4].scopes).toContainAll ['source.php', 'string.unquoted.nowdoc.php', 'meta.embedded.sql', 'source.sql']
+    expect(lines[1][4].scopes).toContainAll ['source.php', 'string.unquoted.nowdoc.php', 'meta.embedded.sql', 'source.sql.embedded.php']
     expect(lines[1][5].value).toEqual ' '
-    expect(lines[1][5].scopes).toContainAll ['source.php', 'string.unquoted.nowdoc.php', 'meta.embedded.sql', 'source.sql']
+    expect(lines[1][5].scopes).toContainAll ['source.php', 'string.unquoted.nowdoc.php', 'meta.embedded.sql', 'source.sql.embedded.php']
     expect(lines[1][6].value).toEqual 'table'
-    expect(lines[1][6].scopes).toContainAll ['source.php', 'string.unquoted.nowdoc.php', 'meta.embedded.sql', 'source.sql']
+    expect(lines[1][6].scopes).toContainAll ['source.php', 'string.unquoted.nowdoc.php', 'meta.embedded.sql', 'source.sql.embedded.php']
     expect(lines[2][0]).toEqual value: 'SQL', scopes: ['source.php', 'string.unquoted.nowdoc.php', 'meta.embedded.sql', 'punctuation.section.embedded.end.php', 'keyword.operator.nowdoc.php']
     expect(lines[2][1]).toEqual value: ';', scopes: ['source.php', 'punctuation.terminator.expression.php']
 
@@ -4112,23 +4147,23 @@ describe 'PHP grammar', ->
     cases = [
       {
         opener: '/*'
-        scopes: ['source.php', 'string.unquoted.nowdoc.php', 'meta.embedded.sql', 'source.sql', 'comment.block', 'punctuation.definition.comment.sql']
+        scopes: ['source.php', 'string.unquoted.nowdoc.php', 'meta.embedded.sql', 'source.sql.embedded.php', 'comment.block', 'punctuation.definition.comment.sql']
       }
       {
         opener: '"'
-        scopes: ['source.php', 'string.unquoted.nowdoc.php', 'meta.embedded.sql', 'source.sql', 'string.quoted.double.sql', 'punctuation.definition.string.begin.sql']
+        scopes: ['source.php', 'string.unquoted.nowdoc.php', 'meta.embedded.sql', 'source.sql.embedded.php', 'string.quoted.double.sql', 'punctuation.definition.string.begin.sql']
       }
       {
         opener: '\''
-        scopes: ['source.php', 'string.unquoted.nowdoc.php', 'meta.embedded.sql', 'source.sql', 'string.quoted.single.sql', 'punctuation.definition.string.begin.sql']
+        scopes: ['source.php', 'string.unquoted.nowdoc.php', 'meta.embedded.sql', 'source.sql.embedded.php', 'string.quoted.single.sql', 'punctuation.definition.string.begin.sql']
       }
       {
         opener: '%{'
-        scopes: ['source.php', 'string.unquoted.nowdoc.php', 'meta.embedded.sql', 'source.sql', 'string.other.quoted.brackets.sql', 'punctuation.definition.string.begin.sql']
+        scopes: ['source.php', 'string.unquoted.nowdoc.php', 'meta.embedded.sql', 'source.sql.embedded.php', 'string.other.quoted.brackets.sql', 'punctuation.definition.string.begin.sql']
       }
       {
         opener: '%r{'
-        scopes: ['source.php', 'string.unquoted.nowdoc.php', 'meta.embedded.sql', 'source.sql', 'string.regexp.modr.sql', 'punctuation.definition.string.begin.sql']
+        scopes: ['source.php', 'string.unquoted.nowdoc.php', 'meta.embedded.sql', 'source.sql.embedded.php', 'string.regexp.modr.sql', 'punctuation.definition.string.begin.sql']
       }
     ]
 
@@ -4161,19 +4196,19 @@ describe 'PHP grammar', ->
     expect(lines[0][5]).toEqual value: '<<<', scopes: ['source.php', 'string.unquoted.heredoc.php', 'meta.embedded.sql', 'punctuation.section.embedded.begin.php', 'punctuation.definition.string.php']
     expect(lines[0][6]).toEqual value: 'DQL', scopes: ['source.php', 'string.unquoted.heredoc.php', 'meta.embedded.sql', 'punctuation.section.embedded.begin.php', 'keyword.operator.heredoc.php']
     expect(lines[1][0].value).toEqual 'SELECT'
-    expect(lines[1][0].scopes).toContainAll ['source.php', 'string.unquoted.heredoc.php', 'meta.embedded.sql', 'source.sql']
+    expect(lines[1][0].scopes).toContainAll ['source.php', 'string.unquoted.heredoc.php', 'meta.embedded.sql', 'source.sql.embedded.php']
     expect(lines[1][1].value).toEqual ' '
-    expect(lines[1][1].scopes).toContainAll ['source.php', 'string.unquoted.heredoc.php', 'meta.embedded.sql', 'source.sql']
+    expect(lines[1][1].scopes).toContainAll ['source.php', 'string.unquoted.heredoc.php', 'meta.embedded.sql', 'source.sql.embedded.php']
     expect(lines[1][2].value).toEqual '*'
-    expect(lines[1][2].scopes).toContainAll ['source.php', 'string.unquoted.heredoc.php', 'meta.embedded.sql', 'source.sql']
+    expect(lines[1][2].scopes).toContainAll ['source.php', 'string.unquoted.heredoc.php', 'meta.embedded.sql', 'source.sql.embedded.php']
     expect(lines[1][3].value).toEqual ' '
-    expect(lines[1][3].scopes).toContainAll ['source.php', 'string.unquoted.heredoc.php', 'meta.embedded.sql', 'source.sql']
+    expect(lines[1][3].scopes).toContainAll ['source.php', 'string.unquoted.heredoc.php', 'meta.embedded.sql', 'source.sql.embedded.php']
     expect(lines[1][4].value).toEqual 'FROM'
-    expect(lines[1][4].scopes).toContainAll ['source.php', 'string.unquoted.heredoc.php', 'meta.embedded.sql', 'source.sql']
+    expect(lines[1][4].scopes).toContainAll ['source.php', 'string.unquoted.heredoc.php', 'meta.embedded.sql', 'source.sql.embedded.php']
     expect(lines[1][5].value).toEqual ' '
-    expect(lines[1][5].scopes).toContainAll ['source.php', 'string.unquoted.heredoc.php', 'meta.embedded.sql', 'source.sql']
+    expect(lines[1][5].scopes).toContainAll ['source.php', 'string.unquoted.heredoc.php', 'meta.embedded.sql', 'source.sql.embedded.php']
     expect(lines[1][6].value).toEqual 'table'
-    expect(lines[1][6].scopes).toContainAll ['source.php', 'string.unquoted.heredoc.php', 'meta.embedded.sql', 'source.sql']
+    expect(lines[1][6].scopes).toContainAll ['source.php', 'string.unquoted.heredoc.php', 'meta.embedded.sql', 'source.sql.embedded.php']
     expect(lines[2][0]).toEqual value: 'DQL', scopes: ['source.php', 'string.unquoted.heredoc.php', 'meta.embedded.sql', 'punctuation.section.embedded.end.php', 'keyword.operator.heredoc.php']
     expect(lines[2][1]).toEqual value: ';', scopes: ['source.php', 'punctuation.terminator.expression.php']
 
@@ -4194,19 +4229,19 @@ describe 'PHP grammar', ->
     expect(lines[0][7]).toEqual value: 'DQL', scopes: ['source.php', 'string.unquoted.nowdoc.php', 'meta.embedded.sql', 'punctuation.section.embedded.begin.php', 'keyword.operator.nowdoc.php']
     expect(lines[0][8]).toEqual value: '\'', scopes: ['source.php', 'string.unquoted.nowdoc.php', 'meta.embedded.sql', 'punctuation.section.embedded.begin.php']
     expect(lines[1][0].value).toEqual 'SELECT'
-    expect(lines[1][0].scopes).toContainAll ['source.php', 'string.unquoted.nowdoc.php', 'meta.embedded.sql', 'source.sql']
+    expect(lines[1][0].scopes).toContainAll ['source.php', 'string.unquoted.nowdoc.php', 'meta.embedded.sql', 'source.sql.embedded.php']
     expect(lines[1][1].value).toEqual ' '
-    expect(lines[1][1].scopes).toContainAll ['source.php', 'string.unquoted.nowdoc.php', 'meta.embedded.sql', 'source.sql']
+    expect(lines[1][1].scopes).toContainAll ['source.php', 'string.unquoted.nowdoc.php', 'meta.embedded.sql', 'source.sql.embedded.php']
     expect(lines[1][2].value).toEqual '*'
-    expect(lines[1][2].scopes).toContainAll ['source.php', 'string.unquoted.nowdoc.php', 'meta.embedded.sql', 'source.sql']
+    expect(lines[1][2].scopes).toContainAll ['source.php', 'string.unquoted.nowdoc.php', 'meta.embedded.sql', 'source.sql.embedded.php']
     expect(lines[1][3].value).toEqual ' '
-    expect(lines[1][3].scopes).toContainAll ['source.php', 'string.unquoted.nowdoc.php', 'meta.embedded.sql', 'source.sql']
+    expect(lines[1][3].scopes).toContainAll ['source.php', 'string.unquoted.nowdoc.php', 'meta.embedded.sql', 'source.sql.embedded.php']
     expect(lines[1][4].value).toEqual 'FROM'
-    expect(lines[1][4].scopes).toContainAll ['source.php', 'string.unquoted.nowdoc.php', 'meta.embedded.sql', 'source.sql']
+    expect(lines[1][4].scopes).toContainAll ['source.php', 'string.unquoted.nowdoc.php', 'meta.embedded.sql', 'source.sql.embedded.php']
     expect(lines[1][5].value).toEqual ' '
-    expect(lines[1][5].scopes).toContainAll ['source.php', 'string.unquoted.nowdoc.php', 'meta.embedded.sql', 'source.sql']
+    expect(lines[1][5].scopes).toContainAll ['source.php', 'string.unquoted.nowdoc.php', 'meta.embedded.sql', 'source.sql.embedded.php']
     expect(lines[1][6].value).toEqual 'table'
-    expect(lines[1][6].scopes).toContainAll ['source.php', 'string.unquoted.nowdoc.php', 'meta.embedded.sql', 'source.sql']
+    expect(lines[1][6].scopes).toContainAll ['source.php', 'string.unquoted.nowdoc.php', 'meta.embedded.sql', 'source.sql.embedded.php']
     expect(lines[2][0]).toEqual value: 'DQL', scopes: ['source.php', 'string.unquoted.nowdoc.php', 'meta.embedded.sql', 'punctuation.section.embedded.end.php', 'keyword.operator.nowdoc.php']
     expect(lines[2][1]).toEqual value: ';', scopes: ['source.php', 'punctuation.terminator.expression.php']
 
