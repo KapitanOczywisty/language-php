@@ -3776,6 +3776,67 @@ describe 'PHP grammar', ->
       expect(tokens[12]).toEqual value: '\'', scopes: ['source.php', 'string.quoted.single.php', 'punctuation.definition.string.begin.php']
       expect(tokens[13]).toEqual value: '\'', scopes: ['source.php', 'string.quoted.single.php', 'punctuation.definition.string.end.php']
 
+  it 'should tokenize SQL continuation fragments in a string', ->
+    delimsByScope =
+      '"': 'string.quoted.double.sql.php'
+      "'": 'string.quoted.single.sql.php'
+
+    fragments = [
+      'SELECT foo'
+      'INSERT foo'
+      'UPDATE foo'
+      'DELETE foo'
+      'CREATE foo'
+      'REPLACE foo'
+      'ALTER foo'
+      'AND foo'
+      'WITH foo'
+      'WHERE foo'
+      'JOIN foo'
+      'LEFT JOIN foo'
+      'LEFT OUTER JOIN foo'
+      'RIGHT JOIN foo'
+      'RIGHT OUTER JOIN foo'
+      'FULL JOIN foo'
+      'FULL OUTER JOIN foo'
+      'INNER JOIN foo'
+      'OUTER JOIN foo'
+      'CROSS JOIN foo'
+    ]
+
+    for fragment in fragments
+      for delim, stringScope of delimsByScope
+        {tokens} = grammar.tokenizeLine "#{delim}#{fragment}#{delim}"
+
+        expect(tokens[0].scopes).toContainAll ['source.php', stringScope, 'punctuation.definition.string.begin.php']
+        expect(tokens[1].scopes).toContainAll ['source.php', stringScope, 'source.sql.embedded.php']
+        expect(tokens[tokens.length - 1].scopes).toContainAll ['source.php', stringScope, 'punctuation.definition.string.end.php']
+
+  it 'should not tokenize near-miss SQL continuation fragments as embedded SQL', ->
+    delimsByScope =
+      '"': 'string.quoted.double.php'
+      "'": 'string.quoted.single.php'
+
+    nearMisses = [
+      'WHEREVER foo'
+      'JOINED foo'
+      'LEFTOVER JOIN foo'
+      'LEFT foo'
+      'INNER foo'
+      'LEFT INNER foo'
+      'OUTER foo'
+      'LEFT OUTER foo'
+    ]
+
+    for fragment in nearMisses
+      for delim, stringScope of delimsByScope
+        {tokens} = grammar.tokenizeLine "#{delim}#{fragment}#{delim}"
+
+        expect(tokens[0].scopes).toContainAll ['source.php', stringScope, 'punctuation.definition.string.begin.php']
+        expect(tokens[1].scopes).toContainAll ['source.php', stringScope]
+        expect(tokens[1].scopes).to.not.contain 'source.sql.embedded.php'
+        expect(tokens[tokens.length - 1].scopes).toContainAll ['source.php', stringScope, 'punctuation.definition.string.end.php']
+
   it 'should tokenize single quoted string regex escape characters correctly', ->
     {tokens} = grammar.tokenizeLine "'/[\\\\\\\\]/';"
 
