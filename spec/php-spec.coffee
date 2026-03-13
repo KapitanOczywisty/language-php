@@ -3578,10 +3578,14 @@ describe 'PHP grammar', ->
     for delim in ['"', "'"]
       {tokens} = grammar.tokenizeLine "#{delim}SELECT something#{delim}"
 
-      expect(tokens[0]).toEqual value: delim, scopes: ['source.php', 'meta.embedded.sql', 'punctuation.definition.string.begin.php']
+      quoteScope = if delim is '"' then 'string.quoted.double.php' else 'string.quoted.single.php'
+      beginScope = 'punctuation.definition.string.begin.php'
+      endScope = 'punctuation.definition.string.end.php'
+
+      expect(tokens[0]).toEqual value: delim, scopes: ['source.php', 'meta.embedded.sql', quoteScope, beginScope]
       expect(tokens[1]).toEqual value: 'SELECT', scopes: ['source.php', 'meta.embedded.sql', 'source.sql.embedded.php', 'keyword.other.DML.sql']
       expect(tokens[2]).toEqual value: ' something', scopes: ['source.php', 'meta.embedded.sql', 'source.sql.embedded.php']
-      expect(tokens[3]).toEqual value: delim, scopes: ['source.php', 'meta.embedded.sql', 'punctuation.definition.string.end.php']
+      expect(tokens[3]).toEqual value: delim, scopes: ['source.php', 'meta.embedded.sql', quoteScope, endScope]
 
       lines = grammar.tokenizeLines """
         #{delim}SELECT something
@@ -3589,16 +3593,16 @@ describe 'PHP grammar', ->
       """
       expect(lines[1][0]).toEqual value: '--', scopes: ['source.php', 'meta.embedded.sql', 'source.sql.embedded.php', 'comment.line.double-dash.sql', 'punctuation.definition.comment.sql']
       expect(lines[1][1]).toEqual value: ' uh oh a comment SELECT', scopes: ['source.php', 'meta.embedded.sql', 'source.sql.embedded.php', 'comment.line.double-dash.sql']
-      expect(lines[1][2]).toEqual value: delim, scopes: ['source.php', 'meta.embedded.sql', 'punctuation.definition.string.end.php']
+      expect(lines[1][2]).toEqual value: delim, scopes: ['source.php', 'meta.embedded.sql', quoteScope, endScope]
 
   it 'should tokenize braced interpolation inside quoted embedded SQL', ->
     {tokens} = grammar.tokenizeLine '"SELECT `{$schema}` FROM `test`";'
 
-    expect(tokens[0]).toEqual value: '"', scopes: ['source.php', 'meta.embedded.sql', 'punctuation.definition.string.begin.php']
+    expect(tokens[0]).toEqual value: '"', scopes: ['source.php', 'meta.embedded.sql', 'string.quoted.double.php', 'punctuation.definition.string.begin.php']
     expect(tokens[4]).toEqual value: '{', scopes: ['source.php', 'meta.embedded.sql', 'source.sql.embedded.php', 'string.quoted.other.backtick.sql', 'meta.embedded.interpolation.php', 'punctuation.definition.variable.php']
     expect(tokens[5]).toEqual value: '$', scopes: ['source.php', 'meta.embedded.sql', 'source.sql.embedded.php', 'string.quoted.other.backtick.sql', 'meta.embedded.interpolation.php', 'variable.other.php', 'punctuation.definition.variable.php']
     expect(tokens[6]).toEqual value: 'schema', scopes: ['source.php', 'meta.embedded.sql', 'source.sql.embedded.php', 'string.quoted.other.backtick.sql', 'meta.embedded.interpolation.php', 'variable.other.php']
-    expect(tokens[15]).toEqual value: '"', scopes: ['source.php', 'meta.embedded.sql', 'punctuation.definition.string.end.php']
+    expect(tokens[15]).toEqual value: '"', scopes: ['source.php', 'meta.embedded.sql', 'string.quoted.double.php', 'punctuation.definition.string.end.php']
 
   it 'should tokenize single quoted string regex escape characters correctly', ->
     {tokens} = grammar.tokenizeLine "'/[\\\\\\\\]/';"
