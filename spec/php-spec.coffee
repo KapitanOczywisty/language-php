@@ -3575,25 +3575,30 @@ describe 'PHP grammar', ->
     expect(tokens[12]).toEqual value: ';', scopes: ['source.php', 'punctuation.terminator.expression.php']
 
   it 'should tokenize embedded SQL in a string', ->
-    delimsByScope =
-      'string.quoted.double.sql.php': '"'
-      'string.quoted.single.sql.php': "'"
-
-    for scope, delim of delimsByScope
+    for delim in ['"', "'"]
       {tokens} = grammar.tokenizeLine "#{delim}SELECT something#{delim}"
 
-      expect(tokens[0]).toEqual value: delim, scopes: ['source.php', scope, 'punctuation.definition.string.begin.php']
-      expect(tokens[1]).toEqual value: 'SELECT', scopes: ['source.php', scope, 'source.sql.embedded.php', 'keyword.other.DML.sql']
-      expect(tokens[2]).toEqual value: ' something', scopes: ['source.php', scope, 'source.sql.embedded.php']
-      expect(tokens[3]).toEqual value: delim, scopes: ['source.php', scope, 'punctuation.definition.string.end.php']
+      expect(tokens[0]).toEqual value: delim, scopes: ['source.php', 'meta.embedded.sql', 'punctuation.definition.string.begin.php']
+      expect(tokens[1]).toEqual value: 'SELECT', scopes: ['source.php', 'meta.embedded.sql', 'source.sql.embedded.php', 'keyword.other.DML.sql']
+      expect(tokens[2]).toEqual value: ' something', scopes: ['source.php', 'meta.embedded.sql', 'source.sql.embedded.php']
+      expect(tokens[3]).toEqual value: delim, scopes: ['source.php', 'meta.embedded.sql', 'punctuation.definition.string.end.php']
 
       lines = grammar.tokenizeLines """
         #{delim}SELECT something
         -- uh oh a comment SELECT#{delim}
       """
-      expect(lines[1][0]).toEqual value: '--', scopes: ['source.php', scope, 'source.sql.embedded.php', 'comment.line.double-dash.sql', 'punctuation.definition.comment.sql']
-      expect(lines[1][1]).toEqual value: ' uh oh a comment SELECT', scopes: ['source.php', scope, 'source.sql.embedded.php', 'comment.line.double-dash.sql']
-      expect(lines[1][2]).toEqual value: delim, scopes: ['source.php', scope, 'punctuation.definition.string.end.php']
+      expect(lines[1][0]).toEqual value: '--', scopes: ['source.php', 'meta.embedded.sql', 'source.sql.embedded.php', 'comment.line.double-dash.sql', 'punctuation.definition.comment.sql']
+      expect(lines[1][1]).toEqual value: ' uh oh a comment SELECT', scopes: ['source.php', 'meta.embedded.sql', 'source.sql.embedded.php', 'comment.line.double-dash.sql']
+      expect(lines[1][2]).toEqual value: delim, scopes: ['source.php', 'meta.embedded.sql', 'punctuation.definition.string.end.php']
+
+  it 'should tokenize braced interpolation inside quoted embedded SQL', ->
+    {tokens} = grammar.tokenizeLine '"SELECT `{$schema}` FROM `test`";'
+
+    expect(tokens[0]).toEqual value: '"', scopes: ['source.php', 'meta.embedded.sql', 'punctuation.definition.string.begin.php']
+    expect(tokens[4]).toEqual value: '{', scopes: ['source.php', 'meta.embedded.sql', 'source.sql.embedded.php', 'string.quoted.other.backtick.sql', 'meta.embedded.interpolation.php', 'punctuation.definition.variable.php']
+    expect(tokens[5]).toEqual value: '$', scopes: ['source.php', 'meta.embedded.sql', 'source.sql.embedded.php', 'string.quoted.other.backtick.sql', 'meta.embedded.interpolation.php', 'variable.other.php', 'punctuation.definition.variable.php']
+    expect(tokens[6]).toEqual value: 'schema', scopes: ['source.php', 'meta.embedded.sql', 'source.sql.embedded.php', 'string.quoted.other.backtick.sql', 'meta.embedded.interpolation.php', 'variable.other.php']
+    expect(tokens[15]).toEqual value: '"', scopes: ['source.php', 'meta.embedded.sql', 'punctuation.definition.string.end.php']
 
   it 'should tokenize single quoted string regex escape characters correctly', ->
     {tokens} = grammar.tokenizeLine "'/[\\\\\\\\]/';"
@@ -4054,7 +4059,7 @@ describe 'PHP grammar', ->
     expect(lines[3][28]).toEqual value: 'id', scopes: ['source.php', 'string.unquoted.heredoc.php', 'meta.embedded.sql', 'source.sql.embedded.php', 'string.quoted.single.sql', 'variable.other.php']
     expect(lines[3][29]).toEqual value: '\'', scopes: ['source.php', 'string.unquoted.heredoc.php', 'meta.embedded.sql', 'source.sql.embedded.php', 'string.quoted.single.sql', 'punctuation.definition.string.end.sql']
 
-  it 'should use the same embedded SQL content scope for heredocs as double-quoted SQL strings', ->
+  it 'should scope quoted embedded SQL content like heredoc SQL content', ->
     lines = grammar.tokenizeLines '''
       $maxId = 10;
       $sql = "SELECT d.id FROM my_table d WHERE d.id BETWEEN 1 AND $maxId AND my_custom_func(d.name) > 10";
@@ -4076,18 +4081,29 @@ describe 'PHP grammar', ->
 
     expect(findToken(lines[1], 'SELECT', 'keyword.other.DML.sql').scopes).toContain 'source.sql.embedded.php'
     expect(findToken(lines[3], 'SELECT', 'keyword.other.DML.sql').scopes).toContain 'source.sql.embedded.php'
+    expect(findToken(lines[1], 'SELECT', 'keyword.other.DML.sql').scopes).toContain 'meta.embedded.sql'
+    expect(findToken(lines[3], 'SELECT', 'keyword.other.DML.sql').scopes).toContain 'meta.embedded.sql'
     expect(quotedAlias.scopes).toContain 'source.sql.embedded.php'
     expect(heredocAlias.scopes).toContain 'source.sql.embedded.php'
+    expect(quotedAlias.scopes).toContain 'meta.embedded.sql'
+    expect(heredocAlias.scopes).toContain 'meta.embedded.sql'
     expect(quotedAlias.scopes).toContain 'constant.other.database-name.sql'
     expect(heredocAlias.scopes).toContain 'constant.other.database-name.sql'
     expect(quotedIdentifier.scopes).toContain 'source.sql.embedded.php'
     expect(heredocIdentifier.scopes).toContain 'source.sql.embedded.php'
+    expect(quotedIdentifier.scopes).toContain 'meta.embedded.sql'
+    expect(heredocIdentifier.scopes).toContain 'meta.embedded.sql'
     expect(quotedIdentifier.scopes).toContain 'constant.other.table-name.sql'
     expect(heredocIdentifier.scopes).toContain 'constant.other.table-name.sql'
     expect(quotedInterpolation.scopes).toContain 'source.sql.embedded.php'
     expect(heredocInterpolation.scopes).toContain 'source.sql.embedded.php'
+    expect(quotedInterpolation.scopes).toContain 'meta.embedded.sql'
+    expect(heredocInterpolation.scopes).toContain 'meta.embedded.sql'
     expect(quotedInterpolation.scopes).toContain 'variable.other.php'
     expect(heredocInterpolation.scopes).toContain 'variable.other.php'
+    expect(quotedAlias.scopes).to.not.include 'string.quoted.double.sql.php'
+    expect(quotedIdentifier.scopes).to.not.include 'string.quoted.double.sql.php'
+    expect(quotedInterpolation.scopes).to.not.include 'string.quoted.double.sql.php'
 
   it 'should stop unclosed embedded SQL segments at a heredoc terminator', ->
     cases = [
