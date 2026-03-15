@@ -2159,7 +2159,7 @@
             'captures':
               '0':
                 'name': 'punctuation.definition.character-class.php'
-            'end': '\\]|(?=$)'
+            'end': '\\]|(?=^\\s*(?:REGEXP?)(?![A-Za-z0-9_\\x{7f}-\\x{10ffff}]))'
             'name': 'string.regexp.character-class.php'
             'patterns': [
               {
@@ -2422,7 +2422,7 @@
             'captures':
               '0':
                 'name': 'punctuation.definition.character-class.php'
-            'end': '\\]|(?=$)'
+            'end': '\\]|(?=^\\s*(?:REGEXP?)(?![A-Za-z0-9_\\x{7f}-\\x{10ffff}]))'
             'name': 'string.regexp.character-class.php'
             'patterns': [
               {
