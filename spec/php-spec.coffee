@@ -8,6 +8,15 @@ describe 'PHP grammar', ->
     grammar = await loadGrammar('source.php')
   )
 
+  expectPlainAssignment = (tokens) ->
+    expect(tokens[0]).toEqual value: '$', scopes: ['source.php', 'variable.other.php', 'punctuation.definition.variable.php']
+    expect(tokens[1]).toEqual value: 'x', scopes: ['source.php', 'variable.other.php']
+    expect(tokens[2]).toEqual value: ' ', scopes: ['source.php']
+    expect(tokens[3]).toEqual value: '=', scopes: ['source.php', 'keyword.operator.assignment.php']
+    expect(tokens[4]).toEqual value: ' ', scopes: ['source.php']
+    expect(tokens[5]).toEqual value: '1', scopes: ['source.php', 'constant.numeric.decimal.php']
+    expect(tokens[6]).toEqual value: ';', scopes: ['source.php', 'punctuation.terminator.expression.php']
+
   it 'parses the grammar', ->
     expect(grammar).toBeTruthy()
     expect(grammar.scopeName).toBe 'source.php'
@@ -3793,6 +3802,42 @@ describe 'PHP grammar', ->
     expect(tokens[1]).toEqual value: '\\[', scopes: ['source.php', 'string.regexp.single-quoted.php', 'constant.character.escape.php']
     expect(tokens[2]).toEqual value: '/\'', scopes: ['source.php', 'string.regexp.single-quoted.php', 'punctuation.definition.string.end.php']
 
+  for {description, regex} in [
+    {description: 'empty character class', regex: '/[]/'}
+    {description: 'negated empty character class', regex: '/[^]/'}
+    {description: 'unclosed character class', regex: '/[a/'}
+    {description: 'unclosed negated character class', regex: '/[^a/'}
+    {description: 'slash after opening character class', regex: '/[/'}
+  ]
+    do (description, regex) ->
+      it "should not leak single quoted regex with #{description}", ->
+        lines = grammar.tokenizeLines "$r = '#{regex}';\n$x = 1;"
+
+        expectPlainAssignment(lines[1])
+
+      it "should not leak double quoted regex with #{description}", ->
+        lines = grammar.tokenizeLines "$r = \"#{regex}\";\n$x = 1;"
+
+        expectPlainAssignment(lines[1])
+
+  it 'should tokenize single quoted regex with slash inside character class', ->
+    {tokens} = grammar.tokenizeLine "'/[a/b]/'"
+
+    expect(tokens[0]).toEqual value: '\'/', scopes: ['source.php', 'string.regexp.single-quoted.php', 'punctuation.definition.string.begin.php']
+    expect(tokens[1]).toEqual value: '[', scopes: ['source.php', 'string.regexp.single-quoted.php', 'string.regexp.character-class.php', 'punctuation.definition.character-class.php']
+    expect(tokens[2]).toEqual value: 'a/b', scopes: ['source.php', 'string.regexp.single-quoted.php', 'string.regexp.character-class.php']
+    expect(tokens[3]).toEqual value: ']', scopes: ['source.php', 'string.regexp.single-quoted.php', 'string.regexp.character-class.php', 'punctuation.definition.character-class.php']
+    expect(tokens[4]).toEqual value: '/\'', scopes: ['source.php', 'string.regexp.single-quoted.php', 'punctuation.definition.string.end.php']
+
+  it 'should tokenize double quoted regex with slash inside character class', ->
+    {tokens} = grammar.tokenizeLine "\"/[a/b]/\""
+
+    expect(tokens[0]).toEqual value: '"/', scopes: ['source.php', 'string.regexp.double-quoted.php', 'punctuation.definition.string.begin.php']
+    expect(tokens[1]).toEqual value: '[', scopes: ['source.php', 'string.regexp.double-quoted.php', 'string.regexp.character-class.php', 'punctuation.definition.character-class.php']
+    expect(tokens[2]).toEqual value: 'a/b', scopes: ['source.php', 'string.regexp.double-quoted.php', 'string.regexp.character-class.php']
+    expect(tokens[3]).toEqual value: ']', scopes: ['source.php', 'string.regexp.double-quoted.php', 'string.regexp.character-class.php', 'punctuation.definition.character-class.php']
+    expect(tokens[4]).toEqual value: '/"', scopes: ['source.php', 'string.regexp.double-quoted.php', 'punctuation.definition.string.end.php']
+
   it 'should tokenize opening scope of a closure correctly', ->
     {tokens} = grammar.tokenizeLine '$a = function() {};'
 
@@ -4704,6 +4749,38 @@ describe 'PHP grammar', ->
     expect(lines[1][2]).toEqual value: '/', scopes: ['source.php', 'string.unquoted.nowdoc.php', 'string.regexp.nowdoc.php']
     expect(lines[2][0]).toEqual value: 'REGEXP', scopes: ['source.php', 'string.unquoted.nowdoc.php', 'punctuation.section.embedded.end.php', 'keyword.operator.nowdoc.php']
     expect(lines[2][1]).toEqual value: ';', scopes: ['source.php', 'punctuation.terminator.expression.php']
+
+  for {description, regex} in [
+    {description: 'empty character class', regex: '/[]/'}
+    {description: 'negated empty character class', regex: '/[^]/'}
+    {description: 'unclosed character class', regex: '/[a/'}
+    {description: 'unclosed negated character class', regex: '/[^a/'}
+    {description: 'slash after opening character class', regex: '/[/'}
+  ]
+    do (description, regex) ->
+      it "should not leak REGEXP heredoc with #{description}", ->
+        lines = grammar.tokenizeLines """
+          $r = <<<REGEXP
+          #{regex}
+          REGEXP;
+          $x = 1;
+        """
+
+        expect(lines[2][0]).toEqual value: 'REGEXP', scopes: ['source.php', 'string.unquoted.heredoc.php', 'punctuation.section.embedded.end.php', 'keyword.operator.heredoc.php']
+        expect(lines[2][1]).toEqual value: ';', scopes: ['source.php', 'punctuation.terminator.expression.php']
+        expectPlainAssignment(lines[3])
+
+      it "should not leak REGEXP nowdoc with #{description}", ->
+        lines = grammar.tokenizeLines """
+          $r = <<<'REGEXP'
+          #{regex}
+          REGEXP;
+          $x = 1;
+        """
+
+        expect(lines[2][0]).toEqual value: 'REGEXP', scopes: ['source.php', 'string.unquoted.nowdoc.php', 'punctuation.section.embedded.end.php', 'keyword.operator.nowdoc.php']
+        expect(lines[2][1]).toEqual value: ';', scopes: ['source.php', 'punctuation.terminator.expression.php']
+        expectPlainAssignment(lines[3])
 
   describe 'punctuation', ->
     it 'tokenizes brackets', ->
