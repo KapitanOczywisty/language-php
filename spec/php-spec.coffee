@@ -4250,6 +4250,21 @@ describe 'PHP grammar', ->
     expect(lines[2][0]).toEqual value: 'SQL', scopes: ['source.php', 'string.unquoted.nowdoc.php', 'meta.embedded.sql', 'punctuation.section.embedded.end.php', 'keyword.operator.nowdoc.php']
     expect(lines[2][1]).toEqual value: ';', scopes: ['source.php', 'punctuation.terminator.expression.php']
 
+  it 'should tokenize a nowdoc with a unicode label correctly', ->
+    lines = grammar.tokenizeLines '''
+      $a = <<<'NOW📄'
+      body
+      NOW📄;
+      function seeme() {}
+    '''
+
+    expect(lines[0][5]).toEqual value: '<<<', scopes: ['source.php', 'string.unquoted.nowdoc.php', 'punctuation.section.embedded.begin.php', 'punctuation.definition.string.php']
+    expect(lines[0][7]).toEqual value: 'NOW📄', scopes: ['source.php', 'string.unquoted.nowdoc.php', 'punctuation.section.embedded.begin.php', 'keyword.operator.nowdoc.php']
+    expect(lines[1][0]).toEqual value: 'body', scopes: ['source.php', 'string.unquoted.nowdoc.php']
+    expect(lines[2][0]).toEqual value: 'NOW📄', scopes: ['source.php', 'string.unquoted.nowdoc.php', 'punctuation.section.embedded.end.php', 'keyword.operator.nowdoc.php']
+    expect(lines[3][0]).toEqual value: 'function', scopes: ['source.php', 'meta.function.php', 'storage.type.function.php']
+    expect(lines[3][2]).toEqual value: 'seeme', scopes: ['source.php', 'meta.function.php', 'entity.name.function.php']
+
   it 'should tokenize a heredoc with embedded DQL correctly', ->
     lines = grammar.tokenizeLines '''
       $a = <<<DQL
