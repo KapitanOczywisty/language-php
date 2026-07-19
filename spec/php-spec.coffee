@@ -4258,10 +4258,10 @@ describe 'PHP grammar', ->
       function seeme() {}
     '''
 
-    expect(lines[0][5]).toEqual value: '<<<', scopes: ['source.php', 'string.unquoted.nowdoc.php', 'punctuation.section.embedded.begin.php', 'punctuation.definition.string.php']
-    expect(lines[0][7]).toEqual value: 'NOW📄', scopes: ['source.php', 'string.unquoted.nowdoc.php', 'punctuation.section.embedded.begin.php', 'keyword.operator.nowdoc.php']
+    expect(lines[0][5]).toEqual value: '<<<', scopes: ['source.php', 'string.unquoted.nowdoc.php', 'punctuation.definition.string.php']
+    expect(lines[0][7]).toEqual value: 'NOW📄', scopes: ['source.php', 'string.unquoted.nowdoc.php', 'keyword.operator.nowdoc.php']
     expect(lines[1][0]).toEqual value: 'body', scopes: ['source.php', 'string.unquoted.nowdoc.php']
-    expect(lines[2][0]).toEqual value: 'NOW📄', scopes: ['source.php', 'string.unquoted.nowdoc.php', 'punctuation.section.embedded.end.php', 'keyword.operator.nowdoc.php']
+    expect(lines[2][0]).toEqual value: 'NOW📄', scopes: ['source.php', 'string.unquoted.nowdoc.php', 'keyword.operator.nowdoc.php']
     expect(lines[3][0]).toEqual value: 'function', scopes: ['source.php', 'meta.function.php', 'storage.type.function.php']
     expect(lines[3][2]).toEqual value: 'seeme', scopes: ['source.php', 'meta.function.php', 'entity.name.function.php']
 
