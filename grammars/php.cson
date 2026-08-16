@@ -1237,14 +1237,14 @@
           |FANNConnection|(Filter|Filesystem)Iterator
           |Gender\\\\Gender|GlobIterator|Gmagick(Draw|Pixel)?
           |Haru(Annotation|Destination|Doc|Encoder|Font|Image|Outline|Page)
-          |Http((Inflate|Deflate)?Stream|Message|Request(Pool)?|Response|QueryString)
+          |Http((Inflate|Deflate)Stream|Message|Request(Pool)?|Response|QueryString)
           |HRTime\\\\(PerformanceCounter|StopWatch)
           |Intl(Calendar|((CodePoint|RuleBased)?Break|Parts)?Iterator|DateFormatter|TimeZone)
           |Imagick(Draw|Pixel(Iterator)?)?
           |InfiniteIterator|InvalidArgumentException|Iterator(Aggregate|Iterator)?
           |JsonSerializable
           |KTaglib_(MPEG_(File|AudioProperties)|Tag|ID3v2_(Tag|(AttachedPicture)?Frame))
-          |Lapack|(Length|Locale|Logic)Exception|LimitIterator|Lua(Closure)?
+          |Lapack|Locale|(Length|Logic)Exception|LimitIterator|Lua(Closure)?
           |Mongo(BinData|Client|Code|Collection|CommandCursor|Cursor(Exception)?|Date|DB(Ref)?|DeleteBatch
                 |Grid(FS(Cursor|File)?)|Id|InsertBatch|Int(32|64)|Log|Pool|Regex|ResultException|Timestamp
                 |UpdateBatch|Write(Batch|ConcernException))?
@@ -1255,7 +1255,7 @@
           |OCI-(Collection|Lob)|OuterIterator|(OutOf(Bounds|Range)|Overflow)Exception
           |ParentIterator|PDO(Statement)?|Phar(Data|FileInfo)?|php_user_filter|Pool
           |QuickHash(Int(Set|StringHash)|StringIntHash)
-          |Recursive(Array|Caching|Directory|Fallback|Filter|Iterator|Regex|Tree)?Iterator
+          |Recursive(Array|Caching|Directory|(Callback)?Filter|Iterator|Regex|Tree)?Iterator
           |Reflection(Attribute|Class(Constant)?|Constant|Enum(UnitCase|BackedCase)?
             |Fiber|Function(Abstract)?|Generator|(Named|Union|Intersection)?Type
             |Method|Object|Parameter|Property|Reference|(Zend)?Extension)?
@@ -1514,7 +1514,7 @@
         'match': '''(?x)
           (\\\\)?\\b
           (DEFAULT_INCLUDE_PATH
-          |EAR_(INSTALL|EXTENSION)_DIR
+          |PEAR_(INSTALL|EXTENSION)_DIR
           |E_(ALL|COMPILE_(ERROR|WARNING)|CORE_(ERROR|WARNING)|DEPRECATED|ERROR|NOTICE
              |PARSE|RECOVERABLE_ERROR|STRICT|USER_(DEPRECATED|ERROR|NOTICE|WARNING)|WARNING)
           |PHP_(ROUND_HALF_(DOWN|EVEN|ODD|UP)|(MAJOR|MINOR|RELEASE)_VERSION|MAXPATHLEN
@@ -1523,8 +1523,8 @@
                |URL_(SCHEME|HOST|USER|PORT|PASS|PATH|QUERY|FRAGMENT)|PREFIX
                |EXTRA_VERSION|EXTENSION_DIR|EOL|VERSION(_ID)?
                |WINDOWS_(NT_(SERVER|DOMAIN_CONTROLLER|WORKSTATION)
-                        |VERSION_(MAJOR|MINOR)|BUILD|SUITEMASK|SP_(MAJOR|MINOR)
-                        |PRODUCTTYPE|PLATFORM)
+                        |VERSION_((MAJOR|MINOR)|BUILD|SUITEMASK|SP_(MAJOR|MINOR)
+                                 |PRODUCTTYPE|PLATFORM))
                |LIBDIR|LOCALSTATEDIR)
           |STD(ERR|IN|OUT)|ZEND_(DEBUG_BUILD|THREAD_SAFE))
           \\b
@@ -1537,20 +1537,20 @@
       {
         'match': '''(?x)
           (\\\\)?\\b
-          (__COMPILER_HALT_OFFSET__|AB(MON_(1|2|3|4|5|6|7|8|9|10|11|12)|DAY[1-7])
-          |AM_STR|ASSERT_(ACTIVE|BAIL|CALLBACK_QUIET_EVAL|WARNING)|ALT_DIGITS
+          (__COMPILER_HALT_OFFSET__|AB(MON_(1|2|3|4|5|6|7|8|9|10|11|12)|DAY_[1-7])
+          |AM_STR|ASSERT_(ACTIVE|BAIL|CALLBACK|QUIET_EVAL|WARNING)|ALT_DIGITS
           |CASE_(UPPER|LOWER)|CHAR_MAX|CONNECTION_(ABORTED|NORMAL|TIMEOUT)|CODESET|COUNT_(NORMAL|RECURSIVE)
           |CREDITS_(ALL|DOCS|FULLPAGE|GENERAL|GROUP|MODULES|QA|SAPI)
           |CRYPT_(BLOWFISH|EXT_DES|MD5|SHA(256|512)|SALT_LENGTH|STD_DES)|CURRENCY_SYMBOL
           |D_(T_)?FMT|DATE_(ATOM|COOKIE|ISO8601|RFC(822|850|1036|1123|2822|3339)|RSS|W3C)
           |DAY_[1-7]|DECIMAL_POINT|DIRECTORY_SEPARATOR
           |ENT_(COMPAT|IGNORE|(NO)?QUOTES)|EXTR_(IF_EXISTS|OVERWRITE|PREFIX_(ALL|IF_EXISTS|INVALID|SAME)|REFS|SKIP)
-          |ERA(_(D_(T_)?FMT)|T_FMT|YEAR)?|FRAC_DIGITS|GROUPING|HASH_HMAC|HTML_(ENTITIES|SPECIALCHARS)
-          |INF|INFO_(ALL|CREDITS|CONFIGURATION|ENVIRONMENT|GENERAL|LICENSEMODULES|VARIABLES)
-          |INI_(ALL|CANNER_(NORMAL|RAW)|PERDIR|SYSTEM|USER)|INT_(CURR_SYMBOL|FRAC_DIGITS)
+          |ERA(_((D_(T_)?FMT)|T_FMT|YEAR))?|FRAC_DIGITS|GROUPING|HASH_HMAC|HTML_(ENTITIES|SPECIALCHARS)
+          |INF|INFO_(ALL|CREDITS|CONFIGURATION|ENVIRONMENT|GENERAL|LICENSE|MODULES|VARIABLES)
+          |INI_(ALL|SCANNER_(NORMAL|RAW)|PERDIR|SYSTEM|USER)|INT_(CURR_SYMBOL|FRAC_DIGITS)
           |LC_(ALL|COLLATE|CTYPE|MESSAGES|MONETARY|NUMERIC|TIME)|LOCK_(EX|NB|SH|UN)
-          |LOG_(ALERT|AUTH(PRIV)?|CRIT|CRON|CONS|DAEMON|DEBUG|EMERG|ERR|INFO|LOCAL[1-7]|LPR|KERN|MAIL
-               |NEWS|NODELAY|NOTICE|NOWAIT|ODELAY|PID|PERROR|WARNING|SYSLOG|UCP|USER)
+          |LOG_(ALERT|AUTH(PRIV)?|CRIT|CRON|CONS|DAEMON|DEBUG|EMERG|ERR|INFO|LOCAL[0-7]|LPR|KERN|MAIL
+               |NEWS|NDELAY|NOTICE|NOWAIT|ODELAY|PID|PERROR|WARNING|SYSLOG|UUCP|USER)
           |M_(1_PI|SQRT(1_2|2|3|PI)|2_(SQRT)?PI|PI(_(2|4))?|E(ULER)?|LN(10|2|PI)|LOG(10|2)E)
           |MON_(1|2|3|4|5|6|7|8|9|10|11|12|DECIMAL_POINT|GROUPING|THOUSANDS_SEP)
           |N_(CS_PRECEDES|SEP_BY_SPACE|SIGN_POSN)|NAN|NEGATIVE_SIGN|NO(EXPR|STR)
@@ -1577,11 +1577,12 @@
                       |NO_(MEMORY|ELEMENTS)|TAG_MISMATCH|INCORRECT_ENCODING|INVALID_TOKEN|DUPLICATE_ATTRIBUTE
                       |UNCLOSED_(CDATA_SECTION|TOKEN)|UNDEFINED_ENTITY|UNKNOWN_ENCODING|JUNK_AFTER_DOC_ELEMENT
                       |PARTIAL_CHAR|EXTERNAL_ENTITY_HANDLING|ASYNC_ENTITY)
-               |ENTITY_(((REF|DECL)_)?NODE)|ELEMENT(_DECL)?_NODE|LOCAL_NAMESPACE|ATTRIBUTE_(NMTOKEN(S)?|NOTATION|NODE)
-               |CDATA|ID(REF(S)?)?|DECL_NODE|ENTITY|ENUMERATION)
+               |ENTITY_(((REF|DECL)_)?NODE)|ELEMENT(_DECL)?_NODE|LOCAL_NAMESPACE
+               |ATTRIBUTE_(NMTOKEN(S)?|NOTATION|NODE|DECL_NODE|ENTITY|ENUMERATION)
+               |CDATA_SECTION_NODE|ID(REF(S)?)?)
           |MHASH_(RIPEMD(128|160|256|320)|GOST|MD(2|4|5)|SHA(1|224|256|384|512)|SNEFRU256|HAVAL(128|160|192|224|256)
-                 |CRC23(B)?|TIGER(128|160)?|WHIRLPOOL|ADLER32)
-          |MYSQL_(BOTH|NUM|CLIENT_(SSL|COMPRESS|IGNORE_SPACE|INTERACTIVE|ASSOC))
+                 |CRC32(B)?|TIGER(128|160)?|WHIRLPOOL|ADLER32)
+          |MYSQL_(BOTH|NUM|CLIENT_(SSL|COMPRESS|IGNORE_SPACE|INTERACTIVE)|ASSOC)
           |MYSQLI_(REPORT_(STRICT|INDEX|OFF|ERROR|ALL)|REFRESH_(GRANT|MASTER|BACKUP_LOG|STATUS|SLAVE|HOSTS|THREADS|TABLES|LOG)
                   |READ_DEFAULT_(FILE|GROUP)|(GROUP|MULTIPLE_KEY|BINARY|BLOB)_FLAG|BOTH
                   |STMT_ATTR_(CURSOR_TYPE|UPDATE_MAX_LENGTH|PREFETCH_ROWS)|STORE_RESULT
@@ -1591,7 +1592,7 @@
                   |CLIENT_(SSL|NO_SCHEMA|COMPRESS|IGNORE_SPACE|INTERACTIVE|FOUND_ROWS)
                   |TYPE_(GEOMETRY|((MEDIUM|LONG|TINY)_)?BLOB|BIT|SHORT|STRING|SET|YEAR|NULL|NEWDECIMAL|NEWDATE|CHAR
                         |TIME(STAMP)?|TINY|INT24|INTERVAL|DOUBLE|DECIMAL|DATE(TIME)?|ENUM|VAR_STRING|FLOAT|LONG(LONG)?)
-                  |TIME_STAMP_FLAG|INIT_COMMAND|ZEROFILL_FLAG|ON_UPDATE_NOW_FLAG
+                  |TIMESTAMP_FLAG|INIT_COMMAND|ZEROFILL_FLAG|ON_UPDATE_NOW_FLAG
                   |OPT_(NET_((CMD|READ)_BUFFER_SIZE)|CONNECT_TIMEOUT|INT_AND_FLOAT_NATIVE|LOCAL_INFILE)
                   |DEBUG_TRACE_ENABLED|DATA_TRUNCATED|USE_RESULT|(ENUM|(PART|PRI|UNIQUE)_KEY|UNSIGNED)_FLAG
                   |ASSOC|ASYNC|AUTO_INCREMENT_FLAG)
@@ -1610,17 +1611,17 @@
           |SQLITE_(READONLY|ROW|MISMATCH|MISUSE|BOTH|BUSY|SCHEMA|NOMEM|NOTFOUND|NOTADB|NOLFS|NUM|CORRUPT
                   |CONSTRAINT|CANTOPEN|TOOBIG|INTERRUPT|INTERNAL|IOERR|OK|DONE|PROTOCOL|PERM|ERROR|EMPTY
                   |FORMAT|FULL|LOCKED|ABORT|ASSOC|AUTH)
-          |SQLITE3_(BOTH|BLOB|NUM|NULL|TEXT|INTEGER|OPEN_(READ(ONLY|WRITE)|CREATE)|FLOAT_ASSOC)
-          |CURL(M_(BAD_((EASY)?HANDLE)|CALL_MULTI_PERFORM|INTERNAL_ERROR|OUT_OF_MEMORY|OK)
+          |SQLITE3_(BOTH|BLOB|NUM|NULL|TEXT|INTEGER|OPEN_(READ(ONLY|WRITE)|CREATE)|FLOAT|ASSOC)
+          |CURL(M_(BAD_(EASY_)?HANDLE|CALL_MULTI_PERFORM|INTERNAL_ERROR|OUT_OF_MEMORY|OK)
                |MSG_DONE|SSH_AUTH_(HOST|NONE|DEFAULT|PUBLICKEY|PASSWORD|KEYBOARD)
-               |CLOSEPOLICY_(SLOWEST|CALLBACK|OLDEST|LEAST_(RECENTLY_USED|TRAFFIC)
+               |CLOSEPOLICY_(SLOWEST|CALLBACK|OLDEST|LEAST_(RECENTLY_USED|TRAFFIC))
                |INFO_(REDIRECT_(COUNT|TIME)|REQUEST_SIZE|SSL_VERIFYRESULT|STARTTRANSFER_TIME
                      |(SIZE|SPEED)_(DOWNLOAD|UPLOAD)|HTTP_CODE|HEADER_(OUT|SIZE)|NAMELOOKUP_TIME
                      |CONNECT_TIME|CONTENT_(TYPE|LENGTH_(DOWNLOAD|UPLOAD))|CERTINFO|TOTAL_TIME
                      |PRIVATE|PRETRANSFER_TIME|EFFECTIVE_URL|FILETIME)
                |OPT_(RESUME_FROM|RETURNTRANSFER|REDIR_PROTOCOLS|REFERER|READ(DATA|FUNCTION)|RANGE|RANDOM_FILE
                     |MAX(CONNECTS|REDIRS)|BINARYTRANSFER|BUFFERSIZE
-                    |SSH_(HOST_PUBLIC_KEY_MD5|(PRIVATE|PUBLIC)_KEYFILE)|AUTH_TYPES)
+                    |SSH_(HOST_PUBLIC_KEY_MD5|(PRIVATE|PUBLIC)_KEYFILE|AUTH_TYPES)
                     |SSL(CERT(TYPE|PASSWD)?|ENGINE(_DEFAULT)?|VERSION|KEY(TYPE|PASSWD)?)
                     |SSL_(CIPHER_LIST|VERIFY(HOST|PEER))
                     |STDERR|HTTP(GET|HEADER|200ALIASES|_VERSION|PROXYTUNNEL|AUTH)
@@ -1640,7 +1641,7 @@
                   |SSH|SSL_(CIPHER|CONNECT_ERROR|CERTPROBLEM|CACERT|PEER_CERTIFICATE|ENGINE_(NOTFOUND|SETFAILED))
                   |SHARE_IN_USE|SEND_ERROR|HTTP_(RANGE_ERROR|NOT_FOUND|PORT_FAILED|POST_ERROR)
                   |COULDNT_(RESOLVE_(HOST|PROXY)|CONNECT)|TOO_MANY_REDIRECTS|TELNET_OPTION_SYNTAX|OBSOLETE
-                  |OUT_OF_MEMORY|OPERATION|TIMEOUTED|OK|URL_MALFORMAT(_USER)?|UNSUPPORTED_PROTOCOL
+                  |OUT_OF_MEMORY|OPERATION_TIMEOUTED|OK|URL_MALFORMAT(_USER)?|UNSUPPORTED_PROTOCOL
                   |UNKNOWN_TELNET_OPTION|PARTIAL_FILE
                   |FTP_(BAD_DOWNLOAD_RESUME|SSL_FAILED|COULDNT_(RETR_FILE|GET_SIZE|STOR_FILE|SET_(BINARY|ASCII)|USE_REST)
                        |CANT_(GET_HOST|RECONNECT)|USER_PASSWORD_INCORRECT|PORT_FAILED|QUOTE_ERROR|WRITE_ERROR
@@ -1657,19 +1658,19 @@
           |DNS_(MX|SRV|SOA|HINFO|NS|NAPTR|CNAME|TXT|PTR|ANY|ALL|AAAA|A(6)?)
           |DOM(STRING_SIZE_ERR)
           |DOM_((SYNTAX|HIERARCHY_REQUEST|NO_(MODIFICATION_ALLOWED|DATA_ALLOWED)|NOT_(FOUND|SUPPORTED)|NAMESPACE
-               |INDEX_SIZE|USE_ATTRIBUTE|VALID_(MODIFICATION|STATE|CHARACTER|ACCESS)|PHP|VALIDATION|WRONG_DOCUMENT)_ERR)
+               |INDEX_SIZE|INUSE_ATTRIBUTE|INVALID_(MODIFICATION|STATE|CHARACTER|ACCESS)|PHP|VALIDATION|WRONG_DOCUMENT)_ERR)
           |JSON_(HEX_(TAG|QUOT|AMP|APOS)|NUMERIC_CHECK|ERROR_(SYNTAX|STATE_MISMATCH|NONE|CTRL_CHAR|DEPTH|UTF8)|FORCE_OBJECT)
-          |PREG_((D_UTF8(_OFFSET)?|NO|INTERNAL|(BACKTRACK|RECURSION)_LIMIT)_ERROR|GREP_INVERT
+          |PREG_((BAD_UTF8(_OFFSET)?|NO|INTERNAL|(BACKTRACK|RECURSION)_LIMIT)_ERROR|GREP_INVERT
                 |SPLIT_(NO_EMPTY|(DELIM|OFFSET)_CAPTURE)|SET_ORDER|OFFSET_CAPTURE|PATTERN_ORDER)
           |PSFS_(PASS_ON|ERR_FATAL|FEED_ME|FLAG_(NORMAL|FLUSH_(CLOSE|INC)))
           |PCRE_VERSION|POSIX_((F|R|W|X)_OK|S_IF(REG|BLK|SOCK|CHR|IFO))
           |FNM_(NOESCAPE|CASEFOLD|PERIOD|PATHNAME)
           |FILTER_(REQUIRE_(SCALAR|ARRAY)|NULL_ON_FAILURE|CALLBACK|DEFAULT|UNSAFE_RAW
                   |SANITIZE_(MAGIC_QUOTES|STRING|STRIPPED|SPECIAL_CHARS|NUMBER_(INT|FLOAT)|URL
-                            |EMAIL|ENCODED|FULL_SPCIAL_CHARS)
+                            |EMAIL|ENCODED|FULL_SPECIAL_CHARS)
                   |VALIDATE_(REGEXP|BOOLEAN|INT|IP|URL|EMAIL|FLOAT)
                   |FORCE_ARRAY
-                  |FLAG_(SCHEME_REQUIRED|STRIP_(BACKTICK|HIGH|LOW)|HOST_REQUIRED|NONE|NO_(RES|PRIV)_RANGE|ENCODE_QUOTES
+                  |FLAG_(SCHEME_REQUIRED|STRIP_(BACKTICK|HIGH|LOW)|HOST_REQUIRED|NONE|NO_(RES|PRIV)_RANGE|NO_ENCODE_QUOTES
                         |IPV(4|6)|PATH_REQUIRED|EMPTY_STRING_NULL|ENCODE_(HIGH|LOW|AMP)|QUERY_REQUIRED
                         |ALLOW_(SCIENTIFIC|HEX|THOUSAND|OCTAL|FRACTION)))
           |FILE_(BINARY|SKIP_EMPTY_LINES|NO_DEFAULT_CONTEXT|TEXT|IGNORE_NEW_LINES|USE_INCLUDE_PATH|APPEND)
@@ -1688,9 +1689,9 @@
         'match': '''(?x)
           (\\\\)?\\b
           (T_(RETURN|REQUIRE(_ONCE)?|GOTO|GLOBAL|(MINUS|MOD|MUL|XOR)_EQUAL|METHOD_C|ML_COMMENT|BREAK
-             |BOOL_CAST|BOOLEAN_(AND|OR)|BAD_CHARACTER|SR(_EQUAL)?|STRING(_CAST|VARNAME)?|START_HEREDOC|STATIC
+             |BOOL_CAST|BOOLEAN_(AND|OR)|BAD_CHARACTER|SR(_EQUAL)?|STRING(_CAST|_VARNAME)?|START_HEREDOC|STATIC
              |SWITCH|SL(_EQUAL)?|HALT_COMPILER|NS_(C|SEPARATOR)|NUM_STRING|NEW|NAMESPACE|CHARACTER|COMMENT
-             |CONSTANT(_ENCAPSED_STRING)?|CONCAT_EQUAL|CONTINUE|CURLY_OPEN|CLOSE_TAG|CLONE|CLASS(_C)?
+             |CONST(ANT_ENCAPSED_STRING)?|CONCAT_EQUAL|CONTINUE|CURLY_OPEN|CLOSE_TAG|CLONE|CLASS(_C)?
              |CASE|CATCH|TRY|THROW|IMPLEMENTS|ISSET|IS_((GREATER|SMALLER)_OR_EQUAL|(NOT_)?(IDENTICAL|EQUAL))
              |INSTANCEOF|INCLUDE(_ONCE)?|INC|INT_CAST|INTERFACE|INLINE_HTML|IF|OR_EQUAL|OBJECT_(CAST|OPERATOR)
              |OPEN_TAG(_WITH_ECHO)?|OLD_FUNCTION|DNUMBER|DIR|DIV_EQUAL|DOC_COMMENT|DOUBLE_(ARROW|CAST|COLON)
@@ -1698,7 +1699,7 @@
              |PLUS_EQUAL|PAAMAYIM_NEKUDOTAYIM|EXTENDS|EXIT|EMPTY|ENCAPSED_AND_WHITESPACE
              |END(SWITCH|IF|DECLARE|FOR(EACH)?|WHILE)|END_HEREDOC|ECHO|EVAL|ELSE(IF)?|VAR(IABLE)?|FINAL|FILE
              |FOR(EACH)?|FUNC_C|FUNCTION|WHITESPACE|WHILE|LNUMBER|LIST|LINE|LOGICAL_(AND|OR|XOR)
-             |ARRAY_(CAST)?|ABSTRACT|AS|AND_EQUAL))
+             |ARRAY(_CAST)?|ABSTRACT|AS|AND_EQUAL))
           \\b
         '''
         'name': 'support.constant.parser-token.php'
@@ -3409,7 +3410,7 @@
         'match': '''(?xi)\\b
           curl_(
             close|copy_handle|errno|error|escape|exec|getinfo|init|pause|reset|
-setopt(_array)?|strerror|unescape|upkeep|version|
+            setopt(_array)?|strerror|unescape|upkeep|version|
             multi_((add|remove)_handle|close|errno|exec|getcontent|
               info_read|init|select|setopt|strerror)|
             share_(close|errno|init(_persistent)?|setopt|strerror)
@@ -3510,7 +3511,7 @@ setopt(_array)?|strerror|unescape|upkeep|version|
           (
             symlink|stat|set_file_buffer|chown|chgrp|chmod|copy|clearstatcache|touch|tempnam|tmpfile|
             is_(dir|(uploaded_)?file|executable|link|readable|writ(e)?able)|disk_(free|total)_space|diskfreespace|
-            dirname|delete|unlink|umask|pclose|popen|pathinfo|parse_ini_(file|string)|fscanf|fstat|fseek|fnmatch|
+            dirname|unlink|umask|pclose|popen|pathinfo|parse_ini_(file|string)|fscanf|fstat|fseek|fnmatch|
             fclose|ftell|ftruncate|file(size|[acm]time|type|inode|owner|perms|group)?|file_(exists|(get|put)_contents)|
             f(open|puts|putcsv|passthru|eof|flush|write|lock|read|gets(s)?|getc(sv)?)|lstat|lchown|lchgrp|link(info)?|
             rename|rewind|read(file|link)|realpath(_cache_(get|size))?|rmdir|glob|move_uploaded_file|mkdir|basename|
@@ -3553,7 +3554,7 @@ setopt(_array)?|strerror|unescape|upkeep|version|
       {
         'match': '(?xi)\\b
           hash(_(
-            algos|copy|equals|file|final|hkdf|hmac(_(file|algos)?)?|
+            algos|copy|equals|file|final|hkdf|hmac(_(file|algos))?|
             init|pbkdf2|update(_(file|stream))?
           ))?
         \\b'
@@ -3608,7 +3609,7 @@ setopt(_array)?|strerror|unescape|upkeep|version|
             get_(cfg_var|current_user|defined_constants|extension_funcs|include_path|included_files|loaded_extensions|
                  magic_quotes_(gpc|runtime)|required_files|resources)|
             get(env|lastmod|rusage|my(inode|[gup]id))|
-            memory_get_(peak_)?usage|main|magic_quotes_runtime
+            memory_get_(peak_)?usage|magic_quotes_runtime
           )\\b
         '''
         'name': 'support.function.info.php'
@@ -3628,7 +3629,7 @@ setopt(_array)?|strerror|unescape|upkeep|version|
       {
         'match': '''(?xi)\\b
           (
-            normalizer_(normalize|is_normalized)|idn_to_(unicode|utf8|ascii)|
+            normalizer_(normalize|is_normalized)|idn_to_(utf8|ascii)|
             numfmt_(set_(symbol|(text_)?attribute|pattern)|create|(parse|format)(_currency)?|
                     get_(symbol|(text_)?attribute|pattern|error_(code|message)|locale))|
             collator_(sort(_with_sort_keys)?|set_(attribute|strength)|compare|create|asort|
@@ -3653,7 +3654,7 @@ setopt(_array)?|strerror|unescape|upkeep|version|
       {
         'match': '''(?xi)\\b
           ldap_(
-            start|tls|sort|search|sasl_bind|set_(option|rebind_proc)|(first|next)_(attribute|entry|reference)|
+            start_tls|sort|search|sasl_bind|set_(option|rebind_proc)|(first|next)_(attribute|entry|reference)|
             connect|control_paged_result(_response)?|count_entries|compare|close|t61_to_8859|8859_to_t61|
             dn2ufn|delete|unbind|parse_(reference|result)|escape|errno|err2str|error|explode_dn|bind|
             free_result|list|add|rename|read|get_(option|dn|entries|values(_len)?|attributes)|modify(_batch)?|
@@ -3851,7 +3852,7 @@ setopt(_array)?|strerror|unescape|upkeep|version|
             escape_(string|identifier|literal|bytea)|end_copy|execute|flush|free_result|last_(notice|error|oid)|
             field_(size|num|name|type(_oid)?|table|is_null|prtlen)|affected_rows|result_(status|seek|error(_field)?)|
             fetch_(object|assoc|all(_columns)?|array|row|result)|get_(notify|pid|result)|meta_data|
-            lo_(seek|close|create|tell|truncate|import|open|unlink|export|write|read(_all)?)|
+            lo_(seek|close|create|tell|truncate|import|open|unlink|export|write|read(_all)?)
           )\\b
         '''
         'name': 'support.function.pgsql.php'
@@ -4180,7 +4181,7 @@ setopt(_array)?|strerror|unescape|upkeep|version|
           xmlwriter_(
             (end|start|write)_(comment|cdata|dtd(_(attlist|entity|element))?|document|pi|attribute|element)|
             (start|write)_(attribute|element)_ns|write_raw|set_indent(_string)?|text|output_memory|open_(memory|uri)|
-            full_end_element|flush|
+            full_end_element|flush
           )\\b
         '''
         'name': 'support.function.xmlwriter.php'

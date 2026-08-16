@@ -25,6 +25,8 @@
     "chalk": "^5.2.0",
     "coffeescript": "^2.7.0",
     "mocha": "^10.2.0",
+    "oniguruma-to-es": "^4.3.4",
+    "regex-to-strings": "^2.1.0",
     "vscode-oniguruma": "^1.7.0",
     "vscode-textmate": "^8.0.0"
   }

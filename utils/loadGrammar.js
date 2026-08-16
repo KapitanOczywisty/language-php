@@ -1,4 +1,4 @@
-const { existsSync, mkdirSync } = require("fs");
+const { existsSync, mkdirSync, readFileSync } = require("fs");
 const { writeFile, readFile } = require("fs/promises");
 const path = require("path");
 const textmate = require("vscode-textmate");
@@ -63,15 +63,28 @@ const parseRawGrammar = (data, grammarPath) => {
   return textmate.parseRawGrammar(data, grammarPath);
 };
 
+const rawGrammarCache = new Map();
+
+const loadLocalRawGrammar = (scopeName) => {
+  if (rawGrammarCache.has(scopeName)) return rawGrammarCache.get(scopeName);
+
+  const grammarPath = grammarPaths[scopeName];
+  if (typeof grammarPath !== "string") {
+    throw new Error(`Raw grammar is not available for scope: ${scopeName}`);
+  }
+
+  const grammar = parseRawGrammar(readFileSync(grammarPath), grammarPath);
+  rawGrammarCache.set(scopeName, grammar);
+  return grammar;
+};
+
 // Create a registry that can create a grammar from a scope name.
 const registry = new textmate.Registry({
   onigLib: vscodeOnigurumaLib,
   loadGrammar: (scopeName) => {
     let grammarPath = grammarPaths[scopeName];
     if (typeof grammarPath === "string") {
-      return readFile(grammarPath).then((data) =>
-        parseRawGrammar(data, grammarPath)
-      );
+      return Promise.resolve(loadLocalRawGrammar(scopeName));
     }
 
     grammarPath = grammarImported[scopeName];
@@ -145,4 +158,6 @@ const loadGrammar = (scopeName) => {
   });
 };
 
-module.exports = { loadGrammar };
+const loadRawGrammarDefinition = (scopeName) => loadLocalRawGrammar(scopeName);
+
+module.exports = { loadGrammar, loadRawGrammarDefinition };
