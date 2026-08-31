@@ -3576,6 +3576,23 @@ describe 'PHP grammar', ->
       expect(lines[1][2]).toEqual value: '$', scopes: ['source.php', 'variable.other.php', 'punctuation.definition.variable.php']
 
   describe 'string escape sequences', ->
+    it 'tokenizes braced interpolation as embedded PHP code', ->
+      {tokens} = grammar.tokenizeLine '"test {$array[\'x\']}";'
+
+      expect(tokens[0]).toEqual value: '"', scopes: ['source.php', 'string.quoted.double.php', 'punctuation.definition.string.begin.php']
+      expect(tokens[1]).toEqual value: 'test ', scopes: ['source.php', 'string.quoted.double.php']
+      expect(tokens[2]).toEqual value: '{', scopes: ['source.php', 'string.quoted.double.php', 'meta.embedded.interpolation.php', 'punctuation.definition.variable.php']
+      expect(tokens[3]).toEqual value: '$', scopes: ['source.php', 'string.quoted.double.php', 'meta.embedded.interpolation.php', 'variable.other.php', 'punctuation.definition.variable.php']
+      expect(tokens[4]).toEqual value: 'array', scopes: ['source.php', 'string.quoted.double.php', 'meta.embedded.interpolation.php', 'variable.other.php']
+      expect(tokens[5]).toEqual value: '[', scopes: ['source.php', 'string.quoted.double.php', 'meta.embedded.interpolation.php', 'punctuation.section.array.begin.php']
+      expect(tokens[6]).toEqual value: '\'', scopes: ['source.php', 'string.quoted.double.php', 'meta.embedded.interpolation.php', 'string.quoted.single.php', 'punctuation.definition.string.begin.php']
+      expect(tokens[7]).toEqual value: 'x', scopes: ['source.php', 'string.quoted.double.php', 'meta.embedded.interpolation.php', 'string.quoted.single.php']
+      expect(tokens[8]).toEqual value: '\'', scopes: ['source.php', 'string.quoted.double.php', 'meta.embedded.interpolation.php', 'string.quoted.single.php', 'punctuation.definition.string.end.php']
+      expect(tokens[9]).toEqual value: ']', scopes: ['source.php', 'string.quoted.double.php', 'meta.embedded.interpolation.php', 'punctuation.section.array.end.php']
+      expect(tokens[10]).toEqual value: '}', scopes: ['source.php', 'string.quoted.double.php', 'meta.embedded.interpolation.php', 'punctuation.definition.variable.php']
+      expect(tokens[11]).toEqual value: '"', scopes: ['source.php', 'string.quoted.double.php', 'punctuation.definition.string.end.php']
+      expect(tokens[12]).toEqual value: ';', scopes: ['source.php', 'punctuation.terminator.expression.php']
+
     it 'tokenizes escaped octal sequences', ->
       {tokens} = grammar.tokenizeLine '"test \\007 test";'
 
