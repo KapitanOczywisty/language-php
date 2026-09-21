@@ -2562,7 +2562,7 @@
         'name': 'constant.character.escape.php'
       }
       {
-        'begin': '{(?=\\$.*?})'
+        'begin': '{(?=\\$)'
         'beginCaptures':
           '0':
             'name': 'punctuation.definition.variable.php'

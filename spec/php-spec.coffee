@@ -4002,6 +4002,65 @@ describe 'PHP grammar', ->
     expect(lines[12][0]).toEqual value: 'GITHUB', scopes: ['source.php', 'string.unquoted.heredoc.php', 'keyword.operator.heredoc.php']
     expect(lines[12][1]).toEqual value: ';', scopes: ['source.php', 'punctuation.terminator.expression.php']
 
+  it 'should tokenize a heredoc with multiline interpolated values correctly', ->
+    lines = grammar.tokenizeLines '''
+      $a = <<<HEREDOC
+      {$this->doSomething(10, function($x) {
+        return $x;
+      })}
+      {$this->doSomethingElse($x)
+      
+      }
+      HEREDOC;
+    '''
+
+    expect(lines[0][0]).toEqual value: '$', scopes: ['source.php', 'variable.other.php', 'punctuation.definition.variable.php']
+    expect(lines[0][1]).toEqual value: 'a', scopes: ['source.php', 'variable.other.php']
+    expect(lines[0][2]).toEqual value: ' ', scopes: ['source.php']
+    expect(lines[0][3]).toEqual value: '=', scopes: ['source.php', 'keyword.operator.assignment.php']
+    expect(lines[0][4]).toEqual value: ' ', scopes: ['source.php']
+    expect(lines[0][5]).toEqual value: '<<<', scopes: ['source.php', 'string.unquoted.heredoc.php', 'punctuation.definition.string.php']
+    expect(lines[0][6]).toEqual value: 'HEREDOC', scopes: ['source.php', 'string.unquoted.heredoc.php', 'keyword.operator.heredoc.php']
+    expect(lines[1][0]).toEqual value: '{', scopes: ['source.php', 'string.unquoted.heredoc.php', 'punctuation.definition.variable.php']
+    expect(lines[1][1]).toEqual value: '$', scopes: ['source.php', 'string.unquoted.heredoc.php', 'variable.language.this.php', 'punctuation.definition.variable.php']
+    expect(lines[1][2]).toEqual value: 'this', scopes: ['source.php', 'string.unquoted.heredoc.php', 'variable.language.this.php']
+    expect(lines[1][3]).toEqual value: '->', scopes: ['source.php', 'string.unquoted.heredoc.php', 'meta.method-call.php', 'keyword.operator.class.php']
+    expect(lines[1][4]).toEqual value: 'doSomething', scopes: ['source.php', 'string.unquoted.heredoc.php', 'meta.method-call.php', 'entity.name.function.php']
+    expect(lines[1][5]).toEqual value: '(', scopes: ['source.php', 'string.unquoted.heredoc.php', 'meta.method-call.php', 'punctuation.definition.arguments.begin.bracket.round.php']
+    expect(lines[1][6]).toEqual value: '10', scopes: ['source.php', 'string.unquoted.heredoc.php', 'meta.method-call.php', 'constant.numeric.decimal.php']
+    expect(lines[1][7]).toEqual value: ',', scopes: ['source.php', 'string.unquoted.heredoc.php', 'meta.method-call.php', 'punctuation.separator.delimiter.php']
+    expect(lines[1][8]).toEqual value: ' ', scopes: ['source.php', 'string.unquoted.heredoc.php', 'meta.method-call.php']
+    expect(lines[1][9]).toEqual value: 'function', scopes: ['source.php', 'string.unquoted.heredoc.php', 'meta.method-call.php', 'meta.function.closure.php', 'storage.type.function.php']
+    expect(lines[1][10]).toEqual value: '(', scopes: ['source.php', 'string.unquoted.heredoc.php', 'meta.method-call.php', 'meta.function.closure.php', 'punctuation.definition.parameters.begin.bracket.round.php']
+    expect(lines[1][11]).toEqual value: '$', scopes: ['source.php', 'string.unquoted.heredoc.php', 'meta.method-call.php', 'meta.function.closure.php', 'meta.function.parameters.php', 'meta.function.parameter.no-default.php', 'variable.other.php', 'punctuation.definition.variable.php']
+    expect(lines[1][12]).toEqual value: 'x', scopes: ['source.php', 'string.unquoted.heredoc.php', 'meta.method-call.php', 'meta.function.closure.php', 'meta.function.parameters.php', 'meta.function.parameter.no-default.php', 'variable.other.php']
+    expect(lines[1][13]).toEqual value: ')', scopes: ['source.php', 'string.unquoted.heredoc.php', 'meta.method-call.php', 'meta.function.closure.php', 'punctuation.definition.parameters.end.bracket.round.php']
+    expect(lines[1][14]).toEqual value: ' ', scopes: ['source.php', 'string.unquoted.heredoc.php', 'meta.method-call.php']
+    expect(lines[1][15]).toEqual value: '{', scopes: ['source.php', 'string.unquoted.heredoc.php', 'meta.method-call.php', 'punctuation.definition.begin.bracket.curly.php']
+    expect(lines[2][0]).toEqual value: '  ', scopes: ['source.php', 'string.unquoted.heredoc.php', 'meta.method-call.php']
+    expect(lines[2][1]).toEqual value: 'return', scopes: ['source.php', 'string.unquoted.heredoc.php', 'meta.method-call.php', 'keyword.control.return.php']
+    expect(lines[2][2]).toEqual value: ' ', scopes: ['source.php', 'string.unquoted.heredoc.php', 'meta.method-call.php']
+    expect(lines[2][3]).toEqual value: '$', scopes: ['source.php', 'string.unquoted.heredoc.php', 'meta.method-call.php', 'variable.other.php', 'punctuation.definition.variable.php']
+    expect(lines[2][4]).toEqual value: 'x', scopes: ['source.php', 'string.unquoted.heredoc.php', 'meta.method-call.php', 'variable.other.php']
+    expect(lines[2][5]).toEqual value: ';', scopes: ['source.php', 'string.unquoted.heredoc.php', 'meta.method-call.php', 'punctuation.terminator.expression.php']
+    expect(lines[2][2]).toEqual value: ' ', scopes: ['source.php', 'string.unquoted.heredoc.php', 'meta.method-call.php']
+    expect(lines[3][0]).toEqual value: '}', scopes: ['source.php', 'string.unquoted.heredoc.php', 'meta.method-call.php', 'punctuation.definition.end.bracket.curly.php']
+    expect(lines[3][1]).toEqual value: ')', scopes: ['source.php', 'string.unquoted.heredoc.php', 'meta.method-call.php', 'punctuation.definition.arguments.end.bracket.round.php']
+    expect(lines[3][2]).toEqual value: '}', scopes: ['source.php', 'string.unquoted.heredoc.php', 'punctuation.definition.variable.php']
+    expect(lines[4][0]).toEqual value: '{', scopes: ['source.php', 'string.unquoted.heredoc.php', 'punctuation.definition.variable.php']
+    expect(lines[4][1]).toEqual value: '$', scopes: ['source.php', 'string.unquoted.heredoc.php', 'variable.language.this.php', 'punctuation.definition.variable.php']
+    expect(lines[4][2]).toEqual value: 'this', scopes: ['source.php', 'string.unquoted.heredoc.php', 'variable.language.this.php']
+    expect(lines[4][3]).toEqual value: '->', scopes: ['source.php', 'string.unquoted.heredoc.php', 'meta.method-call.php', 'keyword.operator.class.php']
+    expect(lines[4][4]).toEqual value: 'doSomethingElse', scopes: ['source.php', 'string.unquoted.heredoc.php', 'meta.method-call.php', 'entity.name.function.php']
+    expect(lines[4][5]).toEqual value: '(', scopes: ['source.php', 'string.unquoted.heredoc.php', 'meta.method-call.php', 'punctuation.definition.arguments.begin.bracket.round.php']
+    expect(lines[4][6]).toEqual value: '$', scopes: ['source.php', 'string.unquoted.heredoc.php', 'meta.method-call.php', 'variable.other.php', 'punctuation.definition.variable.php']
+    expect(lines[4][7]).toEqual value: 'x', scopes: ['source.php', 'string.unquoted.heredoc.php', 'meta.method-call.php', 'variable.other.php']
+    expect(lines[4][8]).toEqual value: ')', scopes: ['source.php', 'string.unquoted.heredoc.php', 'meta.method-call.php', 'punctuation.definition.arguments.end.bracket.round.php']
+    expect(lines[5][0]).toEqual value: '', scopes: ['source.php', 'string.unquoted.heredoc.php']
+    expect(lines[6][0]).toEqual value: '}', scopes: ['source.php', 'string.unquoted.heredoc.php', 'punctuation.definition.variable.php']
+    expect(lines[7][0]).toEqual value: 'HEREDOC', scopes: ['source.php', 'string.unquoted.heredoc.php', 'keyword.operator.heredoc.php']
+    expect(lines[7][1]).toEqual value: ';', scopes: ['source.php', 'punctuation.terminator.expression.php']
+
   it 'should tokenize a nowdoc with interpolated values correctly', ->
     lines = grammar.tokenizeLines '''
       $a = <<<'GITHUB'
