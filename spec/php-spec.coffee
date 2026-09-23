@@ -3776,6 +3776,176 @@ describe 'PHP grammar', ->
       expect(tokens[12]).toEqual value: '\'', scopes: ['source.php', 'string.quoted.single.php', 'punctuation.definition.string.begin.php']
       expect(tokens[13]).toEqual value: '\'', scopes: ['source.php', 'string.quoted.single.php', 'punctuation.definition.string.end.php']
 
+  it 'should keep closed embedded SQL bracket, comment and percent segments tokenized by source.sql', ->
+    cases = [
+      {
+        line: '$sql = "SELECT [db]";'
+        tokenIndex: 8
+        token:
+          value: '[db]'
+          scopes: ['source.php', 'string.quoted.double.sql.php', 'source.sql.embedded.php', 'text.bracketed']
+      }
+      {
+        line: "$sql = 'UPDATE [db]';"
+        tokenIndex: 8
+        token:
+          value: '[db]'
+          scopes: ['source.php', 'string.quoted.single.sql.php', 'source.sql.embedded.php', 'text.bracketed']
+      }
+      {
+        line: '$sql = "SELECT /* ok */";'
+        tokenIndex: 8
+        token:
+          value: '/*'
+          scopes: ['source.php', 'string.quoted.double.sql.php', 'source.sql.embedded.php', 'comment.block', 'punctuation.definition.comment.sql']
+      }
+      {
+        line: "$sql = 'UPDATE /* ok */';"
+        tokenIndex: 8
+        token:
+          value: '/*'
+          scopes: ['source.php', 'string.quoted.single.sql.php', 'source.sql.embedded.php', 'comment.block', 'punctuation.definition.comment.sql']
+      }
+      {
+        line: '$sql = "SELECT %{ok}";'
+        tokenIndex: 8
+        token:
+          value: '%{'
+          scopes: ['source.php', 'string.quoted.double.sql.php', 'source.sql.embedded.php', 'string.other.quoted.brackets.sql', 'punctuation.definition.string.begin.sql']
+      }
+      {
+        line: "$sql = 'UPDATE %{ok}';"
+        tokenIndex: 8
+        token:
+          value: '%{'
+          scopes: ['source.php', 'string.quoted.single.sql.php', 'source.sql.embedded.php', 'string.other.quoted.brackets.sql', 'punctuation.definition.string.begin.sql']
+      }
+      {
+        line: '$sql = "SELECT %r{ok}";'
+        tokenIndex: 8
+        token:
+          value: '%r{'
+          scopes: ['source.php', 'string.quoted.double.sql.php', 'source.sql.embedded.php', 'string.regexp.modr.sql', 'punctuation.definition.string.begin.sql']
+      }
+      {
+        line: "$sql = 'UPDATE %r{ok}';"
+        tokenIndex: 8
+        token:
+          value: '%r{'
+          scopes: ['source.php', 'string.quoted.single.sql.php', 'source.sql.embedded.php', 'string.regexp.modr.sql', 'punctuation.definition.string.begin.sql']
+      }
+    ]
+
+    for {line, tokenIndex, token} in cases
+      {tokens} = grammar.tokenizeLine line
+      expect(tokens[tokenIndex]).toEqual token
+
+  it 'should recover PHP concatenation after unclosed embedded SQL bracket, comment and percent segments', ->
+    cases = [
+      {
+        line: '$sql = "SELECT [".$x."]";'
+        tokenIndex: 8
+        token:
+          value: '['
+          scopes: ['source.php', 'string.quoted.double.sql.php', 'source.sql.embedded.php', 'text.bracketed.unclosed.sql']
+        stringEndToken:
+          value: '"'
+          scopes: ['source.php', 'string.quoted.double.sql.php', 'punctuation.definition.string.end.php']
+      }
+      {
+        line: "$sql = 'UPDATE ['.$x.']';"
+        tokenIndex: 8
+        token:
+          value: '['
+          scopes: ['source.php', 'string.quoted.single.sql.php', 'source.sql.embedded.php', 'text.bracketed.unclosed.sql']
+        stringEndToken:
+          value: '\''
+          scopes: ['source.php', 'string.quoted.single.sql.php', 'punctuation.definition.string.end.php']
+      }
+      {
+        line: '$sql = "SELECT /*".$x."*/";'
+        tokenIndex: 8
+        token:
+          value: '/*'
+          scopes: ['source.php', 'string.quoted.double.sql.php', 'source.sql.embedded.php', 'comment.block.unclosed.sql']
+        stringEndToken:
+          value: '"'
+          scopes: ['source.php', 'string.quoted.double.sql.php', 'punctuation.definition.string.end.php']
+      }
+      {
+        line: "$sql = 'UPDATE /*'.$x.'*/';"
+        tokenIndex: 8
+        token:
+          value: '/*'
+          scopes: ['source.php', 'string.quoted.single.sql.php', 'source.sql.embedded.php', 'comment.block.unclosed.sql']
+        stringEndToken:
+          value: '\''
+          scopes: ['source.php', 'string.quoted.single.sql.php', 'punctuation.definition.string.end.php']
+      }
+      {
+        line: '$sql = "SELECT %{".$x."}";'
+        tokenIndex: 8
+        token:
+          value: '%{'
+          scopes: ['source.php', 'string.quoted.double.sql.php', 'source.sql.embedded.php', 'string.other.quoted.brackets.unclosed.sql']
+        stringEndToken:
+          value: '"'
+          scopes: ['source.php', 'string.quoted.double.sql.php', 'punctuation.definition.string.end.php']
+      }
+      {
+        line: "$sql = 'UPDATE %{'.$x.'}';"
+        tokenIndex: 8
+        token:
+          value: '%{'
+          scopes: ['source.php', 'string.quoted.single.sql.php', 'source.sql.embedded.php', 'string.other.quoted.brackets.unclosed.sql']
+        stringEndToken:
+          value: '\''
+          scopes: ['source.php', 'string.quoted.single.sql.php', 'punctuation.definition.string.end.php']
+      }
+      {
+        line: '$sql = "SELECT %r{".$x."}";'
+        tokenIndex: 8
+        token:
+          value: '%r{'
+          scopes: ['source.php', 'string.quoted.double.sql.php', 'source.sql.embedded.php', 'string.regexp.modr.unclosed.sql']
+        stringEndToken:
+          value: '"'
+          scopes: ['source.php', 'string.quoted.double.sql.php', 'punctuation.definition.string.end.php']
+      }
+      {
+        line: "$sql = 'UPDATE %r{'.$x.'}';"
+        tokenIndex: 8
+        token:
+          value: '%r{'
+          scopes: ['source.php', 'string.quoted.single.sql.php', 'source.sql.embedded.php', 'string.regexp.modr.unclosed.sql']
+        stringEndToken:
+          value: '\''
+          scopes: ['source.php', 'string.quoted.single.sql.php', 'punctuation.definition.string.end.php']
+      }
+    ]
+
+    for {line, tokenIndex, token, stringEnd, stringEndToken} in cases
+      {tokens} = grammar.tokenizeLine line
+      expect(tokens[tokenIndex]).toEqual token
+      expect(tokens[tokenIndex + 1]).toEqual stringEndToken
+      expect(tokens[tokenIndex + 2]).toEqual value: '.', scopes: ['source.php', 'keyword.operator.string.php']
+      expect(tokens[tokenIndex + 3]).toEqual value: '$', scopes: ['source.php', 'variable.other.php', 'punctuation.definition.variable.php']
+      expect(tokens[tokenIndex + 4]).toEqual value: 'x', scopes: ['source.php', 'variable.other.php']
+
+  it 'should recover PHP array access after an unclosed embedded SQL bracketed identifier', ->
+    {tokens} = grammar.tokenizeLine '$findloginfeild = "SELECT * FROM [".$_POST[\'getdb\']."].[dbo].[tabl1] WHERE [column1] = \'PASSWORD\'";'
+
+    expect(tokens[12]).toEqual value: '[', scopes: ['source.php', 'string.quoted.double.sql.php', 'source.sql.embedded.php', 'text.bracketed.unclosed.sql']
+    expect(tokens[13]).toEqual value: '"', scopes: ['source.php', 'string.quoted.double.sql.php', 'punctuation.definition.string.end.php']
+    expect(tokens[14]).toEqual value: '.', scopes: ['source.php', 'keyword.operator.string.php']
+    expect(tokens[15]).toEqual value: '$', scopes: ['source.php', 'variable.other.global.php', 'punctuation.definition.variable.php']
+    expect(tokens[16]).toEqual value: '_POST', scopes: ['source.php', 'variable.other.global.php']
+    expect(tokens[17]).toEqual value: '[', scopes: ['source.php', 'punctuation.section.array.begin.php']
+    expect(tokens[18]).toEqual value: '\'', scopes: ['source.php', 'string.quoted.single.php', 'punctuation.definition.string.begin.php']
+    expect(tokens[19]).toEqual value: 'getdb', scopes: ['source.php', 'string.quoted.single.php']
+    expect(tokens[20]).toEqual value: '\'', scopes: ['source.php', 'string.quoted.single.php', 'punctuation.definition.string.end.php']
+    expect(tokens[21]).toEqual value: ']', scopes: ['source.php', 'punctuation.section.array.end.php']
+
   it 'should tokenize single quoted string regex escape characters correctly', ->
     {tokens} = grammar.tokenizeLine "'/[\\\\\\\\]/';"
 
